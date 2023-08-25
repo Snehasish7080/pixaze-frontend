@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
     width: horizontalScale(302),
     height: 56,
     marginBottom: 30,
+    marginTop: 16,
   },
   logoTitle: {
     fontSize: 40,

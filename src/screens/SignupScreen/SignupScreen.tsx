@@ -1,23 +1,14 @@
-import {Skia} from '@shopify/react-native-skia';
+import {View, Text, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {KeyboardAvoidingView, TouchableOpacity, View} from 'react-native';
-// import {logo} from '../../assets/icons/icons';
-import AppButton from '../../atoms/AppButton/AppButton';
-import AppInputBox from '../../atoms/AppInputBox/AppInputBox';
-import AppLogo from '../../atoms/AppLogo/AppLogo';
+import {styles} from './SignupScreenStyles';
 import AppText from '../../atoms/AppText/AppText';
-import {UnAuthenticatedNavProps} from '../../navigations/UnAuthenticatedNavigation/UnAuthenticatedNavigationTypes';
+import AppInputBox from '../../atoms/AppInputBox/AppInputBox';
+import AppButton from '../../atoms/AppButton/AppButton';
 import {horizontalScale} from '../../utils/scale';
-import {styles} from './LandingScreenStyles';
+import {UnAuthenticatedNavProps} from '../../navigations/UnAuthenticatedNavigation/UnAuthenticatedNavigationTypes';
+import AppLogo from '../../atoms/AppLogo/AppLogo';
 
-const source = Skia.RuntimeEffect.Make(`
-vec4 main(vec2 pos) {
-  // normalized x,y values go from 0 to 1, the canvas is 256x256
-  vec2 normalized = pos/vec2(256);
-  return vec4(normalized.x, normalized.y, 0.5, 1);
-}`)!;
-
-const LandingScreen: React.FC<UnAuthenticatedNavProps<'LandingScreen'>> = ({
+const SignupScreen: React.FC<UnAuthenticatedNavProps<'SignupScreen'>> = ({
   navigation,
 }) => {
   return (
@@ -28,6 +19,27 @@ const LandingScreen: React.FC<UnAuthenticatedNavProps<'LandingScreen'>> = ({
       </AppText>
       <KeyboardAvoidingView>
         <AppInputBox
+          style={[
+            styles.inputBox,
+            {
+              marginTop: 0,
+            },
+          ]}
+          placeholder={'Enter First Name'}
+          label={'First Name'}
+          labelStyle={{
+            fontSize: 14,
+          }}
+        />
+        <AppInputBox
+          style={styles.inputBox}
+          placeholder={'Enter Last Name'}
+          label={'Last Name'}
+          labelStyle={{
+            fontSize: 14,
+          }}
+        />
+        <AppInputBox
           style={styles.inputBox}
           placeholder={'Enter Email Address'}
           label={'Email'}
@@ -36,12 +48,7 @@ const LandingScreen: React.FC<UnAuthenticatedNavProps<'LandingScreen'>> = ({
           }}
         />
         <AppInputBox
-          style={[
-            styles.inputBox,
-            {
-              marginTop: 16,
-            },
-          ]}
+          style={[styles.inputBox]}
           placeholder={'Enter Password'}
           label={'Password'}
           labelStyle={{
@@ -49,20 +56,20 @@ const LandingScreen: React.FC<UnAuthenticatedNavProps<'LandingScreen'>> = ({
           }}
         />
         <AppButton width={horizontalScale(302)} height={56}>
-          Login
+          Sign up
         </AppButton>
       </KeyboardAvoidingView>
       <View style={styles.notRegisteredContainer}>
         <AppText lineHeight={14} style={styles.notRegistered}>
-          Don't have an account?
+          Already have an account?
         </AppText>
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => {
-            navigation.navigate('SignupScreen');
+            navigation.navigate('LandingScreen');
           }}>
           <AppText lineHeight={14} style={styles.signUp}>
-            Sign up
+            login
           </AppText>
         </TouchableOpacity>
       </View>
@@ -70,4 +77,4 @@ const LandingScreen: React.FC<UnAuthenticatedNavProps<'LandingScreen'>> = ({
   );
 };
 
-export default LandingScreen;
+export default SignupScreen;

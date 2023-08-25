@@ -1,10 +1,8 @@
-import {View, Text, Easing} from 'react-native';
-import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {UnAuthenticatedRouteList} from './UnAuthenticatedNavigationTypes';
+import React from 'react';
 import LandingScreen from '../../screens/LandingScreen/LandingScreen';
-import OtpScreen from '../../screens/OtpScreen/OtpScreen';
-import LoginScreen from '../../screens/LoginScreen/LoginScreen';
+import SignupScreen from '../../screens/SignupScreen/SignupScreen';
+import {UnAuthenticatedRouteList} from './UnAuthenticatedNavigationTypes';
 
 const Stack = createStackNavigator<UnAuthenticatedRouteList>();
 
@@ -19,95 +17,10 @@ const UnAuthenticatedNavigation = () => {
         }}
       />
       <Stack.Screen
-        name="OtpScreen"
-        component={OtpScreen}
+        name="SignupScreen"
+        component={SignupScreen}
         options={{
           headerShown: false,
-          presentation: 'transparentModal',
-          transitionSpec: {
-            open: {
-              animation: 'timing',
-              config: {
-                duration: 650,
-                easing: Easing.in(Easing.bezier(0.31, 0.06, 0.41, 1.01)),
-              },
-            },
-            close: {
-              animation: 'timing',
-              config: {
-                duration: 650,
-                easing: Easing.out(Easing.bezier(0.31, 0.06, 0.41, 1.01)),
-              },
-            },
-          },
-          cardStyleInterpolator: ({layouts, current, next}) => {
-            return {
-              cardStyle: {
-                transform: [
-                  {
-                    translateY: current.progress.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [layouts.screen.height, 0],
-                    }),
-                  },
-                  {
-                    scale: next
-                      ? next.progress.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [1, 0.9],
-                        })
-                      : 1,
-                  },
-                ],
-              },
-            };
-          },
-        }}
-      />
-      <Stack.Screen
-        name="LoginScreen"
-        component={LoginScreen}
-        options={{
-          headerShown: false,
-          presentation: 'transparentModal',
-          transitionSpec: {
-            open: {
-              animation: 'timing',
-              config: {
-                duration: 650,
-                easing: Easing.in(Easing.bezier(0.31, 0.06, 0.41, 1.01)),
-              },
-            },
-            close: {
-              animation: 'timing',
-              config: {
-                duration: 650,
-                easing: Easing.out(Easing.bezier(0.31, 0.06, 0.41, 1.01)),
-              },
-            },
-          },
-          cardStyleInterpolator: ({layouts, current, next}) => {
-            return {
-              cardStyle: {
-                transform: [
-                  {
-                    translateY: current.progress.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [layouts.screen.height, 0],
-                    }),
-                  },
-                  {
-                    scale: next
-                      ? next.progress.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [1, 0.9],
-                        })
-                      : 1,
-                  },
-                ],
-              },
-            };
-          },
         }}
       />
     </Stack.Navigator>
