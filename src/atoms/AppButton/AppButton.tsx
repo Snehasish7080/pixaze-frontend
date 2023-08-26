@@ -19,25 +19,34 @@ import {
   TextStyle,
   ViewStyle,
 } from 'react-native';
+import {horizontalScale} from '../../utils/scale';
 import {Colors, FontFamily} from '../../utils/theme';
 import AppText from '../AppText/AppText';
 
 type AppButtonProps = TouchableOpacityProps & {
   width: number;
   height: number;
+  radius?: number;
   children: ReactNode;
   textStyle?: StyleProp<TextStyle>;
   style?: StyleProp<ViewStyle>;
 };
+
+const referenceWidth = horizontalScale(302);
 const AppButton: React.FC<AppButtonProps> = ({
   width,
   height,
   children,
   textStyle,
   style,
+  radius = 16,
   ...props
 }) => {
   const widthDiff = width + 45 - width;
+  const gradientDiff =
+    256 - (referenceWidth - width) < 68
+      ? 256 - (referenceWidth - width) + (68 - (256 - (referenceWidth - width)))
+      : 256 - (referenceWidth - width);
 
   return (
     <View
@@ -60,7 +69,7 @@ const AppButton: React.FC<AppButtonProps> = ({
         }}
         mode="continuous">
         <Box
-          box={rrect(rect(widthDiff / 2, 10, width, height), 16, 16)}
+          box={rrect(rect(widthDiff / 2, 10, width, height), radius, radius)}
           color="transparent">
           <BoxShadow dx={0} dy={15} blur={10} color={Colors.shadow} />
         </Box>
@@ -83,27 +92,29 @@ const AppButton: React.FC<AppButtonProps> = ({
             top: 0,
           }}
           mode="continuous">
-          <Box box={rrect(rect(0, 0, width, height), 16, 16)}>
+          <Box box={rrect(rect(0, 0, width, height), radius, radius)}>
             <LinearGradient
-              start={vec(256, 256)}
+              start={vec(gradientDiff, gradientDiff)}
               end={vec(0, 0)}
               colors={[Colors.primaryLight, Colors.secondary]}
             />
           </Box>
         </Canvas>
 
-        <AppText
-          lineHeight={14}
-          style={[
-            {
-              color: Colors.white,
-              fontFamily: FontFamily.LatoBold,
-              fontSize: 14,
-            },
-            textStyle,
-          ]}>
-          {children}
-        </AppText>
+        {typeof children === 'string' && (
+          <AppText
+            lineHeight={14}
+            style={[
+              {
+                color: Colors.white,
+                fontFamily: FontFamily.LatoBold,
+                fontSize: 14,
+              },
+              textStyle,
+            ]}>
+            {children}
+          </AppText>
+        )}
       </TouchableOpacity>
     </View>
   );

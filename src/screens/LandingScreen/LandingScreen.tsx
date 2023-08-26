@@ -1,3 +1,4 @@
+import {StackActions, useNavigation} from '@react-navigation/native';
 import {Skia} from '@shopify/react-native-skia';
 import React from 'react';
 import {KeyboardAvoidingView, TouchableOpacity, View} from 'react-native';
@@ -6,6 +7,7 @@ import AppButton from '../../atoms/AppButton/AppButton';
 import AppInputBox from '../../atoms/AppInputBox/AppInputBox';
 import AppLogo from '../../atoms/AppLogo/AppLogo';
 import AppText from '../../atoms/AppText/AppText';
+import {ParentRouteList} from '../../navigations/ParentNavigation/ParentNavigationTypes';
 import {UnAuthenticatedNavProps} from '../../navigations/UnAuthenticatedNavigation/UnAuthenticatedNavigationTypes';
 import {horizontalScale} from '../../utils/scale';
 import {styles} from './LandingScreenStyles';
@@ -20,6 +22,7 @@ vec4 main(vec2 pos) {
 const LandingScreen: React.FC<UnAuthenticatedNavProps<'LandingScreen'>> = ({
   navigation,
 }) => {
+  const parentNavigation = useNavigation<ParentRouteList>();
   return (
     <View style={styles.container}>
       <AppLogo />
@@ -48,7 +51,12 @@ const LandingScreen: React.FC<UnAuthenticatedNavProps<'LandingScreen'>> = ({
             fontSize: 14,
           }}
         />
-        <AppButton width={horizontalScale(302)} height={56}>
+        <AppButton
+          width={horizontalScale(302)}
+          height={56}
+          onPress={() => {
+            navigation.dispatch(StackActions.replace('Authenticated'));
+          }}>
           Login
         </AppButton>
       </KeyboardAvoidingView>
