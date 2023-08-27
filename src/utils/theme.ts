@@ -4,13 +4,14 @@ export const Colors = {
   primaryExtraLight: 'rgba(135, 67, 255,0.2)',
   secondary: '#4136F1',
   secondaryLight: 'rgba(65, 54, 241,0.7)',
-  shadow: 'rgba(20, 102, 204, 0.2)',
   black: '#000000',
   placeholder: 'rgba(0, 0, 0, 0.4)',
   white: '#FFFFFF',
   error: '#CC002E',
   textInputBackground: 'rgba(0, 0, 0, 0.03)',
   dark: '#272829',
+  shadow: 'rgba(20, 102, 204, 0.2)',
+  polaroidShadow: 'rgba(0, 0, 0, 0.1)',
 };
 
 export const FontFamily = {
@@ -19,4 +20,6 @@ export const FontFamily = {
   LatoBold: 'Lato-Bold',
   LatoBlack: 'Lato-Black',
   SatisfyRegular: 'Satisfy-Regular',
+  ShadowsIntoLightRgular: 'ShadowsIntoLight-Regular',
+  MarckScriptRegular: 'MarckScript-Regular',
 };

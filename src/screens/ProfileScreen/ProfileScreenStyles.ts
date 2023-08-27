@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
     paddingVertical: 30,
   },
   profilePic: {
@@ -74,7 +74,6 @@ export const styles = StyleSheet.create({
   count: {
     fontFamily: FontFamily.LatoBold,
     fontSize: 14,
-    marginRight: 5,
   },
   followTitle: {
     fontSize: 14,
@@ -89,5 +88,9 @@ export const styles = StyleSheet.create({
     width: horizontalScale(300),
     fontSize: 12,
     marginTop: 10,
+  },
+  mediaContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
   },
 });

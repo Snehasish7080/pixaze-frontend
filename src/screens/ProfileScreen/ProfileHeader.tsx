@@ -70,6 +70,18 @@ const ProfileHeader: React.FC = () => {
           drugs
         </AppText>
       </View>
+      <View style={styles.mediaContainer}>
+        <AppText
+          lineHeight={14}
+          style={[
+            styles.count,
+            {
+              marginRight: 10,
+            },
+          ]}>
+          100 Memo
+        </AppText>
+      </View>
     </View>
   );
 };
