@@ -80,6 +80,8 @@ export const styles = StyleSheet.create({
   },
   profileContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: 26,
   },
   relationContainer: {
     marginLeft: 16,
