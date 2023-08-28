@@ -9,6 +9,7 @@ import {
 import AppText from '../../atoms/AppText/AppText';
 import SettingsIcon from '../../atoms/SettingsIcon/SettingsIcon';
 import PolaroidSmallFrame from '../../molecules/PolaroidSmallFrame/PolaroidSmallFrame';
+import {AuthenticatedNavProps} from '../../navigations/AuthenticatedNavigation/AuthenticatedNavigationTypes';
 import GroupedPolaroidFrame from '../../organisms/GroupedPolaroidFrame/GroupedPolaroidFrame';
 import ProfileHeader from './ProfileHeader';
 import {styles} from './ProfileScreenStyles';
@@ -89,7 +90,7 @@ const data = [
     count: 1,
   },
 ];
-const ProfileScreen = () => {
+const ProfileScreen: React.FC<AuthenticatedNavProps<'ProfileScreen'>> = () => {
   const {width} = useWindowDimensions();
   return (
     <View style={styles.container}>
@@ -130,7 +131,7 @@ const ProfileScreen = () => {
         }}
         columnWrapperStyle={{
           justifyContent: 'space-between',
-          marginBottom: 10,
+          marginBottom: 25,
         }}
       />
     </View>

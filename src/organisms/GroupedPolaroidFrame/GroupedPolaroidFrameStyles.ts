@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     position: 'relative',
     width: 120,
-    height: 150,
+    height: 130,
   },
   frameContainer: {
     position: 'absolute',

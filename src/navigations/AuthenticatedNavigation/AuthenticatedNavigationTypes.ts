@@ -2,7 +2,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 
 export type AuthenticatedRouteList = {
   ProfileScreen: undefined;
-  ThreadScreen: undefined;
+  MemoDetailScreen: undefined;
 };
 export type AuthenticatedNavigationProp<
   T extends keyof AuthenticatedRouteList,

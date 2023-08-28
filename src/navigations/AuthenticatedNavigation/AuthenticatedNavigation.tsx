@@ -3,6 +3,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {AuthenticatedRouteList} from './AuthenticatedNavigationTypes';
 import ProfileScreen from '../../screens/ProfileScreen/ProfileScreen';
+import MemoDetailScreen from '../../screens/MemoDetailScreen/MemoDetailScreen';
 // import AppHeader from '../../atoms/AppHeader/AppHeader';
 
 const Stack = createStackNavigator<AuthenticatedRouteList>();
@@ -15,6 +16,25 @@ const AuthenticatedNavigation = () => {
         component={ProfileScreen}
         options={{
           headerShown: true,
+          // header: ({navigation, options}) => (
+          //   <AppHeader
+          //     onClickBack={() => {
+          //       if (navigation.canGoBack()) {
+          //         navigation.goBack();
+          //       }
+          //     }}>
+          //     {options?.title}
+          //   </AppHeader>
+          // ),
+        }}
+      />
+      <Stack.Screen
+        name="MemoDetailScreen"
+        component={MemoDetailScreen}
+        options={{
+          presentation: 'transparentModal',
+          headerShown: true,
+
           // header: ({navigation, options}) => (
           //   <AppHeader
           //     onClickBack={() => {
