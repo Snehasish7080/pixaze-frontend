@@ -16,16 +16,6 @@ const AuthenticatedNavigation = () => {
         component={ProfileScreen}
         options={{
           headerShown: true,
-          // header: ({navigation, options}) => (
-          //   <AppHeader
-          //     onClickBack={() => {
-          //       if (navigation.canGoBack()) {
-          //         navigation.goBack();
-          //       }
-          //     }}>
-          //     {options?.title}
-          //   </AppHeader>
-          // ),
         }}
       />
       <Stack.Screen
@@ -33,18 +23,27 @@ const AuthenticatedNavigation = () => {
         component={MemoDetailScreen}
         options={{
           presentation: 'transparentModal',
-          headerShown: true,
-
-          // header: ({navigation, options}) => (
-          //   <AppHeader
-          //     onClickBack={() => {
-          //       if (navigation.canGoBack()) {
-          //         navigation.goBack();
-          //       }
-          //     }}>
-          //     {options?.title}
-          //   </AppHeader>
-          // ),
+          headerShown: false,
+          cardStyleInterpolator: ({layouts, current, next}) => {
+            return {
+              cardStyle: {
+                transform: [
+                  {
+                    translateY: current.progress.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [layouts.screen.height, 0],
+                    }),
+                  },
+                  {
+                    scale: current.progress.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.8, 1],
+                    }),
+                  },
+                ],
+              },
+            };
+          },
         }}
       />
     </Stack.Navigator>

@@ -1,14 +1,13 @@
 import {StyleSheet} from 'react-native';
+import {horizontalScale} from '../../utils/scale';
 import {Colors, FontFamily} from '../../utils/theme';
 
 export const styles = StyleSheet.create({
   container: {
-    // backgroundColor: Colors.white,
-    width: 100,
-    height: 130,
-    borderRadius: 2,
-    paddingHorizontal: 6,
-    paddingVertical: 6,
+    width: horizontalScale(250),
+    borderRadius: 4,
+    paddingHorizontal: 15,
+    paddingVertical: 30,
     alignItems: 'center',
     position: 'relative',
   },

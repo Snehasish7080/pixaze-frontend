@@ -1,12 +1,13 @@
-import {View, Text, Image, PixelRatio, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
-import {styles} from './PolaroidSmallFrameStyles';
-import AppText from '../../atoms/AppText/AppText';
-import {Box, BoxShadow, Canvas, rect, rrect} from '@shopify/react-native-skia';
-import {Colors} from '../../utils/theme';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {Box, BoxShadow, Canvas, rect, rrect} from '@shopify/react-native-skia';
+import React from 'react';
+import {PixelRatio, TouchableOpacity} from 'react-native';
+import Animated from 'react-native-reanimated';
+import AppText from '../../atoms/AppText/AppText';
 import {AuthenticatedRouteList} from '../../navigations/AuthenticatedNavigation/AuthenticatedNavigationTypes';
+import {Colors} from '../../utils/theme';
+import {styles} from './PolaroidSmallFrameStyles';
 
 const width = 100;
 const height = 130;
@@ -22,8 +23,9 @@ const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
 }) => {
   const navigation =
     useNavigation<StackNavigationProp<AuthenticatedRouteList>>();
+
   return (
-    <View style={styles.container}>
+    <Animated.View style={styles.container} sharedTransitionTag={tag}>
       <Canvas
         style={{
           height: height + 55,
@@ -44,7 +46,7 @@ const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
         onPress={() => {
           navigation.navigate('MemoDetailScreen');
         }}>
-        <Image
+        <Animated.Image
           source={{
             uri: image,
             height: 40,
@@ -71,7 +73,7 @@ const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
           {tag}
         </AppText>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 
