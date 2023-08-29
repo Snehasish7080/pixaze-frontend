@@ -17,18 +17,22 @@ type PolaroidSmallFrameProps = {
   image: string;
   tag: string;
   id: string;
+  alowTransition?: boolean;
 };
 
 const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
   image,
   tag,
   id,
+  alowTransition = true,
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<ProfileRouteList>>();
 
   return (
-    <Animated.View style={styles.container} sharedTransitionTag={id}>
+    <Animated.View
+      style={styles.container}
+      sharedTransitionTag={alowTransition ? id : undefined}>
       {navigation.isFocused() && (
         <Canvas
           style={{
@@ -68,7 +72,7 @@ const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
               resizeMode: 'contain',
             },
           ]}
-          sharedTransitionTag={image}
+          sharedTransitionTag={alowTransition ? image : undefined}
         />
         <AppText
           lineHeight={20}

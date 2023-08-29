@@ -1,18 +1,14 @@
 import {BlurView} from '@react-native-community/blur';
-import {
-  Box,
-  BoxShadow,
-  Canvas,
-  rect,
-  rrect,
-  useFont,
-} from '@shopify/react-native-skia';
 import React, {useMemo} from 'react';
-import {FlatList, ScrollView, View} from 'react-native';
+import {FlatList, PixelRatio, View} from 'react-native';
 import AppText from '../../atoms/AppText/AppText';
+import CommentButton from '../../atoms/CommentButton/CommentButton';
+import HeartIconButton from '../../atoms/HeartIconButton/HeartIconButton';
+import ShareButton from '../../atoms/ShareButton/ShareButton';
 import PolaroidLargeFrame from '../../molecules/PolaroidLargeFrame/PolaroidLargeFrame';
 import {ProfileNavProps} from '../../navigations/ProfileNavigation/ProfileNavigationTypes';
 import {profileData} from '../../utils/dummyData';
+import {verticalScale} from '../../utils/scale';
 import {Colors} from '../../utils/theme';
 import {styles} from './MemoDetailScreenStyles';
 
@@ -25,6 +21,7 @@ const MemoDetailScreen: React.FC<ProfileNavProps<'MemoDetailScreen'>> = ({
     const temp = profileData.filter(x => x.tag === tag)[0];
     return temp;
   }, [tag]);
+
   return (
     <View style={styles.container}>
       <BlurView
@@ -33,75 +30,61 @@ const MemoDetailScreen: React.FC<ProfileNavProps<'MemoDetailScreen'>> = ({
         blurAmount={10}
         reducedTransparencyFallbackColor={Colors.dark}
       />
-      <Tag height={200} />
+      {/* <Tag height={200} tag={tag} /> */}
 
-      <FlatList
-        data={data.photos}
-        keyExtractor={item => item.id}
-        contentContainerStyle={{
-          flexGrow: 1,
-          paddingVertical: 40,
-          paddingLeft: 70,
-        }}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item, index}) => {
-          return (
-            <PolaroidLargeFrame id={data.id} photo={item} tag={data.tag} />
-          );
-        }}
-      />
-    </View>
-  );
-};
-
-type TagProps = {
-  height: number;
-};
-
-const Tag = ({height}: TagProps) => {
-  const font = useFont(
-    require('../../assets/fonts/MarckScript-Regular.ttf'),
-    22,
-  );
-  const titleWidth = font?.getTextWidth('holiday');
-  if (!titleWidth) {
-    return null;
-  }
-  const calculatedHeight = titleWidth + 30;
-  const calculatedWidth = 50;
-  return (
-    <View
-      style={[
-        styles.tag,
-        {
-          width: calculatedWidth,
-          height: calculatedHeight,
-        },
-      ]}>
-      <Canvas
-        style={{
-          width: calculatedWidth + 20,
-          height: calculatedHeight + 50,
-          position: 'absolute',
-          top: -25,
-        }}>
-        <Box
-          box={rrect(rect(10, 25, calculatedWidth, calculatedHeight), 4, 4)}
-          color={Colors.white}>
-          <BoxShadow dx={-2} dy={1} blur={8} color={Colors.polaroidShadow} />
-        </Box>
-      </Canvas>
-      <View
-        style={[
-          styles.textContainer,
-          {
-            width: titleWidth,
-          },
-        ]}>
-        <AppText lineHeight={18} style={styles.tagText}>
-          Holiday
+      <View style={styles.tagContainer}>
+        <AppText
+          lineHeight={35}
+          style={[
+            styles.tag,
+            {
+              fontSize: 30 / PixelRatio.getFontScale(),
+            },
+          ]}>
+          {tag}
         </AppText>
+      </View>
+      <View
+        style={{
+          height: verticalScale(320),
+        }}>
+        <FlatList
+          data={data.photos}
+          keyExtractor={item => item.id}
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+          }}
+          horizontal
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({item, index}) => {
+            return (
+              <PolaroidLargeFrame id={data.id} photo={item} tag={data.tag} />
+            );
+          }}
+          directionalLockEnabled={true}
+        />
+      </View>
+      <View style={styles.actionBtnContainer}>
+        <View style={styles.actionBtn}>
+          <HeartIconButton />
+          <AppText lineHeight={14} style={styles.actionText}>
+            1.1k
+          </AppText>
+        </View>
+        <View style={styles.actionBtn}>
+          <CommentButton />
+          <AppText lineHeight={14} style={styles.actionText}>
+            500
+          </AppText>
+        </View>
+        <View style={styles.actionBtn}>
+          <ShareButton />
+          <AppText lineHeight={14} style={styles.actionText}>
+            2K
+          </AppText>
+        </View>
       </View>
     </View>
   );

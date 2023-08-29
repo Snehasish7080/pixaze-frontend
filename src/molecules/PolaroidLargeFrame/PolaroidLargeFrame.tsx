@@ -13,8 +13,6 @@ type PolaroidLargeFrameProps = {
   tag: string;
 };
 
-const width = horizontalScale(250);
-
 const PolaroidLargeFrame: React.FC<PolaroidLargeFrameProps> = ({
   id,
   photo,
@@ -30,7 +28,7 @@ const PolaroidLargeFrame: React.FC<PolaroidLargeFrameProps> = ({
           {
             width: '100%',
             height: PixelRatio.getPixelSizeForLayoutSize(
-              270 / PixelRatio.get(),
+              300 / PixelRatio.get(),
             ),
             resizeMode: 'contain',
           },

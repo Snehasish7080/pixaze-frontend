@@ -12,7 +12,7 @@ const AuthenticatedNavigation = () => {
         name="ProfileScreen"
         component={ProfileNavigation}
         options={{
-          headerShown: true,
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

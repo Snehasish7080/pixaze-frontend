@@ -24,7 +24,12 @@ const GroupedPolaroidFrame: React.FC<GroupedPolaroidFrameProps> = ({
           <View
             style={[index ? styles.frameContainer : styles.frameContainer1]}
             key={index}>
-            <PolaroidSmallFrame image={item.url} tag={tag} id={item.id} />
+            <PolaroidSmallFrame
+              image={item.url}
+              tag={tag}
+              id={item.id}
+              alowTransition={index ? true : false}
+            />
           </View>
         );
       })}

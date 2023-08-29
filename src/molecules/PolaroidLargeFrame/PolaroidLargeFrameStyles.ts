@@ -1,16 +1,17 @@
-import {StyleSheet} from 'react-native';
-import {horizontalScale} from '../../utils/scale';
+import {PixelRatio, StyleSheet} from 'react-native';
+import {horizontalScale, verticalScale} from '../../utils/scale';
 import {Colors, FontFamily} from '../../utils/theme';
 
 export const styles = StyleSheet.create({
   container: {
-    width: horizontalScale(250),
-    borderRadius: 4,
-    paddingHorizontal: 15,
-    paddingVertical: 30,
+    width: horizontalScale(320),
+    borderRadius: 15,
     alignItems: 'center',
     position: 'relative',
-    backgroundColor: 'white',
+    height: verticalScale(310),
+    backgroundColor: Colors.white,
+    // paddingHorizontal: 10,
+    overflow: 'hidden',
   },
 
   pressable: {

@@ -12,6 +12,8 @@ export const Colors = {
   dark: '#272829',
   shadow: 'rgba(20, 102, 204, 0.2)',
   polaroidShadow: 'rgba(0, 0, 0, 0.1)',
+  extraDark: '#0D0D0D',
+  heart: '#FF565E',
 };
 
 export const FontFamily = {
@@ -22,4 +24,7 @@ export const FontFamily = {
   SatisfyRegular: 'Satisfy-Regular',
   ShadowsIntoLightRgular: 'ShadowsIntoLight-Regular',
   MarckScriptRegular: 'MarckScript-Regular',
+  KalamBold: 'Kalam-Bold',
+  KalamLight: 'Kalam-Light',
+  KalamRegular: 'Kalam-Regular',
 };
