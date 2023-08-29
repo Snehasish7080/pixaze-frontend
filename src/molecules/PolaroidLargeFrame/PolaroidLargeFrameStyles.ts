@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 30,
     alignItems: 'center',
     position: 'relative',
+    backgroundColor: 'white',
   },
 
   pressable: {

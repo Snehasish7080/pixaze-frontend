@@ -19,12 +19,12 @@ const GroupedPolaroidFrame: React.FC<GroupedPolaroidFrameProps> = ({
 }) => {
   return (
     <View style={styles.container}>
-      {photos.map((item, index) => {
+      {photos.reverse().map((item, index) => {
         return (
           <View
             style={[index ? styles.frameContainer : styles.frameContainer1]}
             key={index}>
-            <PolaroidSmallFrame image={item.url} tag={tag} />
+            <PolaroidSmallFrame image={item.url} tag={tag} id={item.id} />
           </View>
         );
       })}

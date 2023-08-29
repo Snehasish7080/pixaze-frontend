@@ -5,10 +5,7 @@ import {Colors, FontFamily} from '../../utils/theme';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'flex-end',
-    // justifyContent: 'space-between',
-    backgroundColor: 'rgba(0,0,0,0.8)',
-    // flexDirection: 'row',
+    // alignItems: 'flex-end',
   },
   blurView: {
     top: 0,
@@ -24,7 +21,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     paddingHorizontal: 10,
-    top: 100,
+    top: 40,
   },
   tagText: {
     fontFamily: FontFamily.MarckScriptRegular,
@@ -36,5 +33,9 @@ export const styles = StyleSheet.create({
         rotate: '90deg',
       },
     ],
+  },
+
+  separator: {
+    height: 20,
   },
 });

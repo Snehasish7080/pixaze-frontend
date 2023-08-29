@@ -1,11 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Box, BoxShadow, Canvas, rect, rrect} from '@shopify/react-native-skia';
 import React from 'react';
 import {PixelRatio, TouchableOpacity} from 'react-native';
 import Animated from 'react-native-reanimated';
 import AppText from '../../atoms/AppText/AppText';
-import {AuthenticatedRouteList} from '../../navigations/AuthenticatedNavigation/AuthenticatedNavigationTypes';
+import {ProfileRouteList} from '../../navigations/ProfileNavigation/ProfileNavigationTypes';
 import {Colors} from '../../utils/theme';
 import {styles} from './PolaroidSmallFrameStyles';
 
@@ -16,35 +16,42 @@ const widthDiff = width + 45 - width;
 type PolaroidSmallFrameProps = {
   image: string;
   tag: string;
+  id: string;
 };
+
 const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
   image,
   tag,
+  id,
 }) => {
   const navigation =
-    useNavigation<StackNavigationProp<AuthenticatedRouteList>>();
+    useNavigation<NativeStackNavigationProp<ProfileRouteList>>();
 
   return (
-    <Animated.View style={styles.container} sharedTransitionTag={tag}>
-      <Canvas
-        style={{
-          height: height + 55,
-          width: width + 45,
-          position: 'absolute',
-          top: -18,
-        }}
-        mode="continuous">
-        <Box
-          box={rrect(rect(widthDiff / 2, 16.8, width, height), 2, 2)}
-          color={Colors.white}>
-          <BoxShadow dx={-3} dy={0} blur={6} color={Colors.polaroidShadow} />
-        </Box>
-      </Canvas>
+    <Animated.View style={styles.container} sharedTransitionTag={id}>
+      {navigation.isFocused() && (
+        <Canvas
+          style={{
+            height: height + 55,
+            width: width + 45,
+            position: 'absolute',
+            top: -18,
+          }}
+          mode="continuous">
+          <Box
+            box={rrect(rect(widthDiff / 2, 16.8, width, height), 2, 2)}
+            color={Colors.white}>
+            <BoxShadow dx={-3} dy={0} blur={6} color={Colors.polaroidShadow} />
+          </Box>
+        </Canvas>
+      )}
       <TouchableOpacity
         style={styles.pressable}
         activeOpacity={0.5}
         onPress={() => {
-          navigation.navigate('MemoDetailScreen');
+          navigation.navigate('MemoDetailScreen', {
+            tag,
+          });
         }}>
         <Animated.Image
           source={{
@@ -61,6 +68,7 @@ const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
               resizeMode: 'contain',
             },
           ]}
+          sharedTransitionTag={image}
         />
         <AppText
           lineHeight={20}

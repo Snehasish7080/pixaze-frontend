@@ -7,32 +7,50 @@ import {
   rrect,
   useFont,
 } from '@shopify/react-native-skia';
-import React from 'react';
-import {ScrollView, View} from 'react-native';
+import React, {useMemo} from 'react';
+import {FlatList, ScrollView, View} from 'react-native';
 import AppText from '../../atoms/AppText/AppText';
 import PolaroidLargeFrame from '../../molecules/PolaroidLargeFrame/PolaroidLargeFrame';
+import {ProfileNavProps} from '../../navigations/ProfileNavigation/ProfileNavigationTypes';
+import {profileData} from '../../utils/dummyData';
 import {Colors} from '../../utils/theme';
 import {styles} from './MemoDetailScreenStyles';
 
-const MemoDetailScreen: React.FC = () => {
+const MemoDetailScreen: React.FC<ProfileNavProps<'MemoDetailScreen'>> = ({
+  route,
+}) => {
+  const {tag} = route?.params;
+
+  const data = useMemo(() => {
+    const temp = profileData.filter(x => x.tag === tag)[0];
+    return temp;
+  }, [tag]);
   return (
     <View style={styles.container}>
-      {/* <BlurView
+      <BlurView
         style={styles.blurView}
         blurType="dark"
-        blurAmount={6}
+        blurAmount={10}
         reducedTransparencyFallbackColor={Colors.dark}
-      /> */}
+      />
       <Tag height={200} />
-      <ScrollView
+
+      <FlatList
+        data={data.photos}
+        keyExtractor={item => item.id}
         contentContainerStyle={{
           flexGrow: 1,
-          paddingHorizontal: 20,
-          paddingVertical: 100,
+          paddingVertical: 40,
+          paddingLeft: 70,
         }}
-        showsVerticalScrollIndicator={false}>
-        <PolaroidLargeFrame />
-      </ScrollView>
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        showsVerticalScrollIndicator={false}
+        renderItem={({item, index}) => {
+          return (
+            <PolaroidLargeFrame id={data.id} photo={item} tag={data.tag} />
+          );
+        }}
+      />
     </View>
   );
 };
