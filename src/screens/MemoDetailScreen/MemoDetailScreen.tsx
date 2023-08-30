@@ -1,6 +1,7 @@
 import {BlurView} from '@react-native-community/blur';
 import React, {useMemo} from 'react';
-import {FlatList, PixelRatio, View} from 'react-native';
+import {FlatList, Image, PixelRatio, View} from 'react-native';
+import Animated from 'react-native-reanimated';
 import AppText from '../../atoms/AppText/AppText';
 import CommentButton from '../../atoms/CommentButton/CommentButton';
 import HeartIconButton from '../../atoms/HeartIconButton/HeartIconButton';
@@ -30,8 +31,28 @@ const MemoDetailScreen: React.FC<ProfileNavProps<'MemoDetailScreen'>> = ({
         blurAmount={10}
         reducedTransparencyFallbackColor={Colors.dark}
       />
-      {/* <Tag height={200} tag={tag} /> */}
-
+      <View style={styles.profileContainer}>
+        <Animated.Image
+          source={{
+            uri: 'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80',
+          }}
+          style={[
+            styles.profilePic,
+            {
+              width: PixelRatio.getPixelSizeForLayoutSize(
+                50 / PixelRatio.get(),
+              ),
+              height: PixelRatio.getPixelSizeForLayoutSize(
+                50 / PixelRatio.get(),
+              ),
+            },
+          ]}
+          sharedTransitionTag={'profile_Image'}
+        />
+        <AppText lineHeight={20} style={styles.name}>
+          Mark Philips
+        </AppText>
+      </View>
       <View style={styles.tagContainer}>
         <AppText
           lineHeight={35}
@@ -46,7 +67,7 @@ const MemoDetailScreen: React.FC<ProfileNavProps<'MemoDetailScreen'>> = ({
       </View>
       <View
         style={{
-          height: verticalScale(320),
+          height: verticalScale(350),
         }}>
         <FlatList
           data={data.photos}

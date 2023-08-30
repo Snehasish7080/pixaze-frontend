@@ -1,5 +1,6 @@
 import React from 'react';
 import {Image, TouchableOpacity, View} from 'react-native';
+import Animated from 'react-native-reanimated';
 import AppText from '../../atoms/AppText/AppText';
 import SettingsIcon from '../../atoms/SettingsIcon/SettingsIcon';
 import {styles} from './ProfileScreenStyles';
@@ -8,11 +9,12 @@ const ProfileHeader: React.FC = () => {
   return (
     <View>
       <View style={styles.profileContainer}>
-        <Image
+        <Animated.Image
           source={{
             uri: 'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80',
           }}
           style={styles.profilePic}
+          sharedTransitionTag={'profile_Image'}
         />
         <View style={styles.relationContainer}>
           <View style={styles.followersContainer}>

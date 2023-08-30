@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     // alignItems: 'flex-end',
     alignItems: 'center',
     // justifyContent: 'center',
-    paddingTop: verticalScale(150),
+    // paddingTop:
   },
   blurView: {
     top: 0,
@@ -45,5 +45,23 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FontFamily.LatoBold,
     color: Colors.white,
+  },
+  profilePic: {
+    borderRadius: 12,
+    resizeMode: 'cover',
+  },
+  profileContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 16,
+    paddingVertical: 26,
+    marginBottom: verticalScale(50),
+  },
+  name: {
+    fontFamily: FontFamily.LatoBold,
+    color: Colors.white,
+    marginLeft: 16,
+    fontSize: 14,
   },
 });

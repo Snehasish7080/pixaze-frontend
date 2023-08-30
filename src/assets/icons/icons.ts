@@ -2,18 +2,14 @@ import {Skia} from '@shopify/react-native-skia';
 
 export const heartIcon = (width?: number, height?: number) =>
   Skia.SVG.MakeFromString(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${
-      width ? width : 22
-    }" height="${height ? height : 20}" viewBox="0 0 22 20" fill="none">
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 20" fill="none">
   <path d="M6 1.08325C3.239 1.08325 1 3.29925 1 6.03325C1 8.24025 1.875 13.4783 10.488 18.7733C10.6423 18.8671 10.8194 18.9168 11 18.9168C11.1806 18.9168 11.3577 18.8671 11.512 18.7733C20.125 13.4783 21 8.24025 21 6.03325C21 3.29925 18.761 1.08325 16 1.08325C13.239 1.08325 11 4.08325 11 4.08325C11 4.08325 8.761 1.08325 6 1.08325Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>`,
   )!;
 
 export const heartFilledIcon = (width?: number, height?: number) =>
   Skia.SVG.MakeFromString(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${
-      width ? width : 22
-    }" height="${height ? height : 20}" viewBox="0 0 23 20" fill="none">
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 20" fill="none">
   <path d="M6 0C2.9629 0 0.5 2.48521 0.5 5.55134C0.5 8.02646 1.4625 13.9008 10.9368 19.839C11.1065 19.9443 11.3013 20 11.5 20C11.6987 20 11.8935 19.9443 12.0632 19.839C21.5375 13.9008 22.5 8.02646 22.5 5.55134C22.5 2.48521 20.0371 0 17 0C13.9629 0 11.5 3.36445 11.5 3.36445C11.5 3.36445 9.0371 0 6 0Z" fill="red"/>
   </svg>`,
   )!;
