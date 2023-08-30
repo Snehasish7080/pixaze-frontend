@@ -1,6 +1,6 @@
 import {BlurView} from '@react-native-community/blur';
-import React, {useMemo} from 'react';
-import {FlatList, Image, PixelRatio, View} from 'react-native';
+import React, {useMemo, useState} from 'react';
+import {FlatList, Image, PixelRatio, Vibration, View} from 'react-native';
 import Animated from 'react-native-reanimated';
 import AppText from '../../atoms/AppText/AppText';
 import CommentButton from '../../atoms/CommentButton/CommentButton';
@@ -16,12 +16,19 @@ import {styles} from './MemoDetailScreenStyles';
 const MemoDetailScreen: React.FC<ProfileNavProps<'MemoDetailScreen'>> = ({
   route,
 }) => {
+  const [isLiked, setIsLiked] = useState(false);
+
   const {tag} = route?.params;
 
   const data = useMemo(() => {
     const temp = profileData.filter(x => x.tag === tag)[0];
     return temp;
   }, [tag]);
+
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    Vibration.vibrate(1);
+  };
 
   return (
     <View style={styles.container}>
@@ -81,7 +88,12 @@ const MemoDetailScreen: React.FC<ProfileNavProps<'MemoDetailScreen'>> = ({
           showsHorizontalScrollIndicator={false}
           renderItem={({item, index}) => {
             return (
-              <PolaroidLargeFrame id={data.id} photo={item} tag={data.tag} />
+              <PolaroidLargeFrame
+                id={data.id}
+                photo={item}
+                tag={data.tag}
+                onPress={handleLike}
+              />
             );
           }}
           directionalLockEnabled={true}
@@ -89,7 +101,7 @@ const MemoDetailScreen: React.FC<ProfileNavProps<'MemoDetailScreen'>> = ({
       </View>
       <View style={styles.actionBtnContainer}>
         <View style={styles.actionBtn}>
-          <HeartIconButton />
+          <HeartIconButton liked={isLiked} handleLiked={handleLike} />
           <AppText lineHeight={14} style={styles.actionText}>
             1.1k
           </AppText>

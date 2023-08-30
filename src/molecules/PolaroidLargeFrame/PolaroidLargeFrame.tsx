@@ -1,9 +1,12 @@
-import React from 'react';
-import {Alert, PixelRatio} from 'react-native';
+import React, {useEffect} from 'react';
+import {Alert, PixelRatio, TouchableOpacity} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
+  withDelay,
   withTiming,
 } from 'react-native-reanimated';
 import {styles} from './PolaroidLargeFrameStyles';
@@ -15,12 +18,16 @@ type PolaroidLargeFrameProps = {
     url: string;
   };
   tag: string;
+  onPress?: () => void;
+  liked?: boolean;
 };
 
 const PolaroidLargeFrame: React.FC<PolaroidLargeFrameProps> = ({
   id,
   photo,
   tag,
+  onPress,
+  liked,
 }) => {
   const scale = useSharedValue(1);
 
@@ -30,7 +37,7 @@ const PolaroidLargeFrame: React.FC<PolaroidLargeFrameProps> = ({
         duration: 400,
       });
     })
-    .onFinalize(() => {
+    .onFinalize(e => {
       scale.value = withTiming(1, {
         duration: 400,
       });
@@ -44,25 +51,30 @@ const PolaroidLargeFrame: React.FC<PolaroidLargeFrameProps> = ({
 
   return (
     <GestureDetector gesture={longPressGesture}>
-      <Animated.View
-        style={[styles.container, animatedStyles]}
-        sharedTransitionTag={photo.id}>
-        <Animated.Image
-          source={{
-            uri: photo.url,
-          }}
-          style={[
-            {
-              width: '100%',
-              height: PixelRatio.getPixelSizeForLayoutSize(
-                350 / PixelRatio.get(),
-              ),
-              resizeMode: 'contain',
-            },
-          ]}
-          sharedTransitionTag={photo.url}
-        />
-      </Animated.View>
+      <TouchableOpacity
+        onLongPress={onPress}
+        activeOpacity={1}
+        delayLongPress={200}>
+        <Animated.View
+          style={[styles.container, animatedStyles]}
+          sharedTransitionTag={photo.id}>
+          <Animated.Image
+            source={{
+              uri: photo.url,
+            }}
+            style={[
+              {
+                width: '100%',
+                height: PixelRatio.getPixelSizeForLayoutSize(
+                  340 / PixelRatio.get(),
+                ),
+                resizeMode: 'contain',
+              },
+            ]}
+            sharedTransitionTag={photo.url}
+          />
+        </Animated.View>
+      </TouchableOpacity>
     </GestureDetector>
   );
 };

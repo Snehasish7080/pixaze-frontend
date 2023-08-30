@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Box, BoxShadow, Canvas, rect, rrect} from '@shopify/react-native-skia';
 import React from 'react';
-import {PixelRatio, TouchableOpacity} from 'react-native';
+import {PixelRatio, TouchableOpacity, View} from 'react-native';
 import Animated from 'react-native-reanimated';
 import AppText from '../../atoms/AppText/AppText';
 import {ProfileRouteList} from '../../navigations/ProfileNavigation/ProfileNavigationTypes';
@@ -30,9 +30,7 @@ const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
     useNavigation<NativeStackNavigationProp<ProfileRouteList>>();
 
   return (
-    <Animated.View
-      style={styles.container}
-      sharedTransitionTag={alowTransition ? id : undefined}>
+    <View style={styles.container}>
       {navigation.isFocused() && (
         <Canvas
           style={{
@@ -49,43 +47,47 @@ const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
           </Box>
         </Canvas>
       )}
-      <TouchableOpacity
+      <Animated.View
         style={styles.pressable}
-        activeOpacity={0.5}
-        onPress={() => {
-          navigation.navigate('MemoDetailScreen', {
-            tag,
-          });
-        }}>
-        <Animated.Image
-          source={{
-            uri: image,
-            height: 40,
-            width: 40,
-          }}
-          style={[
-            {
-              width: '100%',
-              height: PixelRatio.getPixelSizeForLayoutSize(
-                90 / PixelRatio.get(),
-              ),
-              resizeMode: 'contain',
-            },
-          ]}
-          sharedTransitionTag={alowTransition ? image : undefined}
-        />
-        <AppText
-          lineHeight={20}
-          style={[
-            styles.tag,
-            {
-              fontSize: 18 / PixelRatio.getFontScale(),
-            },
-          ]}>
-          {tag}
-        </AppText>
-      </TouchableOpacity>
-    </Animated.View>
+        sharedTransitionTag={alowTransition ? id : undefined}>
+        <TouchableOpacity
+          style={styles.pressable}
+          activeOpacity={0.5}
+          onPress={() => {
+            navigation.navigate('MemoDetailScreen', {
+              tag,
+            });
+          }}>
+          <Animated.Image
+            source={{
+              uri: image,
+              height: 40,
+              width: 40,
+            }}
+            style={[
+              {
+                width: '100%',
+                height: PixelRatio.getPixelSizeForLayoutSize(
+                  90 / PixelRatio.get(),
+                ),
+                resizeMode: 'contain',
+              },
+            ]}
+            sharedTransitionTag={alowTransition ? image : undefined}
+          />
+          <AppText
+            lineHeight={20}
+            style={[
+              styles.tag,
+              {
+                fontSize: 18 / PixelRatio.getFontScale(),
+              },
+            ]}>
+            {tag}
+          </AppText>
+        </TouchableOpacity>
+      </Animated.View>
+    </View>
   );
 };
 

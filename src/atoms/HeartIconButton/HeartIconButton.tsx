@@ -4,24 +4,21 @@ import {
   Group,
   ImageSVG,
   Skia,
-  vec,
 } from '@shopify/react-native-skia';
 import React, {useEffect, useMemo, useState} from 'react';
 import {TouchableOpacity, Vibration} from 'react-native';
-import {
-  useSharedValue,
-  withRepeat,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
 import {heartFilledIcon, heartIcon} from '../../assets/icons/icons';
 import {Colors} from '../../utils/theme';
 
-const HeartIconButton = () => {
+type HeartIconButtonProps = {
+  liked?: boolean;
+  handleLiked?: () => void;
+};
+const HeartIconButton: React.FC<HeartIconButtonProps> = ({
+  liked,
+  handleLiked,
+}) => {
   const [isLiked, setIsLiked] = useState(false);
-
-  const width = useSharedValue(0);
-  const height = useSharedValue(0);
 
   const paint = useMemo(() => Skia.Paint(), []);
   paint.setColorFilter(
@@ -33,34 +30,21 @@ const HeartIconButton = () => {
   );
 
   useEffect(() => {
-    if (isLiked) {
-      width.value = withSpring(25, {
-        mass: 1,
-        damping: 10,
-        stiffness: 100,
-        overshootClamping: false,
-        restDisplacementThreshold: 0.01,
-        restSpeedThreshold: 2,
-      });
-      height.value = withSpring(25, {
-        mass: 1,
-        damping: 10,
-        stiffness: 100,
-        overshootClamping: false,
-        restDisplacementThreshold: 0.01,
-        restSpeedThreshold: 2,
-      });
-    } else {
-      width.value = 0;
-      height.value = 0;
+    if (liked !== undefined) {
+      setIsLiked(liked);
     }
-  }, [width, height, isLiked]);
+  }, [liked]);
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={() => {
-        setIsLiked(!isLiked);
-        Vibration.vibrate(1);
+        if (handleLiked) {
+          handleLiked();
+        } else {
+          setIsLiked(!isLiked);
+          Vibration.vibrate(1);
+        }
       }}
       style={{
         width: 33,
@@ -81,8 +65,8 @@ const HeartIconButton = () => {
                 svg={heartFilledIcon()}
                 x={13.5}
                 y={10.5}
-                width={width}
-                height={height}
+                width={25}
+                height={25}
               />
             </Group>
           )}
