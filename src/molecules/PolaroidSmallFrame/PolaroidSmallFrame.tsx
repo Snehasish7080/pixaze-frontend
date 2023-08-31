@@ -9,8 +9,8 @@ import {ProfileRouteList} from '../../navigations/ProfileNavigation/ProfileNavig
 import {Colors} from '../../utils/theme';
 import {styles} from './PolaroidSmallFrameStyles';
 
-const width = 100;
-const height = 130;
+const width = 150;
+const height = 170;
 const widthDiff = width + 45 - width;
 
 type PolaroidSmallFrameProps = {
@@ -41,7 +41,7 @@ const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
           }}
           mode="continuous">
           <Box
-            box={rrect(rect(widthDiff / 2, 16.8, width, height), 2, 2)}
+            box={rrect(rect(widthDiff / 2, 16.8, width, height), 4, 4)}
             color={Colors.white}>
             <BoxShadow dx={-3} dy={0} blur={6} color={Colors.polaroidShadow} />
           </Box>
@@ -68,7 +68,7 @@ const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
               {
                 width: '100%',
                 height: PixelRatio.getPixelSizeForLayoutSize(
-                  90 / PixelRatio.get(),
+                  120 / PixelRatio.get(),
                 ),
                 resizeMode: 'contain',
               },
@@ -76,11 +76,11 @@ const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
             sharedTransitionTag={alowTransition ? image : undefined}
           />
           <AppText
-            lineHeight={20}
+            lineHeight={24}
             style={[
               styles.tag,
               {
-                fontSize: 18 / PixelRatio.getFontScale(),
+                fontSize: 22 / PixelRatio.getFontScale(),
               },
             ]}>
             {tag}

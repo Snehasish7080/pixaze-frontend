@@ -9,6 +9,10 @@ export const profileData = [
     ],
     tag: 'holiday',
     count: 1,
+    location: 'Jaipur, India',
+    memoImage: require('../assets/images/jaipur.png'),
+    memoWidth: 100,
+    memoHeight: 130,
   },
   {
     id: '2',
@@ -24,6 +28,11 @@ export const profileData = [
     ],
     tag: 'breakfast',
     count: 2,
+    desc: ' it is a long established fact that a reader will be distracted',
+    location: 'Mumbai, India',
+    memoImage: require('../assets/images/train.png'),
+    memoWidth: 100,
+    memoHeight: 70,
   },
   {
     id: '3',
@@ -35,6 +44,9 @@ export const profileData = [
     ],
     tag: 'sunset',
     count: 1,
+    memoImage: require('../assets/images/hotBalloon.png'),
+    memoWidth: 100,
+    memoHeight: 120,
   },
   {
     id: '4',
@@ -58,6 +70,8 @@ export const profileData = [
     ],
     tag: '27-08-2023',
     count: 4,
+    desc: ' it is a long established fact that a reader will be distracted',
+    location: 'Shimla, India',
   },
   {
     id: '5',
@@ -80,5 +94,6 @@ export const profileData = [
     ],
     tag: "let's start",
     count: 1,
+    desc: ' it is a long established fact that a reader will be distracted',
   },
 ];

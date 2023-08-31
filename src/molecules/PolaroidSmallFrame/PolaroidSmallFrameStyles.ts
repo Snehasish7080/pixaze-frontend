@@ -3,9 +3,9 @@ import {Colors, FontFamily} from '../../utils/theme';
 
 export const styles = StyleSheet.create({
   container: {
-    width: 100,
-    height: 130,
-    borderRadius: 2,
+    width: 150,
+    height: 170,
+    borderRadius: 4,
     paddingHorizontal: 6,
     paddingVertical: 6,
     alignItems: 'center',

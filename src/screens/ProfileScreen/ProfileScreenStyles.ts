@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.white,
     // paddingHorizontal: 16,
-    paddingVertical: 30,
+    // paddingVertical: 30,
   },
   profilePic: {
     width: 78,
@@ -94,5 +94,8 @@ export const styles = StyleSheet.create({
   mediaContainer: {
     flexDirection: 'row',
     marginBottom: 20,
+  },
+  itemSeparator: {
+    height: 30,
   },
 });

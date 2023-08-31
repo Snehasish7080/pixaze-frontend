@@ -4,12 +4,11 @@ import {Colors, FontFamily} from '../../utils/theme';
 export const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    width: 120,
-    height: 130,
+    width: 150,
+    height: 170,
   },
   frameContainer: {
     position: 'absolute',
-    transform: [],
   },
   frameContainer1: {
     position: 'absolute',
@@ -26,8 +25,8 @@ export const styles = StyleSheet.create({
     ],
   },
   countContainer: {
-    minWidth: 12,
-    height: 12,
+    minWidth: 14,
+    height: 14,
     alignItems: 'center',
     justifyContent: 'center',
     borderTopLeftRadius: 2,
@@ -39,5 +38,6 @@ export const styles = StyleSheet.create({
   count: {
     fontSize: 11,
     color: Colors.white,
+    fontFamily: FontFamily.LatoBold,
   },
 });
