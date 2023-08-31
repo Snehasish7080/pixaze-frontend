@@ -1,21 +1,20 @@
 import React from 'react';
 import {FlatList, View} from 'react-native';
 import AppHeader from '../../molecules/AppHeader/AppHeader';
-import PolaroidSmallFrame from '../../molecules/PolaroidSmallFrame/PolaroidSmallFrame';
 import {ProfileNavProps} from '../../navigations/ProfileNavigation/ProfileNavigationTypes';
-import GroupedPolaroidFrame from '../../organisms/GroupedPolaroidFrame/GroupedPolaroidFrame';
 import MemoFrame from '../../organisms/MemoFrame/MemoFrame';
 import {profileData} from '../../utils/dummyData';
+import ProfileHeader from './ProfileHeader';
 import {styles} from './ProfileScreenStyles';
 
 const ProfileScreen: React.FC<ProfileNavProps<'NativeProfileScreen'>> = () => {
   return (
     <>
-      <AppHeader title="Mark Philips" />
+      <AppHeader title="Mark Philips" hideBack={true} />
       <View style={styles.container}>
         <FlatList
           data={profileData}
-          // ListHeaderComponent={<ProfileHeader />}
+          ListHeaderComponent={<ProfileHeader />}
           keyExtractor={item => item.id}
           renderItem={({item, index}) => {
             return (
@@ -28,6 +27,7 @@ const ProfileScreen: React.FC<ProfileNavProps<'NativeProfileScreen'>> = () => {
                 memoImage={item.memoImage}
                 memoWidth={item.memoHeight}
                 memoHeight={item.memoHeight}
+                index={index}
               />
             );
           }}

@@ -12,7 +12,7 @@ export const profileData = [
     location: 'Jaipur, India',
     memoImage: require('../assets/images/jaipur.png'),
     memoWidth: 100,
-    memoHeight: 130,
+    memoHeight: 150,
   },
   {
     id: '2',
@@ -32,7 +32,7 @@ export const profileData = [
     location: 'Mumbai, India',
     memoImage: require('../assets/images/train.png'),
     memoWidth: 100,
-    memoHeight: 70,
+    memoHeight: 120,
   },
   {
     id: '3',
@@ -46,7 +46,8 @@ export const profileData = [
     count: 1,
     memoImage: require('../assets/images/hotBalloon.png'),
     memoWidth: 100,
-    memoHeight: 120,
+    memoHeight: 170,
+    desc: ' it is a long established fact that a reader will be distracted',
   },
   {
     id: '4',
@@ -83,6 +84,10 @@ export const profileData = [
     ],
     tag: 'Night out',
     count: 1,
+    memoImage: require('../assets/images/boat.png'),
+    memoWidth: 100,
+    memoHeight: 200,
+    desc: ' it is a long established fact that a reader will be distracted',
   },
   {
     id: '6',

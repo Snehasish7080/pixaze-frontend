@@ -17,6 +17,7 @@ type MemoFrameProps = {
   memoImage?: any;
   memoWidth?: number;
   memoHeight?: number;
+  index: number;
 };
 
 const MemoFrame: React.FC<MemoFrameProps> = ({
@@ -28,9 +29,16 @@ const MemoFrame: React.FC<MemoFrameProps> = ({
   memoImage,
   memoWidth = 20,
   memoHeight = 20,
+  index,
 }) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          flexDirection: index % 2 ? 'row' : 'row-reverse',
+        },
+      ]}>
       {count === 1 && (
         <PolaroidSmallFrame image={photos[0].url} tag={tag} id={photos[0].id} />
       )}
@@ -42,7 +50,14 @@ const MemoFrame: React.FC<MemoFrameProps> = ({
         />
       )}
 
-      <View style={styles.info}>
+      <View
+        style={[
+          styles.info,
+          {
+            marginRight: index % 2 ? 0 : 30,
+            marginLeft: index % 2 ? 30 : 0,
+          },
+        ]}>
         <AppText lineHeight={18} style={styles.date}>
           31 Aug 2023
         </AppText>
@@ -75,13 +90,16 @@ const MemoFrame: React.FC<MemoFrameProps> = ({
             <Image
               source={memoImage}
               style={{
-                width: PixelRatio.getPixelSizeForLayoutSize(
-                  memoWidth / PixelRatio.get(),
-                ),
+                // width: PixelRatio.getPixelSizeForLayoutSize(
+                //   memoWidth / PixelRatio.get(),
+                // ),
+                width: '100%',
                 height: PixelRatio.getPixelSizeForLayoutSize(
                   memoHeight / PixelRatio.get(),
                 ),
                 resizeMode: 'contain',
+                position: 'absolute',
+                bottom: -20,
               }}
             />
           </View>

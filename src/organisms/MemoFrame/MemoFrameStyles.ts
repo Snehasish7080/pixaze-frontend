@@ -9,14 +9,11 @@ export const styles = StyleSheet.create({
   },
   desc: {
     fontSize: 12,
-    // flex: 1,
     marginTop: 5,
-    // textAlign: 'right',
   },
   info: {
     flex: 1,
     marginLeft: 30,
-    // alignItems: 'flex-end',
   },
   date: {
     fontFamily: FontFamily.LatoBold,
@@ -34,5 +31,6 @@ export const styles = StyleSheet.create({
   },
   memoImageContainer: {
     marginTop: 5,
+    flex: 1,
   },
 });

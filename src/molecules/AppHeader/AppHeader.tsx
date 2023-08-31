@@ -6,11 +6,12 @@ import BackButton from '../../atoms/BackButton/BackButton';
 
 type AppHeaderProps = {
   title: string;
+  hideBack?: boolean;
 };
-const AppHeader: React.FC<AppHeaderProps> = ({title}) => {
+const AppHeader: React.FC<AppHeaderProps> = ({title, hideBack = false}) => {
   return (
     <View style={styles.container}>
-      <BackButton />
+      {!hideBack && <BackButton />}
       <AppText
         lineHeight={14}
         style={[
