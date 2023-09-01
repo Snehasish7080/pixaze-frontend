@@ -4,6 +4,7 @@ export const Colors = {
   primaryExtraLight: 'rgba(135, 67, 255,0.2)',
   secondary: '#4136F1',
   secondaryLight: 'rgba(65, 54, 241,0.7)',
+  secondaryExtraLight: 'rgba(65, 54, 241,0.2)',
   black: '#000000',
   placeholder: 'rgba(0, 0, 0, 0.4)',
   white: '#FFFFFF',

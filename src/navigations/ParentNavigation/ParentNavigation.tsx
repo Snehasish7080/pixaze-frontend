@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {ParentRouteList} from './ParentNavigationTypes';
 import UnAuthenticatedNavigation from '../UnAuthenticatedNavigation/UnAuthenticatedNavigation';
 import AuthenticatedNavigation from '../AuthenticatedNavigation/AuthenticatedNavigation';
+import TabNavigation from '../TabNavigation/TabNavigation';
 
 const Stack = createStackNavigator<ParentRouteList>();
 
@@ -19,7 +20,7 @@ const ParentNavigation = () => {
       />
       <Stack.Screen
         name="Authenticated"
-        component={AuthenticatedNavigation}
+        component={TabNavigation}
         options={{
           headerShown: false,
         }}
