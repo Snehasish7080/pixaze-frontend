@@ -20,7 +20,7 @@ const ParentNavigation = () => {
       />
       <Stack.Screen
         name="Authenticated"
-        component={TabNavigation}
+        component={AuthenticatedNavigation}
         options={{
           headerShown: false,
         }}

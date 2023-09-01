@@ -20,7 +20,6 @@ type AppBottomTabBarProps = {
 };
 const AppBottomTabBar: React.FC<AppBottomTabBarProps> = ({
   descriptors,
-  insets,
   navigation,
   state,
 }) => {

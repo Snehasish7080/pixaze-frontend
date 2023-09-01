@@ -1,11 +1,10 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
-import {View} from 'react-native';
 import CreateIcon from '../../atoms/CreateIcon/CreateIcon';
 import FeedIcon from '../../atoms/FeedIcon/FeedIcon';
 import ProfileIcon from '../../atoms/ProfileIcon/ProfileIcon';
 import AppBottomTabBar from '../../molecules/AppBottomTabBar/AppBottomTabBar';
-import CreateScreen from '../../screens/CreateScreen/CreateScreen';
+import ExploreScreen from '../../screens/ExploreScreen/ExploreScreen';
 import FeedScreen from '../../screens/FeedScreen/FeedScreen';
 import ProfileNavigation from '../ProfileNavigation/ProfileNavigation';
 import {TabNavigationRouteList} from './TabNavigationTypes';
@@ -28,8 +27,8 @@ const TabNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="CreateScreen"
-        component={CreateScreen}
+        name="ExploreScreen"
+        component={ExploreScreen}
         options={{
           tabBarIcon: ({focused}) => {
             return <CreateIcon isFocused={focused} />;
