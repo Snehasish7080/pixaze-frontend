@@ -1,5 +1,6 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
+import {View} from 'react-native';
 import CreateIcon from '../../atoms/CreateIcon/CreateIcon';
 import FeedIcon from '../../atoms/FeedIcon/FeedIcon';
 import ProfileIcon from '../../atoms/ProfileIcon/ProfileIcon';

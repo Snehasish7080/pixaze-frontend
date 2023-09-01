@@ -13,6 +13,8 @@ export const Colors = {
   dark: '#272829',
   shadow: 'rgba(20, 102, 204, 0.2)',
   polaroidShadow: 'rgba(0, 0, 0, 0.1)',
+  tabShadow: 'rgba(0, 0, 0, 0.2)',
+  blurTabBtn: 'rgba(0, 0, 0, 0.4)',
   extraDark: '#0D0D0D',
   heart: '#FF565E',
 };
