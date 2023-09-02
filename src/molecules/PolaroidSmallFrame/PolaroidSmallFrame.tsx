@@ -70,7 +70,8 @@ const PolaroidSmallFrame: React.FC<PolaroidSmallFrameProps> = ({
                 height: PixelRatio.getPixelSizeForLayoutSize(
                   120 / PixelRatio.get(),
                 ),
-                resizeMode: 'contain',
+                // resizeMode: 'contain',
+                aspectRatio: 1,
               },
             ]}
             sharedTransitionTag={alowTransition ? image : undefined}

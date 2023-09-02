@@ -26,7 +26,6 @@ function App(): JSX.Element {
     async function getPermission() {
       const permission = await Camera.requestCameraPermission();
       const audioPermission = await Camera.requestMicrophonePermission();
-      console.log(`Camera permission status: ${permission}`);
       if (permission === 'denied') await Linking.openSettings();
       if (audioPermission === 'denied') await Linking.openSettings();
     }

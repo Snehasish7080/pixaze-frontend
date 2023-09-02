@@ -21,6 +21,7 @@ const AuthenticatedNavigation = () => {
         component={CreateScreen}
         options={{
           headerShown: false,
+          presentation: 'modal',
         }}
       />
     </Stack.Navigator>
