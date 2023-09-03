@@ -17,6 +17,8 @@ export const Colors = {
   blurTabBtn: 'rgba(0, 0, 0, 0.4)',
   extraDark: '#0D0D0D',
   heart: '#FF565E',
+  gridLine: 'rgba(255,255,255,0.4)',
+  gridBackground: 'rgba(0, 0, 0, 0.3)',
 };
 
 export const FontFamily = {
