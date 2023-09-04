@@ -2,7 +2,6 @@ import {
   CameraRoll,
   PhotoIdentifier,
 } from '@react-native-camera-roll/camera-roll';
-import {makeImageFromView, useImage} from '@shopify/react-native-skia';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   FlatList,
@@ -22,6 +21,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import {captureRef} from 'react-native-view-shot';
 import AppButton from '../../atoms/AppButton/AppButton';
 import {imageFile} from '../../interfaces/imageFile';
 import {
@@ -35,6 +35,7 @@ const CreateScreen = () => {
   const [permissionGranted, setPermissionGranted] = useState<boolean>(false);
   const [medias, setMedias] = useState<PhotoIdentifier[]>([]);
   const [selectedMedia, setSelectedMedia] = useState<imageFile>();
+
   // const devices = useCameraDevices();
   // const device = devices.back;
 
@@ -112,7 +113,6 @@ type CropperProps = {
   selectedImage: string;
 };
 const Cropper = ({selectedImage}: CropperProps) => {
-  const image = useImage(encodeURI(selectedImage));
   const {width} = useWindowDimensions();
   const [isTouchStart, setIsTouchStart] = useState(false);
 
@@ -183,13 +183,13 @@ const Cropper = ({selectedImage}: CropperProps) => {
   const composed = Gesture.Simultaneous(panGesture, pinchGesture);
 
   useEffect(() => {
-    if (image) {
+    if (selectedImage) {
       Image.getSize(selectedImage, (width, height) => {
         setImageWidth(width);
         setImageHeight(height);
       });
     }
-  }, [image]);
+  }, [selectedImage]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -200,19 +200,22 @@ const Cropper = ({selectedImage}: CropperProps) => {
   }));
 
   const viewRef = useRef<View>(null);
-  const [skiImage, setSkiaImage] = useState<any>();
+  const [capturedImage, setCapturedImage] = useState<string>();
 
   const takeSnapshot = useCallback(async () => {
     if (!viewRef.current) {
       return null;
     }
-    // Take the snapshot of the view
-    const snapshot = await makeImageFromView(viewRef);
-    if (snapshot) {
-      const byte = snapshot.encodeToBase64();
-      setSkiaImage('data:image/png;base64,'.concat(`${byte}`));
-    }
-  }, [skiImage]);
+    captureRef(viewRef, {
+      format: 'png',
+      quality: 1,
+    }).then(
+      uri => {
+        setCapturedImage(uri);
+      },
+      error => console.error('Oops, snapshot failed', error),
+    );
+  }, [capturedImage]);
 
   return (
     <>
@@ -240,17 +243,16 @@ const Cropper = ({selectedImage}: CropperProps) => {
           onTouchEnd={() => {
             setIsTouchStart(false);
           }}>
-          {Boolean(skiImage) && (
+          {Boolean(capturedImage) && (
             <View
               style={{
                 width: '100%',
                 height: '100%',
                 backgroundColor: 'transparent',
                 overflow: 'hidden',
-              }}
-              ref={viewRef}>
+              }}>
               <Image
-                source={{uri: skiImage}}
+                source={{uri: capturedImage}}
                 style={[
                   {
                     width: '100%',
@@ -261,14 +263,15 @@ const Cropper = ({selectedImage}: CropperProps) => {
               />
             </View>
           )}
-          {!Boolean(skiImage) && (
+          {!Boolean(capturedImage) && (
             <View
-              style={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: 'transparent',
-                overflow: 'hidden',
-              }}
+              style={[
+                {
+                  width: '100%',
+                  height: '100%',
+                  overflow: 'hidden',
+                },
+              ]}
               ref={viewRef}>
               <Animated.Image
                 source={{uri: selectedImage}}
