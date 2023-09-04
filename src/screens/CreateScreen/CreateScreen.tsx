@@ -1,62 +1,35 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {
-  FlatList,
-  Image,
-  PermissionsAndroid,
-  Platform,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
-import {Camera, useCameraDevices} from 'react-native-vision-camera';
-import AppText from '../../atoms/AppText/AppText';
 import {
   CameraRoll,
   PhotoIdentifier,
 } from '@react-native-camera-roll/camera-roll';
-import {styles} from './CreateScreenStyles';
+import {makeImageFromView, useImage} from '@shopify/react-native-skia';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
-  getCheckPermissionPromise,
-  getRequestPermissionPromise,
-} from '../../utils/permissions';
-import {imageFile} from '../../interfaces/imageFile';
-import {
-  Canvas,
-  DataSourceParam,
-  Group,
-  Image as SkiaImage,
-  processTransform2d,
-  Skia,
-  SkImage,
-  useImage,
-  processTransform,
-  useValue,
-  useSharedValueEffect,
-  makeImageFromView,
-} from '@shopify/react-native-skia';
-import Animated, {
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import {Colors} from '../../utils/theme';
+  FlatList,
+  Image,
+  Pressable,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import {
   Gesture,
   GestureDetector,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
-import {
-  identity4,
-  Matrix4,
-  mix,
-  multiply4,
-  toMatrix3,
-} from 'react-native-redash';
-import {concat, vec3} from './MatrixHelper';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import AppButton from '../../atoms/AppButton/AppButton';
+import {imageFile} from '../../interfaces/imageFile';
+import {
+  getCheckPermissionPromise,
+  getRequestPermissionPromise,
+} from '../../utils/permissions';
+import {Colors} from '../../utils/theme';
+import {styles} from './CreateScreenStyles';
 
 const CreateScreen = () => {
   const [permissionGranted, setPermissionGranted] = useState<boolean>(false);
@@ -151,7 +124,7 @@ const Cropper = ({selectedImage}: CropperProps) => {
 
   const pinchGesture = Gesture.Pinch()
     .onUpdate(e => {
-      scale.value = Math.min(Math.max(saved.value * e.scale, 0.7), 3);
+      scale.value = Math.min(Math.max(saved.value * e.scale, 0.7), 4);
     })
     .onEnd(() => {
       if (scale.value < 1) {
@@ -227,7 +200,7 @@ const Cropper = ({selectedImage}: CropperProps) => {
   }));
 
   const viewRef = useRef<View>(null);
-  const [skiImage, setSkiaImage] = useState<SkImage | null>(null);
+  const [skiImage, setSkiaImage] = useState<any>();
 
   const takeSnapshot = useCallback(async () => {
     if (!viewRef.current) {
@@ -235,12 +208,19 @@ const Cropper = ({selectedImage}: CropperProps) => {
     }
     // Take the snapshot of the view
     const snapshot = await makeImageFromView(viewRef);
-    setSkiaImage(snapshot);
+    if (snapshot) {
+      const byte = snapshot.encodeToBase64();
+      setSkiaImage('data:image/png;base64,'.concat(`${byte}`));
+    }
   }, [skiImage]);
 
   return (
     <>
-      <AppButton width={100} height={20} onPress={takeSnapshot}>
+      <AppButton
+        width={100}
+        height={20}
+        onPress={takeSnapshot}
+        style={{zIndex: 10}}>
         Click
       </AppButton>
       <GestureHandlerRootView
@@ -252,6 +232,7 @@ const Cropper = ({selectedImage}: CropperProps) => {
             width: '100%',
             height: '100%',
             position: 'relative',
+            overflow: 'hidden',
           }}
           onTouchStart={() => {
             setIsTouchStart(true);
@@ -260,44 +241,48 @@ const Cropper = ({selectedImage}: CropperProps) => {
             setIsTouchStart(false);
           }}>
           {Boolean(skiImage) && (
-            <Canvas
+            <View
               style={{
                 width: '100%',
                 height: '100%',
-              }}>
-              {skiImage && (
-                <Group>
-                  <SkiaImage
-                    image={skiImage}
-                    fit="contain"
-                    x={0}
-                    y={0}
-                    width={width}
-                    height={width}
-                  />
-                </Group>
-              )}
-            </Canvas>
+                backgroundColor: 'transparent',
+                overflow: 'hidden',
+              }}
+              ref={viewRef}>
+              <Image
+                source={{uri: skiImage}}
+                style={[
+                  {
+                    width: '100%',
+                    aspectRatio: 1,
+                    resizeMode: 'contain',
+                  },
+                ]}
+              />
+            </View>
           )}
-
-          <View
-            style={{
-              width: width,
-              height: width,
-            }}
-            ref={viewRef}>
-            <Animated.Image
-              source={{uri: selectedImage}}
-              style={[
-                {
-                  width: '100%',
-                  aspectRatio: 1,
-                  resizeMode: 'contain',
-                },
-                animatedStyle,
-              ]}
-            />
-          </View>
+          {!Boolean(skiImage) && (
+            <View
+              style={{
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'transparent',
+                overflow: 'hidden',
+              }}
+              ref={viewRef}>
+              <Animated.Image
+                source={{uri: selectedImage}}
+                style={[
+                  {
+                    width: '100%',
+                    aspectRatio: 1,
+                    resizeMode: 'contain',
+                  },
+                  animatedStyle,
+                ]}
+              />
+            </View>
+          )}
 
           <GestureDetector gesture={composed}>
             <Animated.View style={[styles.cropperGrid]}>
