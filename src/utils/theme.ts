@@ -19,6 +19,7 @@ export const Colors = {
   heart: '#FF565E',
   gridLine: 'rgba(255,255,255,0.4)',
   gridBackground: 'rgba(0, 0, 0, 0.3)',
+  gray: '#9597A1',
 };
 
 export const FontFamily = {

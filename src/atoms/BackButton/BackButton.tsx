@@ -10,7 +10,8 @@ import {TouchableOpacity} from 'react-native';
 import {backIcon} from '../../assets/icons/icons';
 import {Colors} from '../../utils/theme';
 
-const BackButton = () => {
+type BackButtonProps = {onPress: () => void};
+const BackButton = ({onPress}: BackButtonProps) => {
   const paint = useMemo(() => Skia.Paint(), []);
   paint.setColorFilter(
     Skia.ColorFilter.MakeBlend(Skia.Color(Colors.dark), BlendMode.SrcIn),
@@ -18,7 +19,7 @@ const BackButton = () => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
-      onPress={() => {}}
+      onPress={onPress}
       style={{
         width: 30,
         height: '70%',

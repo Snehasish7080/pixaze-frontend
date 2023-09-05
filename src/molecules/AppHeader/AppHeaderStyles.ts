@@ -12,8 +12,14 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 2,
     paddingHorizontal: 16,
+    justifyContent: 'space-between',
   },
   title: {
     fontFamily: FontFamily.LatoBold,
+  },
+  leftSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 60,
   },
 });
