@@ -15,6 +15,7 @@ import {captureRef} from 'react-native-view-shot';
 import {Colors} from '../../utils/theme';
 import {styles} from './CreateScreenStyles';
 
+const IMAGE_HEIGHT = 350;
 type CropperProps = {
   selectedImage: string;
   capturedImage: string;
@@ -50,8 +51,11 @@ const Cropper = React.forwardRef<any, CropperProps>(
     const savedYTranslate = useSharedValue(0);
 
     const panGesture = Gesture.Pan()
-      .onStart(() => {
+      .onTouchesDown(() => {
         runOnJS(setIsTouchStart)(true);
+      })
+      .onTouchesUp(() => {
+        runOnJS(setIsTouchStart)(false);
       })
       .onUpdate(e => {
         if (scale.value >= 1) {
@@ -69,12 +73,14 @@ const Cropper = React.forwardRef<any, CropperProps>(
           if (e.translationY < 0) {
             yTranslate.value = Math.max(
               savedYTranslate.value + e.translationY,
-              -((width / 2) * scale.value - width / 2) / scale.value,
+              -((IMAGE_HEIGHT / 2) * scale.value - IMAGE_HEIGHT / 2) /
+                scale.value,
             );
           } else {
             yTranslate.value = Math.min(
               savedYTranslate.value + e.translationY,
-              ((width / 2) * scale.value - width / 2) / scale.value,
+              ((IMAGE_HEIGHT / 2) * scale.value - IMAGE_HEIGHT / 2) /
+                scale.value,
             );
           }
         }
@@ -131,6 +137,8 @@ const Cropper = React.forwardRef<any, CropperProps>(
                   height: '100%',
                   backgroundColor: 'transparent',
                   overflow: 'hidden',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}>
                 <Image
                   source={{uri: capturedImage}}
@@ -151,6 +159,8 @@ const Cropper = React.forwardRef<any, CropperProps>(
                     width: '100%',
                     height: '100%',
                     overflow: 'hidden',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   },
                 ]}
                 ref={ref}>
@@ -159,7 +169,8 @@ const Cropper = React.forwardRef<any, CropperProps>(
                   style={[
                     {
                       width: '100%',
-                      aspectRatio: 1,
+                      height: IMAGE_HEIGHT,
+                      // aspectRatio: 1,
                       resizeMode: 'contain',
                     },
                     animatedStyle,
@@ -178,7 +189,7 @@ const Cropper = React.forwardRef<any, CropperProps>(
                         key={index}
                         style={{
                           width: width / 4,
-                          height: width / 3,
+                          height: IMAGE_HEIGHT / 3,
                           borderWidth: 0.5,
                           borderColor: Colors.gridLine,
                         }}

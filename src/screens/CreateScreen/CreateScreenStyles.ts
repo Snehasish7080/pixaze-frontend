@@ -13,12 +13,12 @@ export const styles = StyleSheet.create({
     height: Dimensions.get('screen').width / 3,
   },
   gallery: {
-    maxHeight: '45%',
+    flex: 1,
   },
   imageCropper: {
     width: '100%',
     backgroundColor: Colors.white,
-    height: Dimensions.get('screen').width,
+    height: 350,
   },
   selectedImage: {
     width: '100%',
@@ -52,19 +52,22 @@ export const styles = StyleSheet.create({
     fontFamily: FontFamily.LatoBlack,
   },
   selectionContainer: {
-    height: 60,
+    height: 50,
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: 16,
+    backgroundColor: Colors.white,
+    marginTop: 2,
+    justifyContent: 'center',
   },
   cameraContainer: {
-    flex: 1,
-    borderWidth: 1,
     alignItems: 'center',
-    height: 40,
+    height: 35,
     justifyContent: 'center',
     borderRadius: 10,
+    width: 35,
+    backgroundColor: Colors.cameraBtnBackground,
+    borderColor: Colors.gray,
   },
 });

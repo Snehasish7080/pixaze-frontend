@@ -3,6 +3,7 @@ import {PixelRatio, TouchableOpacity, View} from 'react-native';
 import {captureRef} from 'react-native-view-shot';
 import AppText from '../../atoms/AppText/AppText';
 import CameraIcon from '../../atoms/CameraIcon/CameraIcon';
+import MultipleSelectIcon from '../../atoms/MultipleSelectIcon/MultipleSelectIcon';
 import {imageFile} from '../../interfaces/imageFile';
 import AppHeader from '../../molecules/AppHeader/AppHeader';
 import {AuthenticatedNavProps} from '../../navigations/AuthenticatedNavigation/AuthenticatedNavigationTypes';
@@ -36,7 +37,7 @@ const CreateScreen: React.FC<AuthenticatedNavProps<'CreateScreen'>> = ({
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <AppHeader
-          title="Back"
+          mainTitle="New Memo"
           rightSection={
             <TouchableOpacity onPress={takeSnapshot}>
               <AppText
@@ -64,24 +65,12 @@ const CreateScreen: React.FC<AuthenticatedNavProps<'CreateScreen'>> = ({
         </View>
       </View>
       <View style={styles.selectionContainer}>
-        <View
-          style={[
-            styles.cameraContainer,
-            {
-              marginRight: 10,
-            },
-          ]}>
+        <TouchableOpacity style={[styles.cameraContainer, {marginRight: 10}]}>
           <CameraIcon />
-        </View>
-        <View
-          style={[
-            styles.cameraContainer,
-            {
-              marginLeft: 10,
-            },
-          ]}>
-          <CameraIcon />
-        </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.cameraContainer]}>
+          <MultipleSelectIcon />
+        </TouchableOpacity>
       </View>
       <GallerySection
         selectedMedia={selectedMedia}
