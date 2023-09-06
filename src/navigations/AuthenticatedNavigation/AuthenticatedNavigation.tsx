@@ -1,6 +1,7 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import CreateScreen from '../../screens/CreateScreen/CreateScreen';
+import EditScreen from '../../screens/EditScreen/EditScreen';
 import TabNavigation from '../TabNavigation/TabNavigation';
 import {AuthenticatedRouteList} from './AuthenticatedNavigationTypes';
 
@@ -19,6 +20,14 @@ const AuthenticatedNavigation = () => {
       <Stack.Screen
         name="CreateScreen"
         component={CreateScreen}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
+      <Stack.Screen
+        name="EditScreen"
+        component={EditScreen}
         options={{
           headerShown: false,
           presentation: 'modal',

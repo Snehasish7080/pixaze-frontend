@@ -1,8 +1,8 @@
-import {View, Text, PixelRatio, StyleProp, ViewStyle} from 'react-native';
 import React, {ReactNode} from 'react';
-import {styles} from './AppHeaderStyles';
+import {PixelRatio, StyleProp, View, ViewStyle} from 'react-native';
 import AppText from '../../atoms/AppText/AppText';
 import BackButton from '../../atoms/BackButton/BackButton';
+import {styles} from './AppHeaderStyles';
 
 type AppHeaderProps = {
   title?: string;
@@ -49,7 +49,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
           {mainTitle}
         </AppText>
       )}
-      {rightSection}
+      <View>{rightSection}</View>
     </View>
   );
 };

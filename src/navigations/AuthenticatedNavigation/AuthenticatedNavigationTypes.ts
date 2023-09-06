@@ -3,6 +3,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 export type AuthenticatedRouteList = {
   HomeScreen: undefined;
   CreateScreen: undefined;
+  EditScreen: {image: string};
 };
 export type AuthenticatedNavigationProp<
   T extends keyof AuthenticatedRouteList,

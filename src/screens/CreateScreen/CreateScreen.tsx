@@ -15,7 +15,6 @@ const CreateScreen: React.FC<AuthenticatedNavProps<'CreateScreen'>> = ({
   navigation,
 }) => {
   const [selectedMedia, setSelectedMedia] = useState<imageFile>();
-  const [capturedImage, setCapturedImage] = useState<string>();
 
   const viewRef = useRef<View>(null);
 
@@ -26,12 +25,14 @@ const CreateScreen: React.FC<AuthenticatedNavProps<'CreateScreen'>> = ({
         quality: 1,
       }).then(
         uri => {
-          setCapturedImage(uri);
+          navigation.replace('EditScreen', {
+            image: uri,
+          });
         },
         error => console.error('Oops, snapshot failed', error),
       );
     }
-  }, [capturedImage]);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -57,11 +58,7 @@ const CreateScreen: React.FC<AuthenticatedNavProps<'CreateScreen'>> = ({
           }}
         />
         <View style={styles.imageCropper}>
-          <Cropper
-            selectedImage={selectedMedia?.uri || ''}
-            ref={viewRef}
-            capturedImage={capturedImage || ''}
-          />
+          <Cropper selectedImage={selectedMedia?.uri || ''} ref={viewRef} />
         </View>
       </View>
       <View style={styles.selectionContainer}>
