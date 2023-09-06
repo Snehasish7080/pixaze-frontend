@@ -16,4 +16,16 @@ export const styles = StyleSheet.create({
     color: Colors.secondaryLight,
     fontFamily: FontFamily.LatoBlack,
   },
+  image: {
+    width: 80,
+    height: 80,
+    // resizeMode: 'cover',
+    // aspectRatio: 1,
+    borderRadius: 12,
+    marginRight: 10,
+    overflow: 'hidden',
+  },
+  filterContainer: {
+    marginTop: 50,
+  },
 });

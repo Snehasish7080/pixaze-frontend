@@ -23,8 +23,8 @@ const Cropper = React.forwardRef<any, CropperProps>(({selectedImage}, ref) => {
   const {width} = useWindowDimensions();
   const [isTouchStart, setIsTouchStart] = useState(false);
 
-  const [imageWidth, setImageWidth] = useState<number>();
-  const [imageHeight, setImageHeight] = useState<number>();
+  const [imageWidth, setImageWidth] = useState<number>(0);
+  const [imageHeight, setImageHeight] = useState<number>(0);
 
   const scale = useSharedValue(1);
   const saved = useSharedValue(1);
@@ -145,7 +145,7 @@ const Cropper = React.forwardRef<any, CropperProps>(({selectedImage}, ref) => {
                   {
                     width: '100%',
                     height: IMAGE_HEIGHT,
-                    resizeMode: 'contain',
+                    resizeMode: imageWidth > imageHeight ? 'cover' : 'contain',
                   },
                   animatedStyle,
                 ]}
