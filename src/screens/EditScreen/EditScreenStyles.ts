@@ -17,8 +17,8 @@ export const styles = StyleSheet.create({
     fontFamily: FontFamily.LatoBlack,
   },
   image: {
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 100,
     // resizeMode: 'cover',
     // aspectRatio: 1,
     borderRadius: 12,

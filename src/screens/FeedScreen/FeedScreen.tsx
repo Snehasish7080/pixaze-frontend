@@ -4,23 +4,15 @@ import AppText from '../../atoms/AppText/AppText';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthenticatedRouteList} from '../../navigations/AuthenticatedNavigation/AuthenticatedNavigationTypes';
+import {styles} from './FeedScreenStyles';
+import TravelCard from '../../molecules/TravelCard/TravelCard';
 
-const FeedScreen = () => {
+const FeedScreen: React.FC = () => {
   const parentNavigation =
     useNavigation<StackNavigationProp<AuthenticatedRouteList>>();
   return (
-    <View
-      style={{
-        justifyContent: 'center',
-        flex: 1,
-        alignItems: 'center',
-      }}>
-      <TouchableOpacity
-        onPress={() => {
-          parentNavigation.navigate('CreateScreen');
-        }}>
-        <AppText lineHeight={14}>Create</AppText>
-      </TouchableOpacity>
+    <View style={styles.container}>
+      <TravelCard />
     </View>
   );
 };

@@ -4,6 +4,7 @@ import CreateIcon from '../../atoms/CreateIcon/CreateIcon';
 import FeedIcon from '../../atoms/FeedIcon/FeedIcon';
 import ProfileIcon from '../../atoms/ProfileIcon/ProfileIcon';
 import AppBottomTabBar from '../../molecules/AppBottomTabBar/AppBottomTabBar';
+import AppHeader from '../../molecules/AppHeader/AppHeader';
 import ExploreScreen from '../../screens/ExploreScreen/ExploreScreen';
 import FeedScreen from '../../screens/FeedScreen/FeedScreen';
 import ProfileNavigation from '../ProfileNavigation/ProfileNavigation';
@@ -24,6 +25,7 @@ const TabNavigation = () => {
             return <FeedIcon isFocused={focused} />;
           },
           title: 'Feed',
+          header: () => <AppHeader hideBack={true} mainTitle="Feed" />,
         }}
       />
       <Tab.Screen

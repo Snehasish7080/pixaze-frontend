@@ -40,7 +40,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
 
   const getAllPhotos = async () => {
     const photos = await CameraRoll.getPhotos({
-      first: 10,
+      first: 15,
       groupTypes: 'All',
       assetType: 'Photos',
     });
