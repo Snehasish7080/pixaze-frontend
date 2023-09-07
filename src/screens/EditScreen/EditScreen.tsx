@@ -14,10 +14,26 @@ import AppText from '../../atoms/AppText/AppText';
 import {
   Canvas,
   ColorMatrix,
+  Fill,
+  Group,
   Image as SkiaImage,
+  Lerp,
   useImage,
 } from '@shopify/react-native-skia';
 
+const colorMatrix = [
+  [
+    1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 1.0, 0.0,
+  ],
+  [0, 1.0, 0, 0, 0, 0, 1.0, 0, 0, 0, 0, 0.6, 1, 0, 0, 0, 0, 0, 1, 0],
+  [
+    1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, -0.4, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 1.0, 0.0,
+  ],
+  [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0],
+  [1, -0.2, 0, 0, 0, 0, 1, 0, -0.1, 0, 0, 1.2, 1, 0.1, 0, 0, 0, 1.7, 1, 0],
+];
 const IMAGE_HEIGHT = 350;
 const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   navigation,
@@ -56,11 +72,11 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               paddingVertical: 20,
               paddingHorizontal: 16,
             }}>
-            {Array(10)
-              .fill(undefined)
-              .map((item, index) => {
-                return <FilterComponent image={image} key={index} />;
-              })}
+            {colorMatrix.map((item, index) => {
+              return (
+                <FilterComponent image={image} key={index} matrix={item} />
+              );
+            })}
           </ScrollView>
         </View>
       </View>
@@ -70,18 +86,16 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
 
 type FilterComponentProps = {
   image: string;
+  matrix: number[];
 };
-const FilterComponent = ({image}: FilterComponentProps) => {
+const FilterComponent = ({image, matrix}: FilterComponentProps) => {
   const src = useImage(image);
   return (
     <View style={styles.image}>
       <Canvas style={{width: '100%', height: '100%'}}>
-        <SkiaImage image={src} x={0} y={0} width={80} height={80} fit="cover" />
-        <ColorMatrix
-          matrix={[
-            0, 1.0, 0, 0, 0, 0, 1.0, 0, 0, 0, 0, 0.6, 1, 0, 0, 0, 0, 0, 1, 0,
-          ]}
-        />
+        <SkiaImage image={src} x={0} y={0} width={80} height={80} fit="cover">
+          <ColorMatrix matrix={matrix} />
+        </SkiaImage>
       </Canvas>
     </View>
   );
