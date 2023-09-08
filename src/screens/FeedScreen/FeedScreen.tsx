@@ -6,8 +6,8 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthenticatedRouteList} from '../../navigations/AuthenticatedNavigation/AuthenticatedNavigationTypes';
 import {styles} from './FeedScreenStyles';
 import TravelCard from '../../molecules/TravelCard/TravelCard';
+import {profileData} from '../../utils/dummyData';
 
-const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 const FeedScreen: React.FC = () => {
   const parentNavigation =
     useNavigation<StackNavigationProp<AuthenticatedRouteList>>();
@@ -18,10 +18,10 @@ const FeedScreen: React.FC = () => {
           paddingVertical: 16,
           paddingHorizontal: 16,
         }}
-        data={data}
-        keyExtractor={item => item.toString()}
+        data={profileData}
+        keyExtractor={item => item.id}
         renderItem={({item, index}) => {
-          return <TravelCard />;
+          return <TravelCard image={item.photos[0].url} />;
         }}
         ItemSeparatorComponent={() => <View style={{height: 20}} />}
       />

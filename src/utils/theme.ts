@@ -21,6 +21,7 @@ export const Colors = {
   gridBackground: 'rgba(0, 0, 0, 0.3)',
   cameraBtnBackground: 'rgba(0, 0, 0, 0.1)',
   gray: '#9597A1',
+  locationColor: 'rgba(0, 0, 0, 0.4)',
 };
 
 export const FontFamily = {

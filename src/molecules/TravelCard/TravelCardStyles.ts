@@ -20,14 +20,55 @@ export const styles = StyleSheet.create({
   },
   location: {
     fontFamily: FontFamily.OswaldBold,
-    color: Colors.placeholder,
+    color: Colors.locationColor,
   },
   date: {
     fontFamily: FontFamily.LatoBold,
-    color: Colors.placeholder,
+    color: Colors.locationColor,
+  },
+  tag: {
+    fontFamily: FontFamily.SatisfyRegular,
+    color: Colors.locationColor,
   },
   locationContainer: {
     paddingHorizontal: 16,
     paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  profileSection: {
+    paddingBottom: 10,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  profilePic: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    marginRight: 8,
+  },
+  name: {
+    fontFamily: FontFamily.LatoBold,
+  },
+  locationMark: {
+    flexDirection: 'row',
+  },
+  dateContainer: {
+    marginLeft: 6,
+  },
+  actionBtnContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: 100,
+    justifyContent: 'space-between',
+  },
+  actionBtn: {
+    alignItems: 'center',
+  },
+  actionText: {
+    fontSize: 10,
+    fontFamily: FontFamily.LatoBold,
+    color: Colors.dark,
   },
 });
