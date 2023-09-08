@@ -31,6 +31,12 @@
 		3FF6F542851046F7A8BC22EB /* Kalam-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 838F97C6ED224B2F948C0EB2 /* Kalam-Bold.ttf */; };
 		83DCD33B5DAD47899E925DA5 /* Kalam-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D922F54114284DCBBF82A1B1 /* Kalam-Light.ttf */; };
 		1F7BEDDCEA76470EBA8FD4AE /* Kalam-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C510535C2E7C4338BA875952 /* Kalam-Regular.ttf */; };
+		FE15084B118147C582F9C1AF /* Oswald-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 668C3D81AE2F424FA478C32D /* Oswald-Bold.ttf */; };
+		71A4C673885B4537ABBD1C87 /* Oswald-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DBBF16D6A1AC472F806465B7 /* Oswald-ExtraLight.ttf */; };
+		47669974BE5D4A81A3C37A33 /* Oswald-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 03DA30C1B2A34C15BB600369 /* Oswald-Light.ttf */; };
+		AC48F9B7EDC6412AB74C073F /* Oswald-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FBA3FB776B394F88A15D299C /* Oswald-Medium.ttf */; };
+		383A169BFF9E45BA863ECE31 /* Oswald-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B7AD91BCD61447E9CD23196 /* Oswald-Regular.ttf */; };
+		584F7FF7F8A843038124C46D /* Oswald-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B55348FC65894BF8BD2BC995 /* Oswald-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +84,12 @@
 		838F97C6ED224B2F948C0EB2 /* Kalam-Bold.ttf */ = {isa = PBXFileReference; name = "Kalam-Bold.ttf"; path = "../src/assets/fonts/Kalam-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		D922F54114284DCBBF82A1B1 /* Kalam-Light.ttf */ = {isa = PBXFileReference; name = "Kalam-Light.ttf"; path = "../src/assets/fonts/Kalam-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		C510535C2E7C4338BA875952 /* Kalam-Regular.ttf */ = {isa = PBXFileReference; name = "Kalam-Regular.ttf"; path = "../src/assets/fonts/Kalam-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		668C3D81AE2F424FA478C32D /* Oswald-Bold.ttf */ = {isa = PBXFileReference; name = "Oswald-Bold.ttf"; path = "../src/assets/fonts/Oswald-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DBBF16D6A1AC472F806465B7 /* Oswald-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Oswald-ExtraLight.ttf"; path = "../src/assets/fonts/Oswald-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		03DA30C1B2A34C15BB600369 /* Oswald-Light.ttf */ = {isa = PBXFileReference; name = "Oswald-Light.ttf"; path = "../src/assets/fonts/Oswald-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FBA3FB776B394F88A15D299C /* Oswald-Medium.ttf */ = {isa = PBXFileReference; name = "Oswald-Medium.ttf"; path = "../src/assets/fonts/Oswald-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3B7AD91BCD61447E9CD23196 /* Oswald-Regular.ttf */ = {isa = PBXFileReference; name = "Oswald-Regular.ttf"; path = "../src/assets/fonts/Oswald-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B55348FC65894BF8BD2BC995 /* Oswald-SemiBold.ttf */ = {isa = PBXFileReference; name = "Oswald-SemiBold.ttf"; path = "../src/assets/fonts/Oswald-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +215,12 @@
 				838F97C6ED224B2F948C0EB2 /* Kalam-Bold.ttf */,
 				D922F54114284DCBBF82A1B1 /* Kalam-Light.ttf */,
 				C510535C2E7C4338BA875952 /* Kalam-Regular.ttf */,
+				668C3D81AE2F424FA478C32D /* Oswald-Bold.ttf */,
+				DBBF16D6A1AC472F806465B7 /* Oswald-ExtraLight.ttf */,
+				03DA30C1B2A34C15BB600369 /* Oswald-Light.ttf */,
+				FBA3FB776B394F88A15D299C /* Oswald-Medium.ttf */,
+				3B7AD91BCD61447E9CD23196 /* Oswald-Regular.ttf */,
+				B55348FC65894BF8BD2BC995 /* Oswald-SemiBold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -321,6 +339,12 @@
 				3FF6F542851046F7A8BC22EB /* Kalam-Bold.ttf in Resources */,
 				83DCD33B5DAD47899E925DA5 /* Kalam-Light.ttf in Resources */,
 				1F7BEDDCEA76470EBA8FD4AE /* Kalam-Regular.ttf in Resources */,
+				FE15084B118147C582F9C1AF /* Oswald-Bold.ttf in Resources */,
+				71A4C673885B4537ABBD1C87 /* Oswald-ExtraLight.ttf in Resources */,
+				47669974BE5D4A81A3C37A33 /* Oswald-Light.ttf in Resources */,
+				AC48F9B7EDC6412AB74C073F /* Oswald-Medium.ttf in Resources */,
+				383A169BFF9E45BA863ECE31 /* Oswald-Regular.ttf in Resources */,
+				584F7FF7F8A843038124C46D /* Oswald-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

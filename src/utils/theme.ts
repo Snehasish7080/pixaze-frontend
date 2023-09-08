@@ -34,4 +34,9 @@ export const FontFamily = {
   KalamBold: 'Kalam-Bold',
   KalamLight: 'Kalam-Light',
   KalamRegular: 'Kalam-Regular',
+  OswaldLight: 'Oswald-Light',
+  OswaldRegular: 'Oswald-Regular',
+  OswaldMedium: 'Oswald-Medium',
+  OswaldSemiBold: 'Oswald-SemiBold',
+  OswaldBold: 'Oswald-Bold',
 };

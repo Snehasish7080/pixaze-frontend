@@ -2,10 +2,10 @@ import {StyleSheet} from 'react-native';
 import {Colors, FontFamily} from '../../utils/theme';
 
 export const styles = StyleSheet.create({
-  container: {
-    width: 320,
-    height: 480,
-    borderRadius: 30,
+  imageContainer: {
+    width: 350,
+    height: 350,
+    borderRadius: 20,
     overflow: 'hidden',
   },
   image: {
@@ -17,5 +17,17 @@ export const styles = StyleSheet.create({
     height: 80,
     resizeMode: 'contain',
     aspectRatio: 1,
+  },
+  location: {
+    fontFamily: FontFamily.OswaldBold,
+    color: Colors.placeholder,
+  },
+  date: {
+    fontFamily: FontFamily.LatoBold,
+    color: Colors.placeholder,
+  },
+  locationContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
   },
 });
