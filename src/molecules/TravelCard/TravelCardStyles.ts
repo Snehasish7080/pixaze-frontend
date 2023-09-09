@@ -37,10 +37,11 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   profileSection: {
-    paddingBottom: 10,
+    paddingBottom: 6,
     paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   profilePic: {
     width: 30,
@@ -70,5 +71,9 @@ export const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: FontFamily.LatoBold,
     color: Colors.dark,
+  },
+  imageSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

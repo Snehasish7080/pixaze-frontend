@@ -4,6 +4,7 @@ import AppText from '../../atoms/AppText/AppText';
 import CommentButton from '../../atoms/CommentButton/CommentButton';
 import HeartIconButton from '../../atoms/HeartIconButton/HeartIconButton';
 import LocationIcon from '../../atoms/LocationIcon/LocationIcon';
+import OptionIcon from '../../atoms/OptionIcon/OptionIcon';
 import ShareButton from '../../atoms/ShareButton/ShareButton';
 import {Colors} from '../../utils/theme';
 import {styles} from './TravelCardStyles';
@@ -21,34 +22,37 @@ const TravelCard: React.FC<TravelCardProps> = ({image}) => {
   return (
     <View>
       <View style={styles.profileSection}>
-        <Image
-          source={{
-            uri: 'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80',
-          }}
-          style={styles.profilePic}
-        />
-        <View>
-          <AppText
-            lineHeight={16}
-            style={[
-              styles.name,
-              {
-                fontSize: 14 / PixelRatio.getFontScale(),
-              },
-            ]}>
-            markphilips
-          </AppText>
-          <AppText
-            lineHeight={14}
-            style={[
-              styles.tag,
-              {
-                fontSize: 12 / PixelRatio.getFontScale(),
-              },
-            ]}>
-            Holiday
-          </AppText>
+        <View style={styles.imageSection}>
+          <Image
+            source={{
+              uri: 'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80',
+            }}
+            style={styles.profilePic}
+          />
+          <View>
+            <AppText
+              lineHeight={16}
+              style={[
+                styles.name,
+                {
+                  fontSize: 14 / PixelRatio.getFontScale(),
+                },
+              ]}>
+              markphilips
+            </AppText>
+            <AppText
+              lineHeight={14}
+              style={[
+                styles.tag,
+                {
+                  fontSize: 12 / PixelRatio.getFontScale(),
+                },
+              ]}>
+              Holiday
+            </AppText>
+          </View>
         </View>
+        <OptionIcon />
       </View>
       <View style={styles.imageContainer}>
         <Image
