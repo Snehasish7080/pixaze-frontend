@@ -22,6 +22,7 @@ export const Colors = {
   cameraBtnBackground: 'rgba(0, 0, 0, 0.1)',
   gray: '#9597A1',
   locationColor: 'rgba(0, 0, 0, 0.4)',
+  addMemoColor: 'rgba(255, 255, 255, 0.4)',
 };
 
 export const FontFamily = {

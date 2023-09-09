@@ -3,25 +3,57 @@ import {horizontalScale, verticalScale} from '../../utils/scale';
 import {Colors, FontFamily} from '../../utils/theme';
 
 export const styles = StyleSheet.create({
-  image: {
-    width: 120,
-    height: 120,
-    borderRadius: 25,
-    marginTop: 6,
-  },
-  location: {
-    fontFamily: FontFamily.LatoBold,
-    marginLeft: 6,
-  },
-  locationContainer: {
+  container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 6,
+    justifyContent: 'space-between',
+    height: 140,
+    position: 'relative',
+  },
+  image: {
+    width: 80,
+    height: '100%',
+  },
+  location: {
+    fontFamily: FontFamily.OswaldSemiBold,
+    color: Colors.locationColor,
+  },
+  locationContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+
+  date: {
+    color: Colors.locationColor,
   },
   imageContainer: {
-    alignItems: 'center',
+    flexDirection: 'row',
+    height: '100%',
+    borderTopLeftRadius: 4,
+    borderBottomLeftRadius: 4,
+    overflow: 'hidden',
+    width: 80 * 3,
   },
-  container: {
+  addMemo: {
+    width: 80,
+    height: '100%',
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: Colors.placeholder,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  absoluteAddMemo: {
+    width: 80,
+    height: '100%',
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: Colors.placeholder,
+    backgroundColor: Colors.addMemoColor,
+    position: 'absolute',
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

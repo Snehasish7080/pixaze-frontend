@@ -12,13 +12,16 @@ import {
 import React, {useMemo} from 'react';
 import {Colors} from '../../utils/theme';
 
-const CameraIcon: React.FC = () => {
+type CameraIconProps = {
+  color?: string;
+};
+const CameraIcon: React.FC<CameraIconProps> = ({color = Colors.dark}) => {
   const src = rect(0, 0, 24, 24);
   const dst = rect(0, 0, 20, 20);
 
   const paint = useMemo(() => Skia.Paint(), []);
   paint.setColorFilter(
-    Skia.ColorFilter.MakeBlend(Skia.Color(Colors.dark), BlendMode.SrcIn),
+    Skia.ColorFilter.MakeBlend(Skia.Color(color), BlendMode.SrcIn),
   );
 
   return (
