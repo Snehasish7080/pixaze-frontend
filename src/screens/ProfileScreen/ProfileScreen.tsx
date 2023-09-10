@@ -1,6 +1,7 @@
 import React from 'react';
 import {FlatList, View} from 'react-native';
 import AppHeader from '../../molecules/AppHeader/AppHeader';
+import LocationMark from '../../molecules/LocationMark/LocationMark';
 import {ProfileNavProps} from '../../navigations/ProfileNavigation/ProfileNavigationTypes';
 import MemoFrame from '../../organisms/MemoFrame/MemoFrame';
 import {profileData} from '../../utils/dummyData';
@@ -18,21 +19,15 @@ const ProfileScreen: React.FC<ProfileNavProps<'NativeProfileScreen'>> = () => {
           keyExtractor={item => item.id}
           renderItem={({item, index}) => {
             return (
-              <MemoFrame
-                count={item.count}
-                photos={item.photos}
+              <LocationMark
+                images={item.photos.map(x => x.url).slice(0, 3)}
+                location={item?.location}
                 tag={item.tag}
-                desc={item.desc}
-                location={item.location}
-                memoImage={item.memoImage}
-                memoWidth={item.memoHeight}
-                memoHeight={item.memoHeight}
-                index={index}
               />
             );
           }}
           contentContainerStyle={{
-            paddingHorizontal: 30,
+            paddingHorizontal: 16,
             paddingVertical: 30,
           }}
           ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}

@@ -1,10 +1,8 @@
-import {View, Text, Image, PixelRatio, FlatList} from 'react-native';
 import React from 'react';
-import {styles} from './LocationScreenStyles';
-import {profileData} from '../../utils/dummyData';
-import TabLocationIcon from '../../atoms/LocationIcon/TabLocationIcon';
-import AppText from '../../atoms/AppText/AppText';
+import {FlatList, View} from 'react-native';
 import LocationMark from '../../molecules/LocationMark/LocationMark';
+import {profileData} from '../../utils/dummyData';
+import {styles} from './LocationScreenStyles';
 
 const LocationScreen: React.FC = () => {
   return (
@@ -25,7 +23,7 @@ const LocationScreen: React.FC = () => {
             />
           );
         }}
-        ItemSeparatorComponent={() => <View style={{height: 16}} />}
+        ItemSeparatorComponent={() => <View style={{height: 26}} />}
       />
     </View>
   );

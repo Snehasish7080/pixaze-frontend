@@ -1,5 +1,12 @@
-import {View, Text, Image, PixelRatio, useWindowDimensions} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  Image,
+  PixelRatio,
+  useWindowDimensions,
+  Vibration,
+} from 'react-native';
+import React, {useState} from 'react';
 import {styles} from './LocationMarkStyles';
 import TabLocationIcon from '../../atoms/LocationIcon/TabLocationIcon';
 import {profileData} from '../../utils/dummyData';
@@ -7,6 +14,9 @@ import AppText from '../../atoms/AppText/AppText';
 import {Box, BoxShadow, Canvas, rect, rrect} from '@shopify/react-native-skia';
 import {Colors} from '../../utils/theme';
 import CameraIcon from '../../atoms/CameraIcon/CameraIcon';
+import HeartIconButton from '../../atoms/HeartIconButton/HeartIconButton';
+import CommentButton from '../../atoms/CommentButton/CommentButton';
+import ShareButton from '../../atoms/ShareButton/ShareButton';
 
 type LocationMarkProps = {
   images: string[];
@@ -17,6 +27,12 @@ type LocationMarkProps = {
 const top = -15;
 const LocationMark: React.FC<LocationMarkProps> = ({images, location, tag}) => {
   const {width} = useWindowDimensions();
+  const [isLiked, setIsLiked] = useState(true);
+
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    Vibration.vibrate(1);
+  };
   return (
     <View
       style={[
@@ -65,27 +81,73 @@ const LocationMark: React.FC<LocationMarkProps> = ({images, location, tag}) => {
         )}
       </View>
       <View style={styles.locationContainer}>
-        {Boolean(location) && <TabLocationIcon width={12} height={16} />}
-        <AppText
-          lineHeight={16}
-          style={[
-            styles.location,
-            {
-              fontSize: 16 / PixelRatio.getFontScale(),
-            },
-          ]}>
-          {location || tag}
-        </AppText>
-        <AppText
-          lineHeight={14}
-          style={[
-            styles.date,
-            {
-              fontSize: 12 / PixelRatio.getFontScale(),
-            },
-          ]}>
-          8 sep 2023
-        </AppText>
+        <View>
+          {Boolean(location) && (
+            <AppText
+              lineHeight={16}
+              style={[
+                styles.location,
+                {
+                  fontSize: 16 / PixelRatio.getFontScale(),
+                },
+              ]}>
+              {location}
+            </AppText>
+          )}
+          {!Boolean(location) && (
+            <AppText
+              lineHeight={16}
+              style={[
+                styles.location,
+                {
+                  fontSize: 16 / PixelRatio.getFontScale(),
+                },
+              ]}>
+              {tag}
+            </AppText>
+          )}
+          {Boolean(location) && (
+            <AppText
+              lineHeight={14}
+              style={[
+                styles.tag,
+                {
+                  fontSize: 12 / PixelRatio.getFontScale(),
+                },
+              ]}>
+              {tag}
+            </AppText>
+          )}
+          <AppText
+            lineHeight={14}
+            style={[
+              styles.date,
+              {
+                fontSize: 12 / PixelRatio.getFontScale(),
+              },
+            ]}>
+            8 sep 2023
+          </AppText>
+        </View>
+        <View style={styles.actionContainer}>
+          <HeartIconButton
+            liked={isLiked}
+            handleLiked={undefined}
+            color={Colors.dark}
+            width={15}
+            height={15}
+          />
+          <AppText
+            lineHeight={14}
+            style={[
+              styles.likes,
+              {
+                fontSize: 10 / PixelRatio.getFontScale(),
+              },
+            ]}>
+            1.1k
+          </AppText>
+        </View>
       </View>
     </View>
   );
