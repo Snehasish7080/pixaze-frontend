@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   image: {
-    width: '100%',
+    width: 350,
     height: '100%',
   },
   essenceImage: {
@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    marginRight: 8,
+    zIndex: 2,
   },
   name: {
     fontFamily: FontFamily.LatoBold,
@@ -75,5 +75,23 @@ export const styles = StyleSheet.create({
   imageSection: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  multiProfile: {
+    flexDirection: 'row',
+    position: 'relative',
+    marginRight: 6,
+  },
+  multiAvatar: {
+    borderWidth: 1,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.dark,
+    right: 5,
+  },
+  count: {
+    color: Colors.white,
   },
 });

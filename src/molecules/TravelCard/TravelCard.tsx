@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, PixelRatio, Vibration, View} from 'react-native';
+import {FlatList, Image, PixelRatio, Vibration, View} from 'react-native';
 import AppText from '../../atoms/AppText/AppText';
 import CommentButton from '../../atoms/CommentButton/CommentButton';
 import HeartIconButton from '../../atoms/HeartIconButton/HeartIconButton';
@@ -10,9 +10,11 @@ import {Colors} from '../../utils/theme';
 import {styles} from './TravelCardStyles';
 
 type TravelCardProps = {
-  image: string;
+  images: string[];
+  location?: string;
+  tag?: string;
 };
-const TravelCard: React.FC<TravelCardProps> = ({image}) => {
+const TravelCard: React.FC<TravelCardProps> = ({images, location, tag}) => {
   const [isLiked, setIsLiked] = useState(false);
 
   const handleLike = () => {
@@ -23,12 +25,26 @@ const TravelCard: React.FC<TravelCardProps> = ({image}) => {
     <View>
       <View style={styles.profileSection}>
         <View style={styles.imageSection}>
-          <Image
-            source={{
-              uri: 'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80',
-            }}
-            style={styles.profilePic}
-          />
+          <View style={styles.multiProfile}>
+            <Image
+              source={{
+                uri: 'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80',
+              }}
+              style={styles.profilePic}
+            />
+            <View style={styles.multiAvatar}>
+              <AppText
+                lineHeight={12}
+                style={[
+                  styles.count,
+                  {
+                    fontSize: 10 / PixelRatio.getFontScale(),
+                  },
+                ]}>
+                +3
+              </AppText>
+            </View>
+          </View>
           <View>
             <AppText
               lineHeight={16}
@@ -40,42 +56,70 @@ const TravelCard: React.FC<TravelCardProps> = ({image}) => {
               ]}>
               markphilips
             </AppText>
-            <AppText
-              lineHeight={14}
-              style={[
-                styles.tag,
-                {
-                  fontSize: 12 / PixelRatio.getFontScale(),
-                },
-              ]}>
-              Holiday
-            </AppText>
+            {Boolean(location) && (
+              <AppText
+                lineHeight={14}
+                style={[
+                  styles.tag,
+                  {
+                    fontSize: 12 / PixelRatio.getFontScale(),
+                  },
+                ]}>
+                Holiday
+              </AppText>
+            )}
           </View>
         </View>
         <OptionIcon />
       </View>
       <View style={styles.imageContainer}>
-        <Image
-          source={{
-            uri: image,
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled={true}
+          decelerationRate="fast"
+          data={images}
+          keyExtractor={item => item}
+          renderItem={({item, index}) => {
+            return (
+              <Image
+                source={{
+                  uri: item,
+                }}
+                style={styles.image}
+              />
+            );
           }}
-          style={styles.image}
         />
       </View>
       <View style={styles.locationContainer}>
         <View style={styles.locationMark}>
-          <LocationIcon />
+          {Boolean(location) && <LocationIcon />}
           <View style={styles.dateContainer}>
-            <AppText
-              lineHeight={20}
-              style={[
-                styles.location,
-                {
-                  fontSize: 20 / PixelRatio.getFontScale(),
-                },
-              ]}>
-              Jaipur, India
-            </AppText>
+            {Boolean(location) && (
+              <AppText
+                lineHeight={20}
+                style={[
+                  styles.location,
+                  {
+                    fontSize: 20 / PixelRatio.getFontScale(),
+                  },
+                ]}>
+                {location}
+              </AppText>
+            )}
+            {!Boolean(location) && (
+              <AppText
+                lineHeight={20}
+                style={[
+                  styles.location,
+                  {
+                    fontSize: 20 / PixelRatio.getFontScale(),
+                  },
+                ]}>
+                {tag}
+              </AppText>
+            )}
             <AppText
               lineHeight={14}
               style={[

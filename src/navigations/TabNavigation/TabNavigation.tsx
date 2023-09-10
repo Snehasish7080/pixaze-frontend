@@ -32,6 +32,7 @@ const TabNavigation = () => {
         name="ExploreScreen"
         component={ExploreScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({focused}) => {
             return <ExploreIcon isFocused={focused} />;
           },

@@ -21,7 +21,13 @@ const FeedScreen: React.FC = () => {
         data={profileData}
         keyExtractor={item => item.id}
         renderItem={({item, index}) => {
-          return <TravelCard image={item.photos[0].url} />;
+          return (
+            <TravelCard
+              images={item.photos.map(x => x.url)}
+              location={item?.location}
+              tag={item.tag}
+            />
+          );
         }}
         ItemSeparatorComponent={() => <View style={{height: 20}} />}
       />
