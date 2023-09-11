@@ -1,37 +1,10 @@
-import React, {useMemo, useState} from 'react';
-import {
-  Image,
-  PixelRatio,
-  ScrollView,
-  TouchableOpacity,
-  Vibration,
-  View,
-} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {Image, PixelRatio, TouchableOpacity, View} from 'react-native';
 import AppText from '../../atoms/AppText/AppText';
 import AppHeader from '../../molecules/AppHeader/AppHeader';
 import {AuthenticatedNavProps} from '../../navigations/AuthenticatedNavigation/AuthenticatedNavigationTypes';
 import {styles} from './EditScreenStyles';
 
-import {
-  achromatomaly,
-  achromatopsia,
-  brightness,
-  ColorMatrix,
-  concatColorMatrices,
-  contrast,
-  cool,
-  deuteranomaly,
-  grayscale,
-  hueRotate,
-  Matrix,
-  protanomaly,
-  protanopia,
-  sepia,
-  tritanomaly,
-  tritanopia,
-  warm,
-} from 'react-native-color-matrix-image-filters';
-import FilterSection from './FilterSection';
 import {
   AdenCompat,
   BrannanCompat,
@@ -48,6 +21,7 @@ import {
   MayfairCompat,
   MoonCompat,
   NashvilleCompat,
+  Normal,
   PerpetuaCompat,
   ReyesCompat,
   RiseCompat,
@@ -59,8 +33,9 @@ import {
   WillowCompat,
   Xpro2Compat,
   _1977Compat,
-  Normal,
 } from 'react-native-image-filter-kit';
+import FilterSection from './FilterSection';
+import {captureRef} from 'react-native-view-shot';
 
 const FILTERS = [
   {
@@ -178,13 +153,47 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   navigation,
   route,
 }) => {
-  const {image} = route?.params;
+  const {image, scale, translateX, translateY} = route?.params;
   const [selectedFilter, setSelectedFilter] = useState<number>(0);
+  const [updatedImage, setUpdatedImage] = useState<string>('');
+  const [imageWidth, setImageWidth] = useState<number>(0);
+  const [imageHeight, setImageHeight] = useState<number>(0);
 
   const SelectedFilterComponent = useMemo(
     () => FILTERS[selectedFilter].filterComponent,
     [selectedFilter],
   );
+  const viewRef = useRef<View>(null);
+
+  const takeSnapshot = useCallback(async () => {
+    if (viewRef) {
+      captureRef(viewRef, {
+        format: 'png',
+        quality: 1,
+      }).then(
+        uri => {
+          setUpdatedImage(uri);
+        },
+        error => console.error('Oops, snapshot failed', error),
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (image) {
+      Image.getSize(image, (width, height) => {
+        setImageWidth(width);
+        setImageHeight(height);
+      });
+    }
+  }, [image]);
+
+  useEffect(() => {
+    if (image && viewRef) {
+      takeSnapshot();
+    }
+  }, [image, viewRef]);
+
   return (
     <>
       <AppHeader
@@ -208,14 +217,24 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
         }
       />
       <View style={styles.container}>
-        {/* <ColorMatrix matrix={selectedFilter}> */}
-        {/* <Image source={{uri: image}} style={styles.mainImage} /> */}
-        {/* </ColorMatrix> */}
-        <SelectedFilterComponent
-          image={<Image source={{uri: image}} style={styles.mainImage} />}
-        />
+        <View style={styles.imageContainer} ref={viewRef}>
+          <SelectedFilterComponent
+            image={
+              <Image
+                source={{uri: image}}
+                style={[
+                  styles.mainImage,
+                  {
+                    transform: [{scale}, {translateX}, {translateY}],
+                    resizeMode: imageWidth > imageHeight ? 'cover' : 'contain',
+                  },
+                ]}
+              />
+            }
+          />
+        </View>
         <FilterSection
-          image={image}
+          image={updatedImage}
           FILTERS={FILTERS}
           setSelectedFilter={setSelectedFilter}
         />

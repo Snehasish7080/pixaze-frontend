@@ -1,5 +1,6 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {PixelRatio, TouchableOpacity, View} from 'react-native';
+import {useSharedValue} from 'react-native-reanimated';
 import {captureRef} from 'react-native-view-shot';
 import AppText from '../../atoms/AppText/AppText';
 import CameraIcon from '../../atoms/CameraIcon/CameraIcon';
@@ -15,24 +16,9 @@ const CreateScreen: React.FC<AuthenticatedNavProps<'CreateScreen'>> = ({
   navigation,
 }) => {
   const [selectedMedia, setSelectedMedia] = useState<imageFile>();
-
-  const viewRef = useRef<View>(null);
-
-  const takeSnapshot = useCallback(async () => {
-    if (viewRef) {
-      captureRef(viewRef, {
-        format: 'png',
-        quality: 1,
-      }).then(
-        uri => {
-          navigation.replace('EditScreen', {
-            image: uri,
-          });
-        },
-        error => console.error('Oops, snapshot failed', error),
-      );
-    }
-  }, []);
+  const scale = useSharedValue(1);
+  const xTranslate = useSharedValue(0);
+  const yTranslate = useSharedValue(0);
 
   return (
     <View style={styles.container}>
@@ -40,7 +26,17 @@ const CreateScreen: React.FC<AuthenticatedNavProps<'CreateScreen'>> = ({
         <AppHeader
           mainTitle="New Memo"
           rightSection={
-            <TouchableOpacity onPress={takeSnapshot}>
+            <TouchableOpacity
+              onPress={() => {
+                if (selectedMedia?.uri) {
+                  navigation.replace('EditScreen', {
+                    image: selectedMedia?.uri,
+                    scale: scale.value,
+                    translateX: xTranslate.value,
+                    translateY: yTranslate.value,
+                  });
+                }
+              }}>
               <AppText
                 lineHeight={14}
                 style={[
@@ -58,7 +54,12 @@ const CreateScreen: React.FC<AuthenticatedNavProps<'CreateScreen'>> = ({
           }}
         />
         <View style={styles.imageCropper}>
-          <Cropper selectedImage={selectedMedia?.uri || ''} ref={viewRef} />
+          <Cropper
+            selectedImage={selectedMedia?.uri || ''}
+            scale={scale}
+            xTranslate={xTranslate}
+            yTranslate={yTranslate}
+          />
         </View>
       </View>
       <View style={styles.selectionContainer}>

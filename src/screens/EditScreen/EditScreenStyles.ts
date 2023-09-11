@@ -8,6 +8,11 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.white,
   },
+  imageContainer: {
+    width: '100%',
+    height: IMAGE_HEIGHT,
+    overflow: 'hidden',
+  },
   mainImage: {
     width: '100%',
     height: IMAGE_HEIGHT,

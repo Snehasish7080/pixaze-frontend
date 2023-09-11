@@ -1,62 +1,7 @@
 import React from 'react';
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  Vibration,
-  View,
-} from 'react-native';
+import {FlatList, Image, TouchableOpacity, View} from 'react-native';
 import {styles} from './EditScreenStyles';
-
-import {
-  achromatomaly,
-  achromatopsia,
-  brightness,
-  concatColorMatrices,
-  contrast,
-  cool,
-  deuteranomaly,
-  grayscale,
-  hueRotate,
-  Matrix,
-  protanomaly,
-  protanopia,
-  sepia,
-  tritanomaly,
-  tritanopia,
-  warm,
-} from 'react-native-color-matrix-image-filters';
-import FilterComponent from './FilterComponent';
-import {
-  AdenCompat,
-  BrannanCompat,
-  BrooklynCompat,
-  ClarendonCompat,
-  EarlybirdCompat,
-  GinghamCompat,
-  HudsonCompat,
-  InkwellCompat,
-  KelvinCompat,
-  LarkCompat,
-  LofiCompat,
-  MavenCompat,
-  MayfairCompat,
-  MoonCompat,
-  NashvilleCompat,
-  PerpetuaCompat,
-  ReyesCompat,
-  RiseCompat,
-  SlumberCompat,
-  StinsonCompat,
-  ToasterCompat,
-  ValenciaCompat,
-  WaldenCompat,
-  WillowCompat,
-  Xpro2Compat,
-  _1977Compat,
-  Normal,
-} from 'react-native-image-filter-kit';
+import {AdenCompat} from 'react-native-image-filter-kit';
 
 type filter = {
   title: string;
@@ -68,7 +13,7 @@ type FilterSectionProps = {
   image: string;
   FILTERS: {
     title: string;
-    filterComponent: typeof Normal;
+    filterComponent: typeof AdenCompat;
   }[];
 };
 const FilterSection: React.FC<FilterSectionProps> = ({
@@ -86,9 +31,11 @@ const FilterSection: React.FC<FilterSectionProps> = ({
     const FilterComponent = item.filterComponent;
     const filterImage = (
       <Image
-        style={{width: '100%', height: '100%'}}
+        style={{
+          width: '100%',
+          height: '100%',
+        }}
         source={{uri: image}}
-        resizeMode={'cover'}
       />
     );
     if (!image) {
@@ -106,26 +53,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({
 
   return (
     <View style={styles.filterContainer}>
-      {/* <ScrollView
-        horizontal
-        contentContainerStyle={{
-          paddingVertical: 20,
-          paddingHorizontal: 16,
-        }}>
-        {colorMatrix.map((item, index) => {
-          return (
-            <FilterComponent
-              image={image}
-              key={index}
-              matrix={item}
-              onPress={() => {
-                setSelectedFilter(item);
-                Vibration.vibrate(1);
-              }}
-            />
-          );
-        })}
-      </ScrollView> */}
       <FlatList
         horizontal
         contentContainerStyle={{
