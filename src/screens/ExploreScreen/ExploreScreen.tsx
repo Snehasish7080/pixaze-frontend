@@ -9,8 +9,13 @@ import ExploreFrame from '../../molecules/ExploreFrame/ExploreFrame';
 import {profileData} from '../../utils/dummyData';
 
 const ExploreScreen = () => {
+  const navigation =
+    useNavigation<StackNavigationProp<AuthenticatedRouteList>>();
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.navigate('CreateScreen')}>
+        <AppText lineHeight={14}>Create</AppText>
+      </TouchableOpacity>
       <FlatList
         contentContainerStyle={{
           paddingHorizontal: 16,

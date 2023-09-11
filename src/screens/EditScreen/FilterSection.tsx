@@ -1,5 +1,12 @@
 import React from 'react';
-import {ScrollView, Vibration, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Vibration,
+  View,
+} from 'react-native';
 import {styles} from './EditScreenStyles';
 
 import {
@@ -21,34 +28,85 @@ import {
   warm,
 } from 'react-native-color-matrix-image-filters';
 import FilterComponent from './FilterComponent';
+import {
+  AdenCompat,
+  BrannanCompat,
+  BrooklynCompat,
+  ClarendonCompat,
+  EarlybirdCompat,
+  GinghamCompat,
+  HudsonCompat,
+  InkwellCompat,
+  KelvinCompat,
+  LarkCompat,
+  LofiCompat,
+  MavenCompat,
+  MayfairCompat,
+  MoonCompat,
+  NashvilleCompat,
+  PerpetuaCompat,
+  ReyesCompat,
+  RiseCompat,
+  SlumberCompat,
+  StinsonCompat,
+  ToasterCompat,
+  ValenciaCompat,
+  WaldenCompat,
+  WillowCompat,
+  Xpro2Compat,
+  _1977Compat,
+  Normal,
+} from 'react-native-image-filter-kit';
 
-const colorMatrix = [
-  concatColorMatrices(),
-  concatColorMatrices(sepia(0.3), contrast(1.2)),
-  concatColorMatrices(grayscale(2)),
-  concatColorMatrices(hueRotate(0.4)),
-  concatColorMatrices(warm(), brightness(1.1)),
-  concatColorMatrices(cool(), contrast(1.2), brightness(1.15)),
-  concatColorMatrices(protanomaly(), brightness(1)),
-  concatColorMatrices(deuteranomaly(), contrast(1.2), cool(), brightness(1)),
-  concatColorMatrices(tritanomaly(), contrast(1.3), warm(), brightness(1)),
-  concatColorMatrices(protanopia(), contrast(1), grayscale(), brightness(1.4)),
-  concatColorMatrices(tritanopia(), contrast(1), sepia(0.3), brightness(1)),
-  concatColorMatrices(achromatopsia(), contrast(1), brightness(1)),
-  concatColorMatrices(achromatomaly(), contrast(1), brightness(1)),
-];
+type filter = {
+  title: string;
+  filterComponent: typeof AdenCompat;
+};
 
 type FilterSectionProps = {
-  setSelectedFilter: React.Dispatch<React.SetStateAction<Matrix>>;
+  setSelectedFilter: React.Dispatch<React.SetStateAction<number>>;
   image: string;
+  FILTERS: {
+    title: string;
+    filterComponent: typeof Normal;
+  }[];
 };
 const FilterSection: React.FC<FilterSectionProps> = ({
   setSelectedFilter,
   image,
+  FILTERS,
 }) => {
+  const renderFilterComponent = ({
+    item,
+    index,
+  }: {
+    item: filter;
+    index: number;
+  }) => {
+    const FilterComponent = item.filterComponent;
+    const filterImage = (
+      <Image
+        style={{width: '100%', height: '100%'}}
+        source={{uri: image}}
+        resizeMode={'cover'}
+      />
+    );
+    if (!image) {
+      return null;
+    }
+    return (
+      <TouchableOpacity
+        style={styles.image}
+        activeOpacity={0.7}
+        onPress={() => setSelectedFilter(index)}>
+        <FilterComponent image={filterImage} />
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.filterContainer}>
-      <ScrollView
+      {/* <ScrollView
         horizontal
         contentContainerStyle={{
           paddingVertical: 20,
@@ -67,7 +125,17 @@ const FilterSection: React.FC<FilterSectionProps> = ({
             />
           );
         })}
-      </ScrollView>
+      </ScrollView> */}
+      <FlatList
+        horizontal
+        contentContainerStyle={{
+          paddingVertical: 20,
+          paddingHorizontal: 16,
+        }}
+        data={FILTERS}
+        keyExtractor={item => item.title}
+        renderItem={renderFilterComponent}
+      />
     </View>
   );
 };
