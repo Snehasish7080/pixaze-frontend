@@ -155,7 +155,6 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
 }) => {
   const {image, scale, translateX, translateY} = route?.params;
   const [selectedFilter, setSelectedFilter] = useState<number>(0);
-  const [updatedImage, setUpdatedImage] = useState<string>('');
   const [imageWidth, setImageWidth] = useState<number>(0);
   const [imageHeight, setImageHeight] = useState<number>(0);
 
@@ -172,7 +171,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
         quality: 1,
       }).then(
         uri => {
-          setUpdatedImage(uri);
+          console.log(uri);
         },
         error => console.error('Oops, snapshot failed', error),
       );
@@ -187,12 +186,6 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
       });
     }
   }, [image]);
-
-  useEffect(() => {
-    if (image && viewRef) {
-      takeSnapshot();
-    }
-  }, [image, viewRef]);
 
   return (
     <>
@@ -234,9 +227,12 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
           />
         </View>
         <FilterSection
-          image={updatedImage}
+          image={image}
           FILTERS={FILTERS}
           setSelectedFilter={setSelectedFilter}
+          scale={scale}
+          translateX={translateX}
+          translateY={translateY}
         />
       </View>
     </>

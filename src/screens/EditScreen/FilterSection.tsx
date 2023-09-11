@@ -1,7 +1,15 @@
 import React from 'react';
-import {FlatList, Image, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import {styles} from './EditScreenStyles';
 import {AdenCompat} from 'react-native-image-filter-kit';
+
+const IMAGE_HEIGHT = 350;
 
 type filter = {
   title: string;
@@ -15,12 +23,22 @@ type FilterSectionProps = {
     title: string;
     filterComponent: typeof AdenCompat;
   }[];
+  scale: number;
+  translateX: number;
+  translateY: number;
 };
 const FilterSection: React.FC<FilterSectionProps> = ({
   setSelectedFilter,
   image,
   FILTERS,
+  scale,
+  translateX,
+  translateY,
 }) => {
+  const {width} = useWindowDimensions();
+
+  const widthMultiple = width / 100;
+  const heightMultiple = IMAGE_HEIGHT / 100;
   const renderFilterComponent = ({
     item,
     index,
@@ -34,6 +52,11 @@ const FilterSection: React.FC<FilterSectionProps> = ({
         style={{
           width: '100%',
           height: '100%',
+          transform: [
+            {scale},
+            {translateX: translateX / widthMultiple},
+            {translateY: translateY / heightMultiple},
+          ],
         }}
         source={{uri: image}}
       />
