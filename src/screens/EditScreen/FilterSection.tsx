@@ -50,13 +50,15 @@ const FilterSection: React.FC<FilterSectionProps> = ({
     const filterImage = (
       <Image
         style={{
-          width: '100%',
-          height: '100%',
+          width: 100,
+          height: 100,
           transform: [
-            {scale},
+            {scale: scale},
             {translateX: translateX / widthMultiple},
             {translateY: translateY / heightMultiple},
           ],
+          resizeMode: 'contain',
+          aspectRatio: 1,
         }}
         source={{uri: image}}
       />

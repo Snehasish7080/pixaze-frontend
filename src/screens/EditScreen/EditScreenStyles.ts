@@ -24,9 +24,7 @@ export const styles = StyleSheet.create({
   image: {
     width: 100,
     height: 100,
-    borderRadius: 12,
-    marginRight: 10,
-    overflow: 'hidden',
+    marginRight: 5,
   },
   filterContainer: {
     marginTop: 50,
