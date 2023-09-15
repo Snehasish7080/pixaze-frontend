@@ -25,8 +25,25 @@ export const styles = StyleSheet.create({
     width: 100,
     height: 100,
     marginRight: 5,
+    alignItems: 'center',
   },
   filterContainer: {
+    marginTop: 50,
+  },
+  title: {
+    fontSize: 12,
+    marginTop: 6,
+  },
+  slider: {
+    width: 2,
+    height: 10,
+    backgroundColor: Colors.dark,
+    borderRadius: 2,
+  },
+  sliderBox: {
+    width: 10,
+  },
+  sliderContainer: {
     marginTop: 50,
   },
 });

@@ -6,8 +6,19 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import {
+  AdenCompat,
+  brightness,
+  ColorMatrix,
+  concatColorMatrices,
+  contrast,
+  saturate,
+  sepia,
+  temperature,
+  tint,
+} from 'react-native-image-filter-kit';
+import AppText from '../../atoms/AppText/AppText';
 import {styles} from './EditScreenStyles';
-import {AdenCompat} from 'react-native-image-filter-kit';
 
 const IMAGE_HEIGHT = 350;
 
@@ -71,7 +82,24 @@ const FilterSection: React.FC<FilterSectionProps> = ({
         style={styles.image}
         activeOpacity={0.7}
         onPress={() => setSelectedFilter(index)}>
-        <FilterComponent image={filterImage} />
+        <FilterComponent
+          image={
+            <ColorMatrix
+              image={filterImage}
+              matrix={concatColorMatrices([
+                saturate(1),
+                brightness(1),
+                contrast(1),
+                sepia(0),
+                temperature(0),
+                tint(0),
+              ])}
+            />
+          }
+        />
+        <AppText lineHeight={10} style={styles.title}>
+          {item.title}
+        </AppText>
       </TouchableOpacity>
     );
   };

@@ -1,5 +1,11 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Image, PixelRatio, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  PixelRatio,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import AppText from '../../atoms/AppText/AppText';
 import AppHeader from '../../molecules/AppHeader/AppHeader';
 import {AuthenticatedNavProps} from '../../navigations/AuthenticatedNavigation/AuthenticatedNavigationTypes';
@@ -34,8 +40,8 @@ import {
   Xpro2Compat,
   _1977Compat,
 } from 'react-native-image-filter-kit';
-import FilterSection from './FilterSection';
 import {captureRef} from 'react-native-view-shot';
+import FilterSection from './FilterSection';
 
 const FILTERS = [
   {
@@ -190,7 +196,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   return (
     <>
       <AppHeader
-        mainTitle="Edit"
+        mainTitle="ADJUST"
         onBack={() => {
           navigation.goBack();
         }}
@@ -234,6 +240,31 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
           translateX={translateX}
           translateY={translateY}
         />
+
+        <View style={styles.sliderContainer}>
+          <ScrollView
+            horizontal
+            contentContainerStyle={{
+              paddingVertical: 20,
+              paddingHorizontal: 16,
+            }}
+            onScroll={e => {
+              console.log(
+                e.nativeEvent.contentOffset.x,
+                e.nativeEvent.contentSize,
+              );
+            }}>
+            {Array(100)
+              .fill(undefined)
+              .map((item, index) => {
+                return (
+                  <View style={styles.sliderBox} key={index}>
+                    <View style={styles.slider} />
+                  </View>
+                );
+              })}
+          </ScrollView>
+        </View>
       </View>
     </>
   );
