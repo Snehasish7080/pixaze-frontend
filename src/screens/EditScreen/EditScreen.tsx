@@ -1,9 +1,12 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
+  FlatList,
   Image,
   PixelRatio,
   ScrollView,
   TouchableOpacity,
+  useWindowDimensions,
+  Vibration,
   View,
 } from 'react-native';
 import AppText from '../../atoms/AppText/AppText';
@@ -159,6 +162,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   navigation,
   route,
 }) => {
+  const {width} = useWindowDimensions();
   const {image, scale, translateX, translateY} = route?.params;
   const [selectedFilter, setSelectedFilter] = useState<number>(0);
   const [imageWidth, setImageWidth] = useState<number>(0);
@@ -192,6 +196,10 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
       });
     }
   }, [image]);
+
+  const handleScroll = (offset: number) => {
+    const value = offset.toFixed(1);
+  };
 
   return (
     <>
@@ -242,28 +250,36 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
         />
 
         <View style={styles.sliderContainer}>
-          <ScrollView
+          <FlatList
             horizontal
             contentContainerStyle={{
               paddingVertical: 20,
-              paddingHorizontal: 16,
+              paddingLeft: width / 2,
+              paddingRight: width / 2 - 10,
             }}
             onScroll={e => {
-              console.log(
-                e.nativeEvent.contentOffset.x,
-                e.nativeEvent.contentSize,
-              );
-            }}>
-            {Array(100)
-              .fill(undefined)
-              .map((item, index) => {
-                return (
-                  <View style={styles.sliderBox} key={index}>
-                    <View style={styles.slider} />
-                  </View>
-                );
-              })}
-          </ScrollView>
+              handleScroll(e.nativeEvent.contentOffset.x);
+            }}
+            data={Array(50).fill(undefined)}
+            keyExtractor={(item, index) => index.toString()}
+            initialScrollIndex={25}
+            getItemLayout={(data, index) => ({
+              length: 10,
+              offset: 10 * index,
+              index,
+            })}
+            renderItem={({item, index}) => {
+              return <View style={[styles.sliderBox]} />;
+            }}
+          />
+          <View
+            style={[
+              styles.sliderPoint,
+              {
+                marginLeft: width / 2,
+              },
+            ]}
+          />
         </View>
       </View>
     </>

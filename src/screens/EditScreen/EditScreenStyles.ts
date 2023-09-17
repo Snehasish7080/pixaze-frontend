@@ -34,16 +34,22 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 6,
   },
-  slider: {
-    width: 2,
-    height: 10,
+  sliderPoint: {
+    width: 1,
+    height: 20,
     backgroundColor: Colors.dark,
     borderRadius: 2,
+    position: 'absolute',
+    top: 10,
   },
   sliderBox: {
     width: 10,
+    height: 10,
+    // backgroundColor: Colors.dark,
+    borderLeftWidth: 1,
   },
   sliderContainer: {
     marginTop: 50,
+    position: 'relative',
   },
 });
