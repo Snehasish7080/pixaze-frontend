@@ -45,11 +45,18 @@ export const styles = StyleSheet.create({
   sliderBox: {
     width: 10,
     height: 10,
-    // backgroundColor: Colors.dark,
     borderLeftWidth: 1,
   },
   sliderContainer: {
-    marginTop: 50,
     position: 'relative',
+  },
+  iconContainer: {
+    borderWidth: 0.7,
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
+    marginRight: 10,
   },
 });

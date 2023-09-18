@@ -45,6 +45,11 @@ import {
 } from 'react-native-image-filter-kit';
 import {captureRef} from 'react-native-view-shot';
 import FilterSection from './FilterSection';
+import BrightnessIcon from '../../atoms/BrightnessIcon/BrightnessIcon';
+import ContrastIcon from '../../atoms/ContrastIcon/ContrastIcon';
+import TemperatureIcon from '../../atoms/TemperatureIcon/TemperatureIcon';
+import TintIcon from '../../atoms/TintIcon/TintIcon';
+import SaturateIcon from '../../atoms/SaturateIcon/SaturateIcon';
 
 const FILTERS = [
   {
@@ -249,6 +254,30 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
           translateY={translateY}
         />
 
+        <View>
+          <ScrollView
+            horizontal
+            contentContainerStyle={{
+              paddingLeft: width / 2 - 13,
+              paddingTop: 20,
+            }}>
+            <View style={styles.iconContainer}>
+              <BrightnessIcon />
+            </View>
+            <View style={styles.iconContainer}>
+              <SaturateIcon />
+            </View>
+            <View style={styles.iconContainer}>
+              <ContrastIcon />
+            </View>
+            <View style={styles.iconContainer}>
+              <TemperatureIcon />
+            </View>
+            <View style={styles.iconContainer}>
+              <TintIcon />
+            </View>
+          </ScrollView>
+        </View>
         <View style={styles.sliderContainer}>
           <FlatList
             horizontal
