@@ -59,4 +59,22 @@ export const styles = StyleSheet.create({
     borderRadius: 15,
     marginRight: 10,
   },
+  editFilterContainer: {
+    marginTop: 50,
+    position: 'relative',
+  },
+  indicator: {
+    backgroundColor: Colors.dark,
+    width: 80,
+    position: 'absolute',
+    borderRadius: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: -20,
+  },
+  indicatorText: {
+    color: Colors.white,
+  },
 });

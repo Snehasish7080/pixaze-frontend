@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   useWindowDimensions,
-  Vibration,
   View,
 } from 'react-native';
 import AppText from '../../atoms/AppText/AppText';
@@ -43,13 +42,14 @@ import {
   Xpro2Compat,
   _1977Compat,
 } from 'react-native-image-filter-kit';
+import Animated from 'react-native-reanimated';
 import {captureRef} from 'react-native-view-shot';
-import FilterSection from './FilterSection';
 import BrightnessIcon from '../../atoms/BrightnessIcon/BrightnessIcon';
 import ContrastIcon from '../../atoms/ContrastIcon/ContrastIcon';
+import SaturateIcon from '../../atoms/SaturateIcon/SaturateIcon';
 import TemperatureIcon from '../../atoms/TemperatureIcon/TemperatureIcon';
 import TintIcon from '../../atoms/TintIcon/TintIcon';
-import SaturateIcon from '../../atoms/SaturateIcon/SaturateIcon';
+import FilterSection from './FilterSection';
 
 const FILTERS = [
   {
@@ -162,7 +162,34 @@ const FILTERS = [
   },
 ];
 
+const EditFilters = [
+  {
+    id: 'Brightness',
+    component: () => <BrightnessIcon />,
+  },
+  {
+    id: 'Saturation',
+    component: () => <SaturateIcon />,
+  },
+  {
+    id: 'Contrast',
+    component: () => <ContrastIcon />,
+  },
+  {
+    id: 'Warmth',
+    component: () => <TemperatureIcon />,
+  },
+  {
+    id: 'Tint',
+    component: () => <TintIcon />,
+  },
+];
+
 const IMAGE_HEIGHT = 350;
+const FILTER_WIDTH = 40;
+const MAX_FILTER_WIDTH = 160;
+const INDICATOR_WIDTH = 80;
+
 const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   navigation,
   route,
@@ -172,6 +199,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   const [selectedFilter, setSelectedFilter] = useState<number>(0);
   const [imageWidth, setImageWidth] = useState<number>(0);
   const [imageHeight, setImageHeight] = useState<number>(0);
+  const [filterIndex, setFilterIndex] = useState(0);
 
   const SelectedFilterComponent = useMemo(
     () => FILTERS[selectedFilter].filterComponent,
@@ -204,6 +232,17 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
 
   const handleScroll = (offset: number) => {
     const value = offset.toFixed(1);
+  };
+
+  const ref = useRef<ScrollView>(null);
+
+  const handleFilterChange = (index: number) => {
+    if (ref && ref.current) {
+      ref.current.scrollTo({
+        animated: true,
+        x: index * 40,
+      });
+    }
   };
 
   return (
@@ -253,29 +292,64 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
           translateX={translateX}
           translateY={translateY}
         />
-
-        <View>
+        <View style={styles.editFilterContainer}>
+          <Animated.View
+            style={[
+              styles.indicator,
+              {
+                left: width / 2 - INDICATOR_WIDTH / 2,
+              },
+            ]}>
+            <AppText
+              lineHeight={12}
+              style={[
+                styles.indicatorText,
+                {
+                  fontSize: 12 / PixelRatio.getFontScale(),
+                },
+              ]}>
+              {EditFilters[filterIndex].id}
+            </AppText>
+          </Animated.View>
           <ScrollView
             horizontal
             contentContainerStyle={{
               paddingLeft: width / 2 - 13,
+              paddingRight: width / 2 - 26,
               paddingTop: 20,
-            }}>
-            <View style={styles.iconContainer}>
-              <BrightnessIcon />
-            </View>
-            <View style={styles.iconContainer}>
-              <SaturateIcon />
-            </View>
-            <View style={styles.iconContainer}>
-              <ContrastIcon />
-            </View>
-            <View style={styles.iconContainer}>
-              <TemperatureIcon />
-            </View>
-            <View style={styles.iconContainer}>
-              <TintIcon />
-            </View>
+            }}
+            snapToOffsets={[0, 40, 80, 120, 160]}
+            scrollEventThrottle={16}
+            decelerationRate="normal"
+            onScroll={e => {
+              if (e.nativeEvent.contentOffset.x > MAX_FILTER_WIDTH) {
+                setFilterIndex(MAX_FILTER_WIDTH / FILTER_WIDTH);
+              } else if (e.nativeEvent.contentOffset.x > 0) {
+                if (
+                  Math.round(e.nativeEvent.contentOffset.x) % FILTER_WIDTH ===
+                  0
+                ) {
+                  setFilterIndex(
+                    Math.round(e.nativeEvent.contentOffset.x) / FILTER_WIDTH,
+                  );
+                }
+              } else {
+                setFilterIndex(0);
+              }
+            }}
+            ref={ref}>
+            {EditFilters.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  style={styles.iconContainer}
+                  key={index}
+                  onPress={() => {
+                    handleFilterChange(index);
+                  }}>
+                  {item.component()}
+                </TouchableOpacity>
+              );
+            })}
           </ScrollView>
         </View>
         <View style={styles.sliderContainer}>
