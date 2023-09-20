@@ -166,24 +166,36 @@ const EditFilters = [
   {
     id: 'Brightness',
     component: () => <BrightnessIcon />,
+    values: Array(100).fill(0.1),
+    defaultValue: 50,
   },
   {
     id: 'Saturation',
     component: () => <SaturateIcon />,
+    values: Array(100).fill(0.01),
+    defaultValue: 50,
   },
   {
     id: 'Contrast',
     component: () => <ContrastIcon />,
+    values: Array(100).fill(0.1),
+    defaultValue: 50,
   },
   {
     id: 'Warmth',
     component: () => <TemperatureIcon />,
+    values: Array(100).fill(0.1),
+    defaultValue: 50,
   },
   {
     id: 'Tint',
     component: () => <TintIcon />,
+    values: Array(100).fill(0.1),
+    defaultValue: 50,
   },
 ];
+
+console.log(EditFilters[0].values);
 
 const IMAGE_HEIGHT = 350;
 const FILTER_WIDTH = 40;
@@ -318,7 +330,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               paddingRight: width / 2 - 26,
               paddingTop: 20,
             }}
-            snapToOffsets={[0, 40, 80, 120, 160]}
+            snapToInterval={40}
             scrollEventThrottle={16}
             decelerationRate="normal"
             onScroll={e => {
@@ -363,9 +375,10 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
             onScroll={e => {
               handleScroll(e.nativeEvent.contentOffset.x);
             }}
-            data={Array(50).fill(undefined)}
+            extraData={selectedFilter}
+            data={EditFilters[selectedFilter].values}
             keyExtractor={(item, index) => index.toString()}
-            initialScrollIndex={25}
+            initialScrollIndex={EditFilters[selectedFilter].defaultValue}
             getItemLayout={(data, index) => ({
               length: 10,
               offset: 10 * index,
