@@ -29,7 +29,7 @@ const CreateScreen: React.FC<AuthenticatedNavProps<'CreateScreen'>> = ({
             <TouchableOpacity
               onPress={() => {
                 if (selectedMedia?.uri) {
-                  navigation.replace('EditScreen', {
+                  navigation.navigate('EditScreen', {
                     image: selectedMedia?.uri,
                     scale: scale.value,
                     translateX: xTranslate.value,

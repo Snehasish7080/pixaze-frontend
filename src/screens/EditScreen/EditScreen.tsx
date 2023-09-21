@@ -166,8 +166,11 @@ const EditFilters = [
   {
     id: 'Brightness',
     component: () => <BrightnessIcon />,
-    values: Array(100).fill(0.1),
-    defaultValue: 50,
+    values: Array.from({length: 100 + 1}, (_, i) => -100 + i * 2),
+    defaultValue: 51,
+    max_value: 100,
+    min_value: -100,
+    divisible: 10,
   },
   {
     id: 'Saturation',
@@ -195,8 +198,6 @@ const EditFilters = [
   },
 ];
 
-console.log(EditFilters[0].values);
-
 const IMAGE_HEIGHT = 350;
 const FILTER_WIDTH = 40;
 const MAX_FILTER_WIDTH = 160;
@@ -212,6 +213,8 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   const [imageWidth, setImageWidth] = useState<number>(0);
   const [imageHeight, setImageHeight] = useState<number>(0);
   const [filterIndex, setFilterIndex] = useState(0);
+  const [filterTitle, setFilterTitle] = useState('Brightness');
+  const [brightnessValue, setBrightnessValue] = useState(0);
 
   const SelectedFilterComponent = useMemo(
     () => FILTERS[selectedFilter].filterComponent,
@@ -243,7 +246,26 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   }, [image]);
 
   const handleScroll = (offset: number) => {
-    const value = offset.toFixed(1);
+    switch (filterTitle) {
+      case 'Brightness':
+        if (offset / 10 > 0) {
+          if (Math.round(offset) / 10 > 10) {
+            setBrightnessValue(10);
+          } else {
+            const index = Math.round(offset) / 10;
+
+            console.log(index);
+            const value = EditFilters[filterIndex].values[index];
+            setBrightnessValue(value);
+          }
+        } else {
+          setBrightnessValue(-10);
+        }
+        break;
+
+      default:
+        break;
+    }
   };
 
   const ref = useRef<ScrollView>(null);
@@ -254,9 +276,11 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
         animated: true,
         x: index * 40,
       });
+      setFilterTitle(EditFilters[index].id);
     }
   };
 
+  // console.log(brightnessValue);
   return (
     <>
       <AppHeader
@@ -330,12 +354,13 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               paddingRight: width / 2 - 26,
               paddingTop: 20,
             }}
-            snapToInterval={40}
+            snapToOffsets={[0, 40, 80, 120, 160]}
             scrollEventThrottle={16}
-            decelerationRate="normal"
+            decelerationRate="fast"
             onScroll={e => {
               if (e.nativeEvent.contentOffset.x > MAX_FILTER_WIDTH) {
                 setFilterIndex(MAX_FILTER_WIDTH / FILTER_WIDTH);
+                setFilterTitle(EditFilters[MAX_FILTER_WIDTH / FILTER_WIDTH].id);
               } else if (e.nativeEvent.contentOffset.x > 0) {
                 if (
                   Math.round(e.nativeEvent.contentOffset.x) % FILTER_WIDTH ===
@@ -344,9 +369,15 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
                   setFilterIndex(
                     Math.round(e.nativeEvent.contentOffset.x) / FILTER_WIDTH,
                   );
+                  setFilterTitle(
+                    EditFilters[
+                      Math.round(e.nativeEvent.contentOffset.x) / FILTER_WIDTH
+                    ].id,
+                  );
                 }
               } else {
                 setFilterIndex(0);
+                setFilterTitle(EditFilters[0].id);
               }
             }}
             ref={ref}>
@@ -387,6 +418,11 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
             renderItem={({item, index}) => {
               return <View style={[styles.sliderBox]} />;
             }}
+            scrollEventThrottle={16}
+            decelerationRate="fast"
+            snapToOffsets={Array(EditFilters[selectedFilter].values.length)
+              .fill(undefined)
+              .map((x, index) => index * 10)}
           />
           <View
             style={[
