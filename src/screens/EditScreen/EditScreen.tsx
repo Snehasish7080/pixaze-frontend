@@ -16,8 +16,12 @@ import {styles} from './EditScreenStyles';
 import {
   AdenCompat,
   BrannanCompat,
+  brightness,
   BrooklynCompat,
   ClarendonCompat,
+  ColorMatrix,
+  concatColorMatrices,
+  contrast,
   EarlybirdCompat,
   GinghamCompat,
   HudsonCompat,
@@ -33,8 +37,12 @@ import {
   PerpetuaCompat,
   ReyesCompat,
   RiseCompat,
+  saturate,
+  sepia,
   SlumberCompat,
   StinsonCompat,
+  temperature,
+  tint,
   ToasterCompat,
   ValenciaCompat,
   WaldenCompat,
@@ -44,6 +52,8 @@ import {
 } from 'react-native-image-filter-kit';
 import Animated from 'react-native-reanimated';
 import {captureRef} from 'react-native-view-shot';
+import FastImage from 'react-native-fast-image';
+
 import BrightnessIcon from '../../atoms/BrightnessIcon/BrightnessIcon';
 import ContrastIcon from '../../atoms/ContrastIcon/ContrastIcon';
 import SaturateIcon from '../../atoms/SaturateIcon/SaturateIcon';
@@ -166,11 +176,8 @@ const EditFilters = [
   {
     id: 'Brightness',
     component: () => <BrightnessIcon />,
-    values: Array.from({length: 100 + 1}, (_, i) => -100 + i * 2),
+    values: Array.from({length: 100}, (_, i) => i / 5),
     defaultValue: 51,
-    max_value: 100,
-    min_value: -100,
-    divisible: 10,
   },
   {
     id: 'Saturation',
@@ -214,11 +221,43 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   const [imageHeight, setImageHeight] = useState<number>(0);
   const [filterIndex, setFilterIndex] = useState(0);
   const [filterTitle, setFilterTitle] = useState('Brightness');
-  const [brightnessValue, setBrightnessValue] = useState(0);
+  const [brightnessValue, setBrightnessValue] = useState(1);
 
   const SelectedFilterComponent = useMemo(
     () => FILTERS[selectedFilter].filterComponent,
-    [selectedFilter],
+    [selectedFilter, brightnessValue],
+  );
+
+  const ColorMatrixComponent = useCallback(
+    () => (
+      <ColorMatrix
+        image={
+          <Image
+            source={{uri: image}}
+            resizeMode={
+              imageWidth > imageHeight
+                ? FastImage.resizeMode.cover
+                : FastImage.resizeMode.contain
+            }
+            style={[
+              styles.mainImage,
+              {
+                transform: [{scale}, {translateX}, {translateY}],
+              },
+            ]}
+          />
+        }
+        matrix={concatColorMatrices([
+          saturate(1),
+          brightness(brightnessValue),
+          contrast(1),
+          sepia(0),
+          temperature(0),
+          tint(0),
+        ])}
+      />
+    ),
+    [selectedFilter, brightnessValue],
   );
   const viewRef = useRef<View>(null);
 
@@ -249,17 +288,17 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
     switch (filterTitle) {
       case 'Brightness':
         if (offset / 10 > 0) {
-          if (Math.round(offset) / 10 > 10) {
-            setBrightnessValue(10);
+          if (Math.round(offset / 10) >= 100) {
+            setBrightnessValue(2);
           } else {
-            const index = Math.round(offset) / 10;
+            const index = Math.round(offset / 10);
+            const value =
+              Math.round(EditFilters[filterIndex].values[index]) / 10;
 
-            console.log(index);
-            const value = EditFilters[filterIndex].values[index];
             setBrightnessValue(value);
           }
         } else {
-          setBrightnessValue(-10);
+          setBrightnessValue(0);
         }
         break;
 
@@ -280,7 +319,6 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
     }
   };
 
-  // console.log(brightnessValue);
   return (
     <>
       <AppHeader
@@ -307,16 +345,33 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
         <View style={styles.imageContainer} ref={viewRef}>
           <SelectedFilterComponent
             image={
-              <Image
-                source={{uri: image}}
-                style={[
-                  styles.mainImage,
-                  {
-                    transform: [{scale}, {translateX}, {translateY}],
-                    resizeMode: imageWidth > imageHeight ? 'cover' : 'contain',
-                  },
-                ]}
-              />
+              <ColorMatrixComponent />
+              // <ColorMatrix
+              //   image={
+              //     <Image
+              //       source={{uri: image}}
+              //       resizeMode={
+              //         imageWidth > imageHeight
+              //           ? FastImage.resizeMode.cover
+              //           : FastImage.resizeMode.contain
+              //       }
+              //       style={[
+              //         styles.mainImage,
+              //         {
+              //           transform: [{scale}, {translateX}, {translateY}],
+              //         },
+              //       ]}
+              //     />
+              //   }
+              //   matrix={concatColorMatrices([
+              //     saturate(1),
+              //     brightness(brightnessValue),
+              //     contrast(1),
+              //     sepia(0),
+              //     temperature(0),
+              //     tint(0),
+              //   ])}
+              // />
             }
           />
         </View>
