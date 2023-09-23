@@ -19,7 +19,6 @@ import {
   brightness,
   BrooklynCompat,
   ClarendonCompat,
-  ColorMatrix,
   concatColorMatrices,
   contrast,
   EarlybirdCompat,
@@ -28,6 +27,7 @@ import {
   InkwellCompat,
   KelvinCompat,
   LarkCompat,
+  LinearGradient,
   LofiCompat,
   MavenCompat,
   MayfairCompat,
@@ -60,6 +60,20 @@ import SaturateIcon from '../../atoms/SaturateIcon/SaturateIcon';
 import TemperatureIcon from '../../atoms/TemperatureIcon/TemperatureIcon';
 import TintIcon from '../../atoms/TintIcon/TintIcon';
 import FilterSection from './FilterSection';
+import EditFilterSection from './EditFilterSection';
+import {
+  Canvas,
+  useImage,
+  Image as SkiaImage,
+  ColorMatrix,
+  BlendColor,
+  Lerp,
+  vec,
+  Blend,
+  RadialGradient,
+  ImageShader,
+  Rect,
+} from '@shopify/react-native-skia';
 
 const FILTERS = [
   {
@@ -172,43 +186,7 @@ const FILTERS = [
   },
 ];
 
-const EditFilters = [
-  {
-    id: 'Brightness',
-    component: () => <BrightnessIcon />,
-    values: Array.from({length: 100}, (_, i) => i / 5),
-    defaultValue: 51,
-  },
-  {
-    id: 'Saturation',
-    component: () => <SaturateIcon />,
-    values: Array(100).fill(0.01),
-    defaultValue: 50,
-  },
-  {
-    id: 'Contrast',
-    component: () => <ContrastIcon />,
-    values: Array(100).fill(0.1),
-    defaultValue: 50,
-  },
-  {
-    id: 'Warmth',
-    component: () => <TemperatureIcon />,
-    values: Array(100).fill(0.1),
-    defaultValue: 50,
-  },
-  {
-    id: 'Tint',
-    component: () => <TintIcon />,
-    values: Array(100).fill(0.1),
-    defaultValue: 50,
-  },
-];
-
 const IMAGE_HEIGHT = 350;
-const FILTER_WIDTH = 40;
-const MAX_FILTER_WIDTH = 160;
-const INDICATOR_WIDTH = 80;
 
 const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   navigation,
@@ -219,8 +197,6 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   const [selectedFilter, setSelectedFilter] = useState<number>(0);
   const [imageWidth, setImageWidth] = useState<number>(0);
   const [imageHeight, setImageHeight] = useState<number>(0);
-  const [filterIndex, setFilterIndex] = useState(0);
-  const [filterTitle, setFilterTitle] = useState('Brightness');
   const [brightnessValue, setBrightnessValue] = useState(1);
 
   const SelectedFilterComponent = useMemo(
@@ -228,37 +204,6 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
     [selectedFilter, brightnessValue],
   );
 
-  const ColorMatrixComponent = useCallback(
-    () => (
-      <ColorMatrix
-        image={
-          <Image
-            source={{uri: image}}
-            resizeMode={
-              imageWidth > imageHeight
-                ? FastImage.resizeMode.cover
-                : FastImage.resizeMode.contain
-            }
-            style={[
-              styles.mainImage,
-              {
-                transform: [{scale}, {translateX}, {translateY}],
-              },
-            ]}
-          />
-        }
-        matrix={concatColorMatrices([
-          saturate(1),
-          brightness(brightnessValue),
-          contrast(1),
-          sepia(0),
-          temperature(0),
-          tint(0),
-        ])}
-      />
-    ),
-    [selectedFilter, brightnessValue],
-  );
   const viewRef = useRef<View>(null);
 
   const takeSnapshot = useCallback(async () => {
@@ -284,41 +229,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
     }
   }, [image]);
 
-  const handleScroll = (offset: number) => {
-    switch (filterTitle) {
-      case 'Brightness':
-        if (offset / 10 > 0) {
-          if (Math.round(offset / 10) >= 100) {
-            setBrightnessValue(2);
-          } else {
-            const index = Math.round(offset / 10);
-            const value =
-              Math.round(EditFilters[filterIndex].values[index]) / 10;
-
-            setBrightnessValue(value);
-          }
-        } else {
-          setBrightnessValue(0);
-        }
-        break;
-
-      default:
-        break;
-    }
-  };
-
-  const ref = useRef<ScrollView>(null);
-
-  const handleFilterChange = (index: number) => {
-    if (ref && ref.current) {
-      ref.current.scrollTo({
-        animated: true,
-        x: index * 40,
-      });
-      setFilterTitle(EditFilters[index].id);
-    }
-  };
-
+  const skiaImage = useImage(image);
   return (
     <>
       <AppHeader
@@ -343,37 +254,70 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
       />
       <View style={styles.container}>
         <View style={styles.imageContainer} ref={viewRef}>
-          <SelectedFilterComponent
+          <Canvas style={{flex: 1}}>
+            <SkiaImage
+              image={skiaImage}
+              fit={
+                imageWidth > imageHeight
+                  ? FastImage.resizeMode.cover
+                  : FastImage.resizeMode.contain
+              }
+              x={0}
+              y={0}
+              width={width}
+              height={IMAGE_HEIGHT}
+              transform={[{scale}, {translateX}, {translateY}]}></SkiaImage>
+            {/* <Rect width={width} height={IMAGE_HEIGHT} x={0} y={0}>
+              <ImageShader
+                image={skiaImage}
+                fit={
+                  imageWidth > imageHeight
+                    ? FastImage.resizeMode.cover
+                    : FastImage.resizeMode.contain
+                }
+                x={0}
+                y={0}
+                width={width}
+                height={IMAGE_HEIGHT}
+                transform={[{scale}, {translateX}, {translateY}]}
+              />
+            </Rect> */}
+            <ColorMatrix
+              matrix={concatColorMatrices([brightness(brightnessValue)])}
+            />
+            <BlendColor color={'rgba(243, 106, 188, 0.3)'} mode="screen" />
+          </Canvas>
+
+          {/* <ColorMatrix
             image={
-              <ColorMatrixComponent />
-              // <ColorMatrix
-              //   image={
-              //     <Image
-              //       source={{uri: image}}
-              //       resizeMode={
-              //         imageWidth > imageHeight
-              //           ? FastImage.resizeMode.cover
-              //           : FastImage.resizeMode.contain
-              //       }
-              //       style={[
-              //         styles.mainImage,
-              //         {
-              //           transform: [{scale}, {translateX}, {translateY}],
-              //         },
-              //       ]}
-              //     />
-              //   }
-              //   matrix={concatColorMatrices([
-              //     saturate(1),
-              //     brightness(brightnessValue),
-              //     contrast(1),
-              //     sepia(0),
-              //     temperature(0),
-              //     tint(0),
-              //   ])}
-              // />
+              <SelectedFilterComponent
+                image={
+                  <Image
+                    source={{uri: image}}
+                    resizeMode={
+                      imageWidth > imageHeight
+                        ? FastImage.resizeMode.cover
+                        : FastImage.resizeMode.contain
+                    }
+                    style={[
+                      styles.mainImage,
+                      {
+                        transform: [{scale}, {translateX}, {translateY}],
+                      },
+                    ]}
+                  />
+                }
+              />
             }
-          />
+            matrix={concatColorMatrices([
+              saturate(1),
+              brightness(brightnessValue),
+              contrast(1),
+              sepia(0),
+              temperature(0),
+              tint(0),
+            ])}
+          /> */}
         </View>
         <FilterSection
           image={image}
@@ -383,111 +327,10 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
           translateX={translateX}
           translateY={translateY}
         />
-        <View style={styles.editFilterContainer}>
-          <Animated.View
-            style={[
-              styles.indicator,
-              {
-                left: width / 2 - INDICATOR_WIDTH / 2,
-              },
-            ]}>
-            <AppText
-              lineHeight={12}
-              style={[
-                styles.indicatorText,
-                {
-                  fontSize: 12 / PixelRatio.getFontScale(),
-                },
-              ]}>
-              {EditFilters[filterIndex].id}
-            </AppText>
-          </Animated.View>
-          <ScrollView
-            horizontal
-            contentContainerStyle={{
-              paddingLeft: width / 2 - 13,
-              paddingRight: width / 2 - 26,
-              paddingTop: 20,
-            }}
-            snapToOffsets={[0, 40, 80, 120, 160]}
-            scrollEventThrottle={16}
-            decelerationRate="fast"
-            onScroll={e => {
-              if (e.nativeEvent.contentOffset.x > MAX_FILTER_WIDTH) {
-                setFilterIndex(MAX_FILTER_WIDTH / FILTER_WIDTH);
-                setFilterTitle(EditFilters[MAX_FILTER_WIDTH / FILTER_WIDTH].id);
-              } else if (e.nativeEvent.contentOffset.x > 0) {
-                if (
-                  Math.round(e.nativeEvent.contentOffset.x) % FILTER_WIDTH ===
-                  0
-                ) {
-                  setFilterIndex(
-                    Math.round(e.nativeEvent.contentOffset.x) / FILTER_WIDTH,
-                  );
-                  setFilterTitle(
-                    EditFilters[
-                      Math.round(e.nativeEvent.contentOffset.x) / FILTER_WIDTH
-                    ].id,
-                  );
-                }
-              } else {
-                setFilterIndex(0);
-                setFilterTitle(EditFilters[0].id);
-              }
-            }}
-            ref={ref}>
-            {EditFilters.map((item, index) => {
-              return (
-                <TouchableOpacity
-                  style={styles.iconContainer}
-                  key={index}
-                  onPress={() => {
-                    handleFilterChange(index);
-                  }}>
-                  {item.component()}
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-        </View>
-        <View style={styles.sliderContainer}>
-          <FlatList
-            horizontal
-            contentContainerStyle={{
-              paddingVertical: 20,
-              paddingLeft: width / 2,
-              paddingRight: width / 2 - 10,
-            }}
-            onScroll={e => {
-              handleScroll(e.nativeEvent.contentOffset.x);
-            }}
-            extraData={selectedFilter}
-            data={EditFilters[selectedFilter].values}
-            keyExtractor={(item, index) => index.toString()}
-            initialScrollIndex={EditFilters[selectedFilter].defaultValue}
-            getItemLayout={(data, index) => ({
-              length: 10,
-              offset: 10 * index,
-              index,
-            })}
-            renderItem={({item, index}) => {
-              return <View style={[styles.sliderBox]} />;
-            }}
-            scrollEventThrottle={16}
-            decelerationRate="fast"
-            snapToOffsets={Array(EditFilters[selectedFilter].values.length)
-              .fill(undefined)
-              .map((x, index) => index * 10)}
-          />
-          <View
-            style={[
-              styles.sliderPoint,
-              {
-                marginLeft: width / 2,
-              },
-            ]}
-          />
-        </View>
+        <EditFilterSection
+          brightnessValue={brightnessValue}
+          setBrightnessValue={setBrightnessValue}
+        />
       </View>
     </>
   );
