@@ -27,7 +27,6 @@ import {
   InkwellCompat,
   KelvinCompat,
   LarkCompat,
-  LinearGradient,
   LofiCompat,
   MavenCompat,
   MayfairCompat,
@@ -73,7 +72,10 @@ import {
   RadialGradient,
   ImageShader,
   Rect,
+  Group,
+  LinearGradient,
 } from '@shopify/react-native-skia';
+import {Colors} from '../../utils/theme';
 
 const FILTERS = [
   {
@@ -230,6 +232,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   }, [image]);
 
   const skiaImage = useImage(image);
+
   return (
     <>
       <AppHeader
@@ -254,7 +257,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
       />
       <View style={styles.container}>
         <View style={styles.imageContainer} ref={viewRef}>
-          <Canvas style={{flex: 1}}>
+          <Canvas style={{flex: 1, width, height: IMAGE_HEIGHT}}>
             <SkiaImage
               image={skiaImage}
               fit={
@@ -266,58 +269,27 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               y={0}
               width={width}
               height={IMAGE_HEIGHT}
-              transform={[{scale}, {translateX}, {translateY}]}></SkiaImage>
-            {/* <Rect width={width} height={IMAGE_HEIGHT} x={0} y={0}>
-              <ImageShader
-                image={skiaImage}
-                fit={
-                  imageWidth > imageHeight
-                    ? FastImage.resizeMode.cover
-                    : FastImage.resizeMode.contain
-                }
-                x={0}
-                y={0}
-                width={width}
-                height={IMAGE_HEIGHT}
-                transform={[{scale}, {translateX}, {translateY}]}
-              />
-            </Rect> */}
-            <ColorMatrix
-              matrix={concatColorMatrices([brightness(brightnessValue)])}
+              transform={[{scale}, {translateX}, {translateY}]}
             />
-            <BlendColor color={'rgba(243, 106, 188, 0.3)'} mode="screen" />
-          </Canvas>
+            <Group blendMode="screen">
+              <Rect
+                x={width / 2 - 280 / 2}
+                y={0}
+                width={280}
+                height={IMAGE_HEIGHT}>
+                <LinearGradient
+                  start={vec(0, 256)}
+                  end={vec(220, 256)}
+                  colors={['blue', 'red']}
+                />
+              </Rect>
+            </Group>
 
-          {/* <ColorMatrix
-            image={
-              <SelectedFilterComponent
-                image={
-                  <Image
-                    source={{uri: image}}
-                    resizeMode={
-                      imageWidth > imageHeight
-                        ? FastImage.resizeMode.cover
-                        : FastImage.resizeMode.contain
-                    }
-                    style={[
-                      styles.mainImage,
-                      {
-                        transform: [{scale}, {translateX}, {translateY}],
-                      },
-                    ]}
-                  />
-                }
-              />
-            }
-            matrix={concatColorMatrices([
-              saturate(1),
-              brightness(brightnessValue),
-              contrast(1),
-              sepia(0),
-              temperature(0),
-              tint(0),
-            ])}
-          /> */}
+            {/* <ColorMatrix
+              matrix={concatColorMatrices([brightness(brightnessValue)])}
+            /> */}
+            {/* <BlendColor color={'rgba(243, 106, 188, 0.3)'} mode="screen" /> */}
+          </Canvas>
         </View>
         <FilterSection
           image={image}
