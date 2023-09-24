@@ -24,6 +24,7 @@ import {
   EarlybirdCompat,
   GinghamCompat,
   HudsonCompat,
+  hueRotate,
   InkwellCompat,
   KelvinCompat,
   LarkCompat,
@@ -76,6 +77,33 @@ import {
   LinearGradient,
 } from '@shopify/react-native-skia';
 import {Colors} from '../../utils/theme';
+import {
+  Aden,
+  Amaro,
+  Brannan,
+  Brooklyn,
+  Clarendon,
+  Earlybird,
+  Gingham,
+  Hudson,
+  Inkwell,
+  Kelvin,
+  Lark,
+  Lofi,
+  Maven,
+  Mayfair,
+  Moon,
+  Nashville,
+  Perpetua,
+  Reyes,
+  Rise,
+  Slumber,
+  Stinson,
+  Toaster,
+  Valencia,
+  Walden,
+  _1997,
+} from './Filter';
 
 const FILTERS = [
   {
@@ -233,6 +261,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
 
   const skiaImage = useImage(image);
 
+  const OVERLAY_WIDTH = (imageWidth * IMAGE_HEIGHT) / imageHeight;
   return (
     <>
       <AppHeader
@@ -271,24 +300,11 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               height={IMAGE_HEIGHT}
               transform={[{scale}, {translateX}, {translateY}]}
             />
-            <Group blendMode="screen">
-              <Rect
-                x={width / 2 - 280 / 2}
-                y={0}
-                width={280}
-                height={IMAGE_HEIGHT}>
-                <LinearGradient
-                  start={vec(0, 256)}
-                  end={vec(220, 256)}
-                  colors={['blue', 'red']}
-                />
-              </Rect>
-            </Group>
-
-            {/* <ColorMatrix
-              matrix={concatColorMatrices([brightness(brightnessValue)])}
+            {/* <Toaster
+              IMAGE_HEIGHT={IMAGE_HEIGHT}
+              OVERLAY_WIDTH={OVERLAY_WIDTH}
             /> */}
-            {/* <BlendColor color={'rgba(243, 106, 188, 0.3)'} mode="screen" /> */}
+            <Walden />
           </Canvas>
         </View>
         <FilterSection
