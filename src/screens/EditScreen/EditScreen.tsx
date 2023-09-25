@@ -1,9 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
-  FlatList,
   Image,
   PixelRatio,
-  ScrollView,
   TouchableOpacity,
   useWindowDimensions,
   View,
@@ -13,70 +11,11 @@ import AppHeader from '../../molecules/AppHeader/AppHeader';
 import {AuthenticatedNavProps} from '../../navigations/AuthenticatedNavigation/AuthenticatedNavigationTypes';
 import {styles} from './EditScreenStyles';
 
-import {
-  AdenCompat,
-  BrannanCompat,
-  brightness,
-  BrooklynCompat,
-  ClarendonCompat,
-  concatColorMatrices,
-  contrast,
-  EarlybirdCompat,
-  GinghamCompat,
-  HudsonCompat,
-  hueRotate,
-  InkwellCompat,
-  KelvinCompat,
-  LarkCompat,
-  LofiCompat,
-  MavenCompat,
-  MayfairCompat,
-  MoonCompat,
-  NashvilleCompat,
-  Normal,
-  PerpetuaCompat,
-  ReyesCompat,
-  RiseCompat,
-  saturate,
-  sepia,
-  SlumberCompat,
-  StinsonCompat,
-  temperature,
-  tint,
-  ToasterCompat,
-  ValenciaCompat,
-  WaldenCompat,
-  WillowCompat,
-  Xpro2Compat,
-  _1977Compat,
-} from 'react-native-image-filter-kit';
-import Animated from 'react-native-reanimated';
-import {captureRef} from 'react-native-view-shot';
 import FastImage from 'react-native-fast-image';
+import {captureRef} from 'react-native-view-shot';
 
-import BrightnessIcon from '../../atoms/BrightnessIcon/BrightnessIcon';
-import ContrastIcon from '../../atoms/ContrastIcon/ContrastIcon';
-import SaturateIcon from '../../atoms/SaturateIcon/SaturateIcon';
-import TemperatureIcon from '../../atoms/TemperatureIcon/TemperatureIcon';
-import TintIcon from '../../atoms/TintIcon/TintIcon';
-import FilterSection from './FilterSection';
+import {Canvas, Image as SkiaImage, useImage} from '@shopify/react-native-skia';
 import EditFilterSection from './EditFilterSection';
-import {
-  Canvas,
-  useImage,
-  Image as SkiaImage,
-  ColorMatrix,
-  BlendColor,
-  Lerp,
-  vec,
-  Blend,
-  RadialGradient,
-  ImageShader,
-  Rect,
-  Group,
-  LinearGradient,
-} from '@shopify/react-native-skia';
-import {Colors} from '../../utils/theme';
 import {
   Aden,
   Amaro,
@@ -94,6 +33,7 @@ import {
   Mayfair,
   Moon,
   Nashville,
+  Normal,
   Perpetua,
   Reyes,
   Rise,
@@ -102,118 +42,137 @@ import {
   Toaster,
   Valencia,
   Walden,
-  _1997,
+  Willow,
+  Xpro2,
+  _1977,
 } from './Filter';
+import FilterSection from './FilterSection';
 
 const FILTERS = [
-  {
-    title: 'Normal',
-    filterComponent: Normal,
-  },
-  {
-    title: 'Maven',
-    filterComponent: MavenCompat,
-  },
-  {
-    title: 'Mayfair',
-    filterComponent: MayfairCompat,
-  },
-  {
-    title: 'Moon',
-    filterComponent: MoonCompat,
-  },
-  {
-    title: 'Nashville',
-    filterComponent: NashvilleCompat,
-  },
-  {
-    title: 'Perpetua',
-    filterComponent: PerpetuaCompat,
-  },
-  {
-    title: 'Reyes',
-    filterComponent: ReyesCompat,
-  },
-  {
-    title: 'Rise',
-    filterComponent: RiseCompat,
-  },
-  {
-    title: 'Slumber',
-    filterComponent: SlumberCompat,
-  },
-  {
-    title: 'Stinson',
-    filterComponent: StinsonCompat,
-  },
-  {
-    title: 'Brooklyn',
-    filterComponent: BrooklynCompat,
-  },
-  {
-    title: 'Earlybird',
-    filterComponent: EarlybirdCompat,
-  },
-  {
-    title: 'Clarendon',
-    filterComponent: ClarendonCompat,
-  },
-  {
-    title: 'Gingham',
-    filterComponent: GinghamCompat,
-  },
-  {
-    title: 'Hudson',
-    filterComponent: HudsonCompat,
-  },
-  {
-    title: 'Inkwell',
-    filterComponent: InkwellCompat,
-  },
-  {
-    title: 'Kelvin',
-    filterComponent: KelvinCompat,
-  },
-  {
-    title: 'Lark',
-    filterComponent: LarkCompat,
-  },
-  {
-    title: 'Lofi',
-    filterComponent: LofiCompat,
-  },
-  {
-    title: 'Toaster',
-    filterComponent: ToasterCompat,
-  },
-  {
-    title: 'Valencia',
-    filterComponent: ValenciaCompat,
-  },
-  {
-    title: 'Walden',
-    filterComponent: WaldenCompat,
-  },
-  {
-    title: 'Willow',
-    filterComponent: WillowCompat,
-  },
-  {
-    title: 'Xpro2',
-    filterComponent: Xpro2Compat,
-  },
-  {
-    title: 'Aden',
-    filterComponent: AdenCompat,
-  },
-  {
-    title: '_1977',
-    filterComponent: _1977Compat,
-  },
-  {
-    title: 'Brannan',
-    filterComponent: BrannanCompat,
-  },
+  ...[
+    {
+      title: 'Normal',
+      filterComponent: Normal,
+    },
+  ],
+  ...[
+    {
+      title: 'Amaro',
+      filterComponent: Amaro,
+    },
+    {
+      title: 'Maven',
+      filterComponent: Maven,
+    },
+    {
+      title: 'Mayfair',
+      filterComponent: Mayfair,
+    },
+    {
+      title: 'Moon',
+      filterComponent: Moon,
+    },
+    {
+      title: 'Nashville',
+      filterComponent: Nashville,
+    },
+    {
+      title: 'Perpetua',
+      filterComponent: Perpetua,
+    },
+    {
+      title: 'Reyes',
+      filterComponent: Reyes,
+    },
+    {
+      title: 'Rise',
+      filterComponent: Rise,
+    },
+    {
+      title: 'Slumber',
+      filterComponent: Slumber,
+    },
+    {
+      title: 'Stinson',
+      filterComponent: Stinson,
+    },
+    {
+      title: 'Brooklyn',
+      filterComponent: Brooklyn,
+    },
+    {
+      title: 'Earlybird',
+      filterComponent: Earlybird,
+    },
+    {
+      title: 'Clarendon',
+      filterComponent: Clarendon,
+    },
+    {
+      title: 'Gingham',
+      filterComponent: Gingham,
+    },
+    {
+      title: 'Hudson',
+      filterComponent: Hudson,
+    },
+    {
+      title: 'Inkwell',
+      filterComponent: Inkwell,
+    },
+    {
+      title: 'Kelvin',
+      filterComponent: Kelvin,
+    },
+    {
+      title: 'Lark',
+      filterComponent: Lark,
+    },
+    {
+      title: 'Lofi',
+      filterComponent: Lofi,
+    },
+    {
+      title: 'Toaster',
+      filterComponent: Toaster,
+    },
+    {
+      title: 'Valencia',
+      filterComponent: Valencia,
+    },
+    {
+      title: 'Walden',
+      filterComponent: Walden,
+    },
+    {
+      title: 'Willow',
+      filterComponent: Willow,
+    },
+    {
+      title: 'Xpro2',
+      filterComponent: Xpro2,
+    },
+    {
+      title: 'Aden',
+      filterComponent: Aden,
+    },
+    {
+      title: '_1977',
+      filterComponent: _1977,
+    },
+    {
+      title: 'Brannan',
+      filterComponent: Brannan,
+    },
+  ].sort(function (a, b) {
+    if (a.title < b.title) {
+      return -1;
+    }
+    if (a.title > b.title) {
+      return 1;
+    }
+    return 0;
+  }),
 ];
 
 const IMAGE_HEIGHT = 350;
@@ -231,7 +190,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
 
   const SelectedFilterComponent = useMemo(
     () => FILTERS[selectedFilter].filterComponent,
-    [selectedFilter, brightnessValue],
+    [selectedFilter],
   );
 
   const viewRef = useRef<View>(null);
@@ -300,20 +259,23 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               height={IMAGE_HEIGHT}
               transform={[{scale}, {translateX}, {translateY}]}
             />
-            {/* <Toaster
+            <SelectedFilterComponent
               IMAGE_HEIGHT={IMAGE_HEIGHT}
               OVERLAY_WIDTH={OVERLAY_WIDTH}
-            /> */}
-            <Walden />
+              width={width}
+            />
           </Canvas>
         </View>
         <FilterSection
           image={image}
           FILTERS={FILTERS}
           setSelectedFilter={setSelectedFilter}
+          selectedFilter={selectedFilter}
           scale={scale}
           translateX={translateX}
           translateY={translateY}
+          imageHeight={imageHeight}
+          imageWidth={imageWidth}
         />
         <EditFilterSection
           brightnessValue={brightnessValue}

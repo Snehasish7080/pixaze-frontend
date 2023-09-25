@@ -1,42 +1,38 @@
-import React from 'react';
+import {Canvas, Image, useImage} from '@shopify/react-native-skia';
+import React, {useRef} from 'react';
 import {
   FlatList,
-  Image,
   TouchableOpacity,
   useWindowDimensions,
   View,
 } from 'react-native';
-import {
-  AdenCompat,
-  brightness,
-  ColorMatrix,
-  concatColorMatrices,
-  contrast,
-  saturate,
-  sepia,
-  temperature,
-  tint,
-} from 'react-native-image-filter-kit';
+import FastImage from 'react-native-fast-image';
 import AppText from '../../atoms/AppText/AppText';
 import {styles} from './EditScreenStyles';
+import {FilterProps} from './Filter';
 
 const IMAGE_HEIGHT = 350;
 
+const IMAGE_RESIZED_HEIGHT = 100;
+
 type filter = {
   title: string;
-  filterComponent: typeof AdenCompat;
+  filterComponent: React.FC<FilterProps>;
 };
 
 type FilterSectionProps = {
   setSelectedFilter: React.Dispatch<React.SetStateAction<number>>;
+  selectedFilter: number;
   image: string;
   FILTERS: {
     title: string;
-    filterComponent: typeof AdenCompat;
+    filterComponent: React.FC<FilterProps>;
   }[];
   scale: number;
   translateX: number;
   translateY: number;
+  imageWidth: number;
+  imageHeight: number;
 };
 const FilterSection: React.FC<FilterSectionProps> = ({
   setSelectedFilter,
@@ -45,8 +41,15 @@ const FilterSection: React.FC<FilterSectionProps> = ({
   scale,
   translateX,
   translateY,
+  imageHeight,
+  imageWidth,
 }) => {
+  const skiaImage = useImage(image);
+
   const {width} = useWindowDimensions();
+  const ref = useRef<FlatList>(null);
+
+  const OVERLAY_WIDTH = (imageWidth * IMAGE_RESIZED_HEIGHT) / imageHeight;
 
   const widthMultiple = width / 100;
   const heightMultiple = IMAGE_HEIGHT / 100;
@@ -58,45 +61,46 @@ const FilterSection: React.FC<FilterSectionProps> = ({
     index: number;
   }) => {
     const FilterComponent = item.filterComponent;
-    const filterImage = (
-      <Image
-        style={{
-          width: 100,
-          height: 100,
-          transform: [
-            {scale: scale},
-            {translateX: translateX / widthMultiple},
-            {translateY: translateY / heightMultiple},
-          ],
-          resizeMode: 'contain',
-          aspectRatio: 1,
-        }}
-        source={{uri: image}}
-      />
-    );
-    if (!image) {
+
+    if (!skiaImage) {
       return null;
     }
     return (
       <TouchableOpacity
         style={styles.image}
         activeOpacity={0.7}
-        onPress={() => setSelectedFilter(index)}>
-        <FilterComponent
-          image={
-            <ColorMatrix
-              image={filterImage}
-              matrix={concatColorMatrices([
-                saturate(1),
-                brightness(1),
-                contrast(1),
-                sepia(0),
-                temperature(0),
-                tint(0),
-              ])}
-            />
+        onPress={() => {
+          setSelectedFilter(index);
+          if (index * 100 > width / 2) {
+            if (ref && ref.current) {
+              ref.current.scrollToIndex({
+                index,
+                animated: true,
+              });
+            }
           }
-        />
+        }}>
+        <Canvas
+          style={{
+            flex: 1,
+            width: 100,
+            height: IMAGE_RESIZED_HEIGHT,
+          }}>
+          <Image
+            image={skiaImage}
+            fit={FastImage.resizeMode.contain}
+            x={0}
+            y={0}
+            width={100}
+            height={IMAGE_RESIZED_HEIGHT}
+            transform={[{scale}, {translateX}, {translateY}]}
+          />
+          <FilterComponent
+            IMAGE_HEIGHT={IMAGE_RESIZED_HEIGHT}
+            OVERLAY_WIDTH={OVERLAY_WIDTH}
+            width={100}
+          />
+        </Canvas>
         <AppText lineHeight={10} style={styles.title}>
           {item.title}
         </AppText>
@@ -115,6 +119,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
         data={FILTERS}
         keyExtractor={item => item.title}
         renderItem={renderFilterComponent}
+        ref={ref}
       />
     </View>
   );

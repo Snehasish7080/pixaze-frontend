@@ -5,9 +5,11 @@ import {
   ColorMatrix,
   Group,
   LinearGradient,
+  LinearToSRGBGamma,
   OpacityMatrix,
   RadialGradient,
   Rect,
+  SRGBToLinearGamma,
   vec,
 } from '@shopify/react-native-skia';
 import {
@@ -20,12 +22,16 @@ import {
   sepia,
 } from 'react-native-image-filter-kit';
 
-type FilterProps = {
-  OVERLAY_WIDTH: number;
-  IMAGE_HEIGHT: number;
+export type FilterProps = {
+  OVERLAY_WIDTH?: number;
+  IMAGE_HEIGHT?: number;
+  width?: number;
 };
-export const Aden: React.FC<FilterProps> = ({IMAGE_HEIGHT, OVERLAY_WIDTH}) => {
-  const {width} = useWindowDimensions();
+export const Aden: React.FC<FilterProps> = ({
+  IMAGE_HEIGHT = 0,
+  OVERLAY_WIDTH = 0,
+  width = 0,
+}) => {
   return (
     <>
       <ColorMatrix
@@ -48,7 +54,7 @@ export const Aden: React.FC<FilterProps> = ({IMAGE_HEIGHT, OVERLAY_WIDTH}) => {
   );
 };
 
-export const _1997: React.FC = () => {
+export const _1977: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'rgba(243, 106, 188, 0.3)'} mode="screen" />
@@ -58,9 +64,11 @@ export const _1997: React.FC = () => {
     </>
   );
 };
-export const Amaro: React.FC<FilterProps> = ({IMAGE_HEIGHT, OVERLAY_WIDTH}) => {
-  const {width} = useWindowDimensions();
-
+export const Amaro: React.FC<FilterProps> = ({
+  IMAGE_HEIGHT = 0,
+  OVERLAY_WIDTH = 0,
+  width = 0,
+}) => {
   return (
     <>
       <ColorMatrix
@@ -77,7 +85,7 @@ export const Amaro: React.FC<FilterProps> = ({IMAGE_HEIGHT, OVERLAY_WIDTH}) => {
   );
 };
 
-export const Brannan: React.FC = () => {
+export const Brannan: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'rgba(161, 44, 199, 0.31)'} mode="lighten" />
@@ -87,11 +95,10 @@ export const Brannan: React.FC = () => {
 };
 
 export const Brooklyn: React.FC<FilterProps> = ({
-  IMAGE_HEIGHT,
-  OVERLAY_WIDTH,
+  IMAGE_HEIGHT = 0,
+  OVERLAY_WIDTH = 0,
+  width = 0,
 }) => {
-  const {width} = useWindowDimensions();
-
   return (
     <>
       <ColorMatrix matrix={concatColorMatrices([brightness(1.1)])} />
@@ -112,7 +119,7 @@ export const Brooklyn: React.FC<FilterProps> = ({
   );
 };
 
-export const Clarendon: React.FC = () => {
+export const Clarendon: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'rgba(127, 187, 227, 0.5)'} mode="overlay" />
@@ -122,11 +129,10 @@ export const Clarendon: React.FC = () => {
 };
 
 export const Earlybird: React.FC<FilterProps> = ({
-  IMAGE_HEIGHT,
-  OVERLAY_WIDTH,
+  IMAGE_HEIGHT = 0,
+  OVERLAY_WIDTH = 0,
+  width = 0,
 }) => {
-  const {width} = useWindowDimensions();
-
   return (
     <>
       <ColorMatrix matrix={concatColorMatrices([sepia(0.2)])} />
@@ -151,7 +157,7 @@ export const Earlybird: React.FC<FilterProps> = ({
   );
 };
 
-export const Gingham: React.FC = () => {
+export const Gingham: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'lavender'} mode="softLight" />
@@ -161,11 +167,10 @@ export const Gingham: React.FC = () => {
 };
 
 export const Hudson: React.FC<FilterProps> = ({
-  IMAGE_HEIGHT,
-  OVERLAY_WIDTH,
+  IMAGE_HEIGHT = 0,
+  OVERLAY_WIDTH = 0,
+  width = 0,
 }) => {
-  const {width} = useWindowDimensions();
-
   return (
     <>
       <ColorMatrix
@@ -188,7 +193,7 @@ export const Hudson: React.FC<FilterProps> = ({
   );
 };
 
-export const Inkwell: React.FC = () => {
+export const Inkwell: React.FC<FilterProps> = () => {
   return (
     <>
       <ColorMatrix
@@ -201,14 +206,14 @@ export const Inkwell: React.FC = () => {
     </>
   );
 };
-export const Kelvin: React.FC = () => {
+export const Kelvin: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'#382c34'} mode="colorDodge" />
     </>
   );
 };
-export const Lark: React.FC = () => {
+export const Lark: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'rgba(242, 242, 242, 0.8)'} mode="darken" />
@@ -217,9 +222,11 @@ export const Lark: React.FC = () => {
   );
 };
 
-export const Lofi: React.FC<FilterProps> = ({IMAGE_HEIGHT, OVERLAY_WIDTH}) => {
-  const {width} = useWindowDimensions();
-
+export const Lofi: React.FC<FilterProps> = ({
+  IMAGE_HEIGHT = 0,
+  OVERLAY_WIDTH = 0,
+  width = 0,
+}) => {
   return (
     <>
       <ColorMatrix
@@ -242,7 +249,7 @@ export const Lofi: React.FC<FilterProps> = ({IMAGE_HEIGHT, OVERLAY_WIDTH}) => {
   );
 };
 
-export const Maven: React.FC = () => {
+export const Maven: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'rgba(3, 230, 26, 0.2)'} mode="hue" />
@@ -258,11 +265,10 @@ export const Maven: React.FC = () => {
 };
 
 export const Mayfair: React.FC<FilterProps> = ({
-  IMAGE_HEIGHT,
-  OVERLAY_WIDTH,
+  IMAGE_HEIGHT = 0,
+  OVERLAY_WIDTH = 0,
+  width = 0,
 }) => {
-  const {width} = useWindowDimensions();
-
   return (
     <>
       <ColorMatrix matrix={concatColorMatrices([sepia(0.2)])} />
@@ -287,7 +293,7 @@ export const Mayfair: React.FC<FilterProps> = ({
   );
 };
 
-export const Moon: React.FC = () => {
+export const Moon: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'#a0a0a0'} mode="softLight" />
@@ -298,7 +304,7 @@ export const Moon: React.FC = () => {
     </>
   );
 };
-export const Nashville: React.FC = () => {
+export const Nashville: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'rgba(0, 70, 150, 0.4)'} mode="lighten" />
@@ -315,10 +321,10 @@ export const Nashville: React.FC = () => {
 };
 
 export const Perpetua: React.FC<FilterProps> = ({
-  IMAGE_HEIGHT,
-  OVERLAY_WIDTH,
+  IMAGE_HEIGHT = 0,
+  OVERLAY_WIDTH = 0,
+  width = 0,
 }) => {
-  const {width} = useWindowDimensions();
   return (
     <>
       <Group blendMode="softLight">
@@ -338,7 +344,7 @@ export const Perpetua: React.FC<FilterProps> = ({
   );
 };
 
-export const Reyes: React.FC = () => {
+export const Reyes: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'#efcdad'} mode="softLight" />
@@ -353,9 +359,11 @@ export const Reyes: React.FC = () => {
   );
 };
 
-export const Rise: React.FC<FilterProps> = ({IMAGE_HEIGHT, OVERLAY_WIDTH}) => {
-  const {width} = useWindowDimensions();
-
+export const Rise: React.FC<FilterProps> = ({
+  IMAGE_HEIGHT = 0,
+  OVERLAY_WIDTH = 0,
+  width = 0,
+}) => {
   return (
     <>
       <ColorMatrix
@@ -382,7 +390,7 @@ export const Rise: React.FC<FilterProps> = ({IMAGE_HEIGHT, OVERLAY_WIDTH}) => {
   );
 };
 
-export const Slumber: React.FC = () => {
+export const Slumber: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'rgba(125, 105, 24, 0.5)'} mode="softLight" />
@@ -394,7 +402,7 @@ export const Slumber: React.FC = () => {
   );
 };
 
-export const Stinson: React.FC = () => {
+export const Stinson: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'rgba(240, 149, 128, 0.2)'} mode="softLight" />
@@ -406,11 +414,10 @@ export const Stinson: React.FC = () => {
 };
 
 export const Toaster: React.FC<FilterProps> = ({
-  IMAGE_HEIGHT,
-  OVERLAY_WIDTH,
+  IMAGE_HEIGHT = 0,
+  OVERLAY_WIDTH = 0,
+  width = 0,
 }) => {
-  const {width} = useWindowDimensions();
-
   return (
     <>
       <ColorMatrix matrix={concatColorMatrices([brightness(0.9)])} />
@@ -431,7 +438,7 @@ export const Toaster: React.FC<FilterProps> = ({
   );
 };
 
-export const Valencia: React.FC = () => {
+export const Valencia: React.FC<FilterProps> = () => {
   return (
     <>
       <BlendColor color={'#3a0339'} mode="exclusion" />
@@ -441,13 +448,74 @@ export const Valencia: React.FC = () => {
     </>
   );
 };
-export const Walden: React.FC = () => {
+export const Walden: React.FC<FilterProps> = () => {
   return (
     <>
-      <BlendColor color={'#0044cc'} mode="screen" />
-      <ColorMatrix
-        matrix={concatColorMatrices([brightness(1), sepia(0.3), saturate(1.6)])}
-      />
+      <BlendColor color={'rgba(0, 68, 204,0.6)'} mode="screen">
+        <ColorMatrix
+          matrix={concatColorMatrices([
+            brightness(1.1),
+            sepia(0.3),
+            saturate(1.6),
+          ])}
+        />
+      </BlendColor>
     </>
   );
+};
+
+export const Willow: React.FC<FilterProps> = ({
+  IMAGE_HEIGHT = 0,
+  OVERLAY_WIDTH = 0,
+  width = 0,
+}) => {
+  return (
+    <>
+      <ColorMatrix
+        matrix={concatColorMatrices([grayscale(0.5), brightness(0.9)])}
+      />
+      <Group blendMode="overlay">
+        <Rect
+          x={width / 2 - OVERLAY_WIDTH / 2}
+          y={0}
+          width={OVERLAY_WIDTH}
+          height={IMAGE_HEIGHT}>
+          <RadialGradient
+            c={vec(OVERLAY_WIDTH / 2, OVERLAY_WIDTH / 2)}
+            r={OVERLAY_WIDTH / 4}
+            colors={['rgba(212, 169, 175,0.55)', 'rgba(0,0,0,0.2)']}
+          />
+        </Rect>
+      </Group>
+      <BlendColor color={'#d8cdcb'} mode="color" />
+    </>
+  );
+};
+export const Xpro2: React.FC<FilterProps> = ({
+  IMAGE_HEIGHT = 0,
+  OVERLAY_WIDTH = 0,
+  width = 0,
+}) => {
+  return (
+    <>
+      <ColorMatrix matrix={concatColorMatrices([sepia(0.3)])} />
+      <Group blendMode="colorBurn">
+        <Rect
+          x={width / 2 - OVERLAY_WIDTH / 2}
+          y={0}
+          width={OVERLAY_WIDTH}
+          height={IMAGE_HEIGHT}>
+          <RadialGradient
+            c={vec(OVERLAY_WIDTH / 2, OVERLAY_WIDTH / 2)}
+            r={OVERLAY_WIDTH / 4}
+            colors={['rgba(230, 231, 224,0.4)', 'rgba(43, 42, 161, 0.3)']}
+          />
+        </Rect>
+      </Group>
+    </>
+  );
+};
+
+export const Normal: React.FC<FilterProps> = () => {
+  return <></>;
 };
