@@ -2,7 +2,7 @@ import {Dimensions, StyleSheet} from 'react-native';
 import {horizontalScale, verticalScale} from '../../utils/scale';
 import {Colors, FontFamily} from '../../utils/theme';
 
-const IMAGE_HEIGHT = 350;
+const IMAGE_HEIGHT = verticalScale(604.5);
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -12,6 +12,19 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: IMAGE_HEIGHT,
     overflow: 'hidden',
+    position: 'relative',
+  },
+  drawIcon: {
+    position: 'absolute',
+    zIndex: 2,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+    backgroundColor: Colors.drawIconColor,
+    right: 16,
+    top: 16,
   },
   mainImage: {
     width: '100%',
@@ -28,7 +41,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   filterContainer: {
-    marginTop: 50,
+    marginTop: 15,
   },
   title: {
     fontSize: 12,
@@ -60,7 +73,7 @@ export const styles = StyleSheet.create({
     marginRight: 10,
   },
   editFilterContainer: {
-    marginTop: 50,
+    marginTop: 20,
     position: 'relative',
   },
   indicator: {

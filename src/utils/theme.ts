@@ -24,6 +24,7 @@ export const Colors = {
   locationColor: 'rgba(0, 0, 0, 0.4)',
   tagBackGroundColor: 'rgba(0, 0, 0, 0.5)',
   addMemoColor: 'rgba(255, 255, 255, 0.4)',
+  drawIconColor: 'rgba(0, 0, 0, 0.6)',
 };
 
 export const FontFamily = {

@@ -11,7 +11,7 @@ import AppText from '../../atoms/AppText/AppText';
 import {styles} from './EditScreenStyles';
 import {FilterProps} from './Filter';
 
-const IMAGE_HEIGHT = 350;
+const IMAGE_HEIGHT = 484;
 
 const IMAGE_RESIZED_HEIGHT = 100;
 
@@ -71,10 +71,10 @@ const FilterSection: React.FC<FilterSectionProps> = ({
         activeOpacity={0.7}
         onPress={() => {
           setSelectedFilter(index);
-          if (index * 100 > width / 2) {
+          if (index * 105 > width / 2) {
             if (ref && ref.current) {
-              ref.current.scrollToIndex({
-                index,
+              ref.current.scrollToOffset({
+                offset: index * 105 - (width / 2 - 105 / 2),
                 animated: true,
               });
             }
@@ -88,7 +88,11 @@ const FilterSection: React.FC<FilterSectionProps> = ({
           }}>
           <Image
             image={skiaImage}
-            fit={FastImage.resizeMode.contain}
+            fit={
+              imageWidth > imageHeight
+                ? FastImage.resizeMode.cover
+                : FastImage.resizeMode.contain
+            }
             x={0}
             y={0}
             width={100}

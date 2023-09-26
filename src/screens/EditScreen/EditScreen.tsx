@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
+  Dimensions,
   Image,
   PixelRatio,
   TouchableOpacity,
@@ -14,7 +15,17 @@ import {styles} from './EditScreenStyles';
 import FastImage from 'react-native-fast-image';
 import {captureRef} from 'react-native-view-shot';
 
-import {Canvas, Image as SkiaImage, useImage} from '@shopify/react-native-skia';
+import {
+  Canvas,
+  ColorMatrix,
+  Image as SkiaImage,
+  Path,
+  Skia,
+  SkPath,
+  TouchInfo,
+  useImage,
+  useTouchHandler,
+} from '@shopify/react-native-skia';
 import EditFilterSection from './EditFilterSection';
 import {
   Aden,
@@ -47,6 +58,9 @@ import {
   _1977,
 } from './Filter';
 import FilterSection from './FilterSection';
+import {brightness, concatColorMatrices} from 'react-native-image-filter-kit';
+import {verticalScale} from '../../utils/scale';
+import DrawIcon from '../../atoms/DrawIcon/DrawIcon';
 
 const FILTERS = [
   ...[
@@ -175,7 +189,7 @@ const FILTERS = [
   }),
 ];
 
-const IMAGE_HEIGHT = 350;
+const IMAGE_HEIGHT = verticalScale(604.5);
 
 const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   navigation,
@@ -221,31 +235,49 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   const skiaImage = useImage(image);
 
   const OVERLAY_WIDTH = (imageWidth * IMAGE_HEIGHT) / imageHeight;
+
+  const [paths, setPaths] = useState<SkPath[]>([]);
+
+  const onDrawingStart = useCallback((touchInfo: TouchInfo) => {
+    setPaths(old => {
+      const {x, y} = touchInfo;
+      const newPath = Skia.Path.Make();
+      newPath.moveTo(x, y);
+      return [...old, newPath];
+    });
+  }, []);
+
+  const onDrawingActive = useCallback((touchInfo: TouchInfo) => {
+    setPaths(currentPaths => {
+      const {x, y} = touchInfo;
+      const currentPath = currentPaths[currentPaths.length - 1];
+      const lastPoint = currentPath.getLastPt();
+      const xMid = (lastPoint.x + x) / 2;
+      const yMid = (lastPoint.y + y) / 2;
+
+      currentPath.quadTo(lastPoint.x, lastPoint.y, xMid, yMid);
+      return [...currentPaths.slice(0, currentPaths.length - 1), currentPath];
+    });
+  }, []);
+
+  const touchHandler = useTouchHandler(
+    {
+      onActive: onDrawingActive,
+      onStart: onDrawingStart,
+    },
+    [onDrawingActive, onDrawingStart],
+  );
+
   return (
     <>
-      <AppHeader
-        mainTitle="ADJUST"
-        onBack={() => {
-          navigation.goBack();
-        }}
-        rightSection={
-          <TouchableOpacity>
-            <AppText
-              lineHeight={14}
-              style={[
-                styles.next,
-                {
-                  fontSize: 14 / PixelRatio.getFontScale(),
-                },
-              ]}>
-              Next
-            </AppText>
-          </TouchableOpacity>
-        }
-      />
       <View style={styles.container}>
         <View style={styles.imageContainer} ref={viewRef}>
-          <Canvas style={{flex: 1, width, height: IMAGE_HEIGHT}}>
+          <View style={styles.drawIcon}>
+            <DrawIcon />
+          </View>
+          <Canvas
+            style={{flex: 1, width, height: IMAGE_HEIGHT}}
+            onTouch={touchHandler}>
             <SkiaImage
               image={skiaImage}
               fit={
@@ -264,6 +296,18 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               OVERLAY_WIDTH={OVERLAY_WIDTH}
               width={width}
             />
+            <ColorMatrix
+              matrix={concatColorMatrices([brightness(brightnessValue)])}
+            />
+            {paths.map((path, index) => (
+              <Path
+                key={index}
+                path={path}
+                color={'white'}
+                style={'stroke'}
+                strokeWidth={5}
+              />
+            ))}
           </Canvas>
         </View>
         <FilterSection
@@ -277,10 +321,10 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
           imageHeight={imageHeight}
           imageWidth={imageWidth}
         />
-        <EditFilterSection
+        {/* <EditFilterSection
           brightnessValue={brightnessValue}
           setBrightnessValue={setBrightnessValue}
-        />
+        /> */}
       </View>
     </>
   );

@@ -37,8 +37,8 @@ const EditFilters = [
   {
     id: 'Saturation',
     component: () => <SaturateIcon />,
-    values: Array(100).fill(0.01),
-    defaultValue: 50,
+    values: Array.from({length: 100}, (_, i) => i / 5),
+    defaultValue: 51,
   },
   {
     id: 'Contrast',
