@@ -18,6 +18,8 @@ import {captureRef} from 'react-native-view-shot';
 import {
   Canvas,
   ColorMatrix,
+  CornerPathEffect,
+  DiscretePathEffect,
   Image as SkiaImage,
   Path,
   Skia,
@@ -25,6 +27,7 @@ import {
   TouchInfo,
   useImage,
   useTouchHandler,
+  useValue,
 } from '@shopify/react-native-skia';
 import EditFilterSection from './EditFilterSection';
 import {
@@ -236,37 +239,25 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
 
   const OVERLAY_WIDTH = (imageWidth * IMAGE_HEIGHT) / imageHeight;
 
+  const currentPath = useValue<SkPath>(Skia.Path.Make());
   const [paths, setPaths] = useState<SkPath[]>([]);
 
-  const onDrawingStart = useCallback((touchInfo: TouchInfo) => {
-    setPaths(old => {
-      const {x, y} = touchInfo;
-      const newPath = Skia.Path.Make();
-      newPath.moveTo(x, y);
-      return [...old, newPath];
-    });
-  }, []);
-
-  const onDrawingActive = useCallback((touchInfo: TouchInfo) => {
-    setPaths(currentPaths => {
-      const {x, y} = touchInfo;
-      const currentPath = currentPaths[currentPaths.length - 1];
-      const lastPoint = currentPath.getLastPt();
-      const xMid = (lastPoint.x + x) / 2;
-      const yMid = (lastPoint.y + y) / 2;
-
-      currentPath.quadTo(lastPoint.x, lastPoint.y, xMid, yMid);
-      return [...currentPaths.slice(0, currentPaths.length - 1), currentPath];
-    });
-  }, []);
-
-  const touchHandler = useTouchHandler(
-    {
-      onActive: onDrawingActive,
-      onStart: onDrawingStart,
+  const touchHandler = useTouchHandler({
+    onStart: ({x, y}) => {
+      currentPath.current = Skia.Path.Make();
+      currentPath.current.moveTo(x, y);
     },
-    [onDrawingActive, onDrawingStart],
-  );
+    onActive: ({x, y}) => {
+      currentPath.current?.lineTo(x, y);
+    },
+    onEnd: () => {
+      if (!currentPath.current) {
+        return;
+      }
+      setPaths(values => values.concat(currentPath.current!));
+      currentPath.current = Skia.Path.Make();
+    },
+  });
 
   return (
     <>
@@ -299,14 +290,22 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
             <ColorMatrix
               matrix={concatColorMatrices([brightness(brightnessValue)])}
             />
+            <Path
+              path={currentPath}
+              color={'white'}
+              style={'stroke'}
+              strokeWidth={5}>
+              <CornerPathEffect r={64} />
+            </Path>
             {paths.map((path, index) => (
               <Path
                 key={index}
                 path={path}
                 color={'white'}
                 style={'stroke'}
-                strokeWidth={5}
-              />
+                strokeWidth={5}>
+                <CornerPathEffect r={64} />
+              </Path>
             ))}
           </Canvas>
         </View>
