@@ -16,11 +16,17 @@ import FastImage from 'react-native-fast-image';
 import {captureRef} from 'react-native-view-shot';
 
 import {
+  BlendMode,
   Canvas,
   ColorMatrix,
   CornerPathEffect,
+  DashPathEffect,
   DiscretePathEffect,
+  enumKey,
+  Group,
   Image as SkiaImage,
+  Mask,
+  PaintStyle,
   Path,
   Skia,
   SkPath,
@@ -259,6 +265,11 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
     },
   });
 
+  const paint = Skia.Paint();
+  paint.setColor(Skia.Color('red'));
+  paint.setStyle(PaintStyle.Stroke);
+  paint.setStrokeWidth(5);
+
   return (
     <>
       <View style={styles.container}>
@@ -290,23 +301,24 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
             <ColorMatrix
               matrix={concatColorMatrices([brightness(brightnessValue)])}
             />
-            <Path
-              path={currentPath}
-              color={'white'}
-              style={'stroke'}
-              strokeWidth={5}>
-              <CornerPathEffect r={64} />
-            </Path>
+
             {paths.map((path, index) => (
               <Path
                 key={index}
                 path={path}
                 color={'white'}
                 style={'stroke'}
-                strokeWidth={5}>
-                <CornerPathEffect r={64} />
-              </Path>
+                strokeWidth={5}
+                strokeCap={'round'}></Path>
             ))}
+
+            <Path
+              path={currentPath}
+              color={'white'}
+              style={'stroke'}
+              strokeWidth={5}
+              strokeCap={'round'}
+              paint={paint}></Path>
           </Canvas>
         </View>
         <FilterSection
