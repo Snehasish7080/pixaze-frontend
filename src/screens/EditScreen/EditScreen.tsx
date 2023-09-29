@@ -23,13 +23,17 @@ import {
   DashPathEffect,
   DiscretePathEffect,
   enumKey,
+  Fill,
   Group,
   Image as SkiaImage,
   Mask,
   PaintStyle,
   Path,
+  Rect,
   Skia,
   SkPath,
+  StrokeCap,
+  StrokeJoin,
   TouchInfo,
   useImage,
   useTouchHandler,
@@ -246,29 +250,48 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   const OVERLAY_WIDTH = (imageWidth * IMAGE_HEIGHT) / imageHeight;
 
   const currentPath = useValue<SkPath>(Skia.Path.Make());
+  const currentEraserPath = useValue<SkPath>(Skia.Path.Make());
+
   const [paths, setPaths] = useState<SkPath[]>([]);
+  const [eraserPaths, setEraserPaths] = useState<SkPath[]>([]);
+  const [isEraser, setIsEraser] = useState<boolean>(false);
 
-  const touchHandler = useTouchHandler({
-    onStart: ({x, y}) => {
-      currentPath.current = Skia.Path.Make();
-      currentPath.current.moveTo(x, y);
+  const touchHandler = useTouchHandler(
+    {
+      onStart: ({x, y}) => {
+        if (isEraser) {
+          currentEraserPath.current = Skia.Path.Make();
+          currentEraserPath.current.moveTo(x, y);
+        } else {
+          currentPath.current = Skia.Path.Make();
+          currentPath.current.moveTo(x, y);
+        }
+      },
+      onActive: ({x, y}) => {
+        if (isEraser) {
+          currentEraserPath.current?.lineTo(x, y);
+        } else {
+          currentPath.current?.lineTo(x, y);
+        }
+      },
+      onEnd: () => {
+        if (isEraser) {
+          if (!currentEraserPath.current) {
+            return;
+          }
+          setEraserPaths(values => values.concat(currentEraserPath.current!));
+          currentEraserPath.current = Skia.Path.Make();
+        } else {
+          if (!currentPath.current) {
+            return;
+          }
+          setPaths(values => values.concat(currentPath.current!));
+          currentPath.current = Skia.Path.Make();
+        }
+      },
     },
-    onActive: ({x, y}) => {
-      currentPath.current?.lineTo(x, y);
-    },
-    onEnd: () => {
-      if (!currentPath.current) {
-        return;
-      }
-      setPaths(values => values.concat(currentPath.current!));
-      currentPath.current = Skia.Path.Make();
-    },
-  });
-
-  const paint = Skia.Paint();
-  paint.setColor(Skia.Color('red'));
-  paint.setStyle(PaintStyle.Stroke);
-  paint.setStrokeWidth(5);
+    [isEraser],
+  );
 
   return (
     <>
@@ -302,23 +325,68 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               matrix={concatColorMatrices([brightness(brightnessValue)])}
             />
 
-            {paths.map((path, index) => (
-              <Path
-                key={index}
-                path={path}
-                color={'white'}
-                style={'stroke'}
-                strokeWidth={5}
-                strokeCap={'round'}></Path>
-            ))}
+            <Mask
+              mode="luminance"
+              mask={
+                <Group>
+                  {paths.map((path, index) => (
+                    <Path
+                      key={index}
+                      path={path}
+                      color={'white'}
+                      style={'stroke'}
+                      strokeWidth={5}
+                      strokeCap={'round'}
+                      strokeJoin={'round'}></Path>
+                  ))}
+                  <Path
+                    path={currentPath}
+                    color={'white'}
+                    style={'stroke'}
+                    strokeWidth={5}
+                    strokeCap={'round'}
+                    strokeJoin={'round'}></Path>
 
-            <Path
-              path={currentPath}
-              color={'white'}
-              style={'stroke'}
-              strokeWidth={5}
-              strokeCap={'round'}
-              paint={paint}></Path>
+                  {eraserPaths.map((path, index) => (
+                    <Path
+                      key={index}
+                      path={path}
+                      color={'black'}
+                      style={'stroke'}
+                      strokeWidth={20}
+                      strokeCap={'round'}
+                      strokeJoin={'round'}></Path>
+                  ))}
+                  <Path
+                    path={currentEraserPath}
+                    color={'black'}
+                    style={'stroke'}
+                    strokeWidth={20}
+                    strokeCap={'round'}
+                    strokeJoin={'round'}></Path>
+                </Group>
+              }>
+              <Group>
+                <Fill color={'white'} />
+                {paths.map((path, index) => (
+                  <Path
+                    key={index}
+                    path={path}
+                    color={'red'}
+                    style={'stroke'}
+                    strokeWidth={5}
+                    strokeCap={'round'}
+                    strokeJoin={'round'}></Path>
+                ))}
+                <Path
+                  path={currentPath}
+                  color={'red'}
+                  style={'stroke'}
+                  strokeWidth={5}
+                  strokeCap={'round'}
+                  strokeJoin={'round'}></Path>
+              </Group>
+            </Mask>
           </Canvas>
         </View>
         <FilterSection
