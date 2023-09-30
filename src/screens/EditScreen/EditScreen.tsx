@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Dimensions,
+  FlatList,
   Image,
   PixelRatio,
   TouchableOpacity,
@@ -74,6 +75,14 @@ import FilterSection from './FilterSection';
 import {brightness, concatColorMatrices} from 'react-native-image-filter-kit';
 import {verticalScale} from '../../utils/scale';
 import DrawIcon from '../../atoms/DrawIcon/DrawIcon';
+import Animated, {
+  SlideInDown,
+  SlideOutDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import {colorPalets} from '../../utils/ColorPalets';
 
 const FILTERS = [
   ...[
@@ -204,6 +213,10 @@ const FILTERS = [
 
 const IMAGE_HEIGHT = verticalScale(604.5);
 
+type path = {
+  path: SkPath;
+  color: string;
+};
 const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   navigation,
   route,
@@ -252,9 +265,11 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   const currentPath = useValue<SkPath>(Skia.Path.Make());
   const currentEraserPath = useValue<SkPath>(Skia.Path.Make());
 
-  const [paths, setPaths] = useState<SkPath[]>([]);
+  const [paths, setPaths] = useState<path[]>([]);
   const [eraserPaths, setEraserPaths] = useState<SkPath[]>([]);
   const [isEraser, setIsEraser] = useState<boolean>(false);
+  const [drawingMode, setDrawingMode] = useState<boolean>(false);
+  const [selectedColor, setSelectedColor] = useState<string>('#FFFFFF');
 
   const touchHandler = useTouchHandler(
     {
@@ -285,21 +300,38 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
           if (!currentPath.current) {
             return;
           }
-          setPaths(values => values.concat(currentPath.current!));
+          setPaths(values =>
+            values.concat({
+              path: currentPath.current!,
+              color: selectedColor,
+            }),
+          );
           currentPath.current = Skia.Path.Make();
         }
       },
     },
-    [isEraser],
+    [isEraser, selectedColor],
   );
 
+  const bottom = useSharedValue(0);
+  const selectedAnimation = useAnimatedStyle(() => {
+    return {
+      bottom: withTiming(bottom.value),
+    };
+  }, [bottom]);
+
+  console.log(isEraser);
   return (
     <>
       <View style={styles.container}>
         <View style={styles.imageContainer} ref={viewRef}>
-          <View style={styles.drawIcon}>
+          <TouchableOpacity
+            style={styles.drawIcon}
+            onPress={() => {
+              setDrawingMode(!drawingMode);
+            }}>
             <DrawIcon />
-          </View>
+          </TouchableOpacity>
           <Canvas
             style={{flex: 1, width, height: IMAGE_HEIGHT}}
             onTouch={touchHandler}>
@@ -329,10 +361,11 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               mode="luminance"
               mask={
                 <Group>
-                  {paths.map((path, index) => (
+                  {/* don't change color--> only for mask*/}
+                  {paths.map((item, index) => (
                     <Path
                       key={index}
-                      path={path}
+                      path={item.path}
                       color={'white'}
                       style={'stroke'}
                       strokeWidth={5}
@@ -368,11 +401,11 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               }>
               <Group>
                 <Fill color={'white'} />
-                {paths.map((path, index) => (
+                {paths.map((item, index) => (
                   <Path
                     key={index}
-                    path={path}
-                    color={'red'}
+                    path={item.path}
+                    color={item.color}
                     style={'stroke'}
                     strokeWidth={5}
                     strokeCap={'round'}
@@ -380,7 +413,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
                 ))}
                 <Path
                   path={currentPath}
-                  color={'red'}
+                  color={selectedColor}
                   style={'stroke'}
                   strokeWidth={5}
                   strokeCap={'round'}
@@ -389,17 +422,78 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
             </Mask>
           </Canvas>
         </View>
-        <FilterSection
-          image={image}
-          FILTERS={FILTERS}
-          setSelectedFilter={setSelectedFilter}
-          selectedFilter={selectedFilter}
-          scale={scale}
-          translateX={translateX}
-          translateY={translateY}
-          imageHeight={imageHeight}
-          imageWidth={imageWidth}
-        />
+        {!drawingMode && (
+          <FilterSection
+            image={image}
+            FILTERS={FILTERS}
+            setSelectedFilter={setSelectedFilter}
+            selectedFilter={selectedFilter}
+            scale={scale}
+            translateX={translateX}
+            translateY={translateY}
+            imageHeight={imageHeight}
+            imageWidth={imageWidth}
+          />
+        )}
+        {drawingMode && (
+          <Animated.View
+            entering={SlideInDown.duration(700)}
+            exiting={SlideOutDown.duration(700)}
+            style={styles.colorPaletteContainer}>
+            <FlatList
+              contentContainerStyle={{
+                paddingVertical: 10,
+                paddingHorizontal: 16,
+              }}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={colorPalets}
+              keyExtractor={item => item}
+              bounces={false}
+              renderItem={({item, index}) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => setSelectedColor(item)}
+                    style={[
+                      styles.colorPalette,
+                      {
+                        backgroundColor: item,
+                        borderWidth: selectedColor === item ? 2.5 : 1.5,
+                      },
+                    ]}
+                  />
+                );
+              }}
+              scrollEventThrottle={16}
+              decelerationRate="fast"
+              snapToOffsets={Array(colorPalets.length)
+                .fill(undefined)
+                .map((x, index) => index * (20 + 15))}
+              getItemLayout={(data, index) => ({
+                length: 20 + 15,
+                offset: (20 + 15) * index,
+                index,
+              })}
+              ItemSeparatorComponent={() => <View style={{width: 15}} />}
+            />
+            <TouchableOpacity
+              // activeOpacity={1}
+              onPress={() => {
+                setIsEraser(!isEraser);
+                if (isEraser) {
+                  bottom.value = 0;
+                } else {
+                  bottom.value = 10;
+                }
+              }}>
+              <Animated.View></Animated.View>
+              <Image
+                source={require('../../assets/images/eraser.png')}
+                style={[styles.eraser]}
+              />
+            </TouchableOpacity>
+          </Animated.View>
+        )}
         {/* <EditFilterSection
           brightnessValue={brightnessValue}
           setBrightnessValue={setBrightnessValue}

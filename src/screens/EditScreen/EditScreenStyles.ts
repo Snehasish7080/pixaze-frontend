@@ -90,4 +90,24 @@ export const styles = StyleSheet.create({
   indicatorText: {
     color: Colors.white,
   },
+  colorPalette: {
+    width: 20,
+    height: 20,
+    borderRadius: 15,
+  },
+  colorPaletteContainer: {
+    marginTop: 50,
+    borderWidth: 1,
+    height: 150,
+  },
+  eraser: {
+    width: 80,
+    height: 80,
+    resizeMode: 'contain',
+    transform: [
+      {
+        rotateZ: '180deg',
+      },
+    ],
+  },
 });
