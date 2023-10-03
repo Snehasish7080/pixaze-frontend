@@ -1,15 +1,11 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
-  Dimensions,
   FlatList,
   Image,
-  PixelRatio,
   TouchableOpacity,
   useWindowDimensions,
   View,
 } from 'react-native';
-import AppText from '../../atoms/AppText/AppText';
-import AppHeader from '../../molecules/AppHeader/AppHeader';
 import {AuthenticatedNavProps} from '../../navigations/AuthenticatedNavigation/AuthenticatedNavigationTypes';
 import {styles} from './EditScreenStyles';
 
@@ -17,30 +13,30 @@ import FastImage from 'react-native-fast-image';
 import {captureRef} from 'react-native-view-shot';
 
 import {
-  BlendMode,
   Canvas,
   ColorMatrix,
-  CornerPathEffect,
-  DashPathEffect,
-  DiscretePathEffect,
-  enumKey,
   Fill,
   Group,
   Image as SkiaImage,
   Mask,
-  PaintStyle,
   Path,
-  Rect,
   Skia,
   SkPath,
-  StrokeCap,
-  StrokeJoin,
-  TouchInfo,
   useImage,
   useTouchHandler,
   useValue,
 } from '@shopify/react-native-skia';
-import EditFilterSection from './EditFilterSection';
+import {brightness, concatColorMatrices} from 'react-native-image-filter-kit';
+import Animated, {
+  SlideInDown,
+  SlideOutDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import DrawIcon from '../../atoms/DrawIcon/DrawIcon';
+import {colorPalets} from '../../utils/ColorPalets';
+import {verticalScale} from '../../utils/scale';
 import {
   Aden,
   Amaro,
@@ -72,17 +68,6 @@ import {
   _1977,
 } from './Filter';
 import FilterSection from './FilterSection';
-import {brightness, concatColorMatrices} from 'react-native-image-filter-kit';
-import {verticalScale} from '../../utils/scale';
-import DrawIcon from '../../atoms/DrawIcon/DrawIcon';
-import Animated, {
-  SlideInDown,
-  SlideOutDown,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import {colorPalets} from '../../utils/ColorPalets';
 
 const FILTERS = [
   ...[
@@ -313,14 +298,13 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
     [isEraser, selectedColor],
   );
 
-  const bottom = useSharedValue(0);
+  const bottom = useSharedValue(-10);
   const selectedAnimation = useAnimatedStyle(() => {
     return {
       bottom: withTiming(bottom.value),
     };
   }, [bottom]);
 
-  console.log(isEraser);
   return (
     <>
       <View style={styles.container}>
@@ -357,11 +341,46 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               matrix={concatColorMatrices([brightness(brightnessValue)])}
             />
 
-            <Mask
+            {eraserPaths.map((path, index) => (
+              <Path
+                key={index}
+                path={path}
+                color={'black'}
+                style={'stroke'}
+                strokeWidth={20}
+                strokeCap={'round'}
+                strokeJoin={'round'}></Path>
+            ))}
+            <Path
+              path={currentEraserPath}
+              color={'black'}
+              style={'stroke'}
+              strokeWidth={20}
+              strokeCap={'round'}
+              strokeJoin={'round'}></Path>
+
+            {paths.map((item, index) => (
+              <Path
+                key={index}
+                path={item.path}
+                color={item.color}
+                style={'stroke'}
+                strokeWidth={5}
+                strokeCap={'round'}
+                strokeJoin={'round'}></Path>
+            ))}
+            <Path
+              path={currentPath}
+              color={selectedColor}
+              style={'stroke'}
+              strokeWidth={5}
+              strokeCap={'round'}
+              strokeJoin={'round'}></Path>
+
+            {/* <Mask
               mode="luminance"
               mask={
                 <Group>
-                  {/* don't change color--> only for mask*/}
                   {paths.map((item, index) => (
                     <Path
                       key={index}
@@ -401,6 +420,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               }>
               <Group>
                 <Fill color={'white'} />
+
                 {paths.map((item, index) => (
                   <Path
                     key={index}
@@ -419,7 +439,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
                   strokeCap={'round'}
                   strokeJoin={'round'}></Path>
               </Group>
-            </Mask>
+            </Mask> */}
           </Canvas>
         </View>
         {!drawingMode && (
@@ -477,20 +497,20 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               ItemSeparatorComponent={() => <View style={{width: 15}} />}
             />
             <TouchableOpacity
-              // activeOpacity={1}
               onPress={() => {
                 setIsEraser(!isEraser);
                 if (isEraser) {
-                  bottom.value = 0;
+                  bottom.value = -10;
                 } else {
-                  bottom.value = 10;
+                  bottom.value = 0;
                 }
               }}>
-              <Animated.View></Animated.View>
-              <Image
-                source={require('../../assets/images/eraser.png')}
-                style={[styles.eraser]}
-              />
+              <Animated.View style={[selectedAnimation]}>
+                <Image
+                  source={require('../../assets/images/eraser.png')}
+                  style={[styles.eraser]}
+                />
+              </Animated.View>
             </TouchableOpacity>
           </Animated.View>
         )}
