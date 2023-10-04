@@ -68,6 +68,7 @@ import {
   _1977,
 } from './Filter';
 import FilterSection from './FilterSection';
+import ColorPaletteModal from '../../organisms/ColorPaletteModal/ColorPaletteModal';
 
 const FILTERS = [
   ...[
@@ -248,10 +249,8 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   const OVERLAY_WIDTH = (imageWidth * IMAGE_HEIGHT) / imageHeight;
 
   const currentPath = useValue<SkPath>(Skia.Path.Make());
-  const currentEraserPath = useValue<SkPath>(Skia.Path.Make());
 
   const [paths, setPaths] = useState<path[]>([]);
-  const [eraserPaths, setEraserPaths] = useState<SkPath[]>([]);
   const [isEraser, setIsEraser] = useState<boolean>(false);
   const [drawingMode, setDrawingMode] = useState<boolean>(false);
   const [selectedColor, setSelectedColor] = useState<string>('#FFFFFF');
@@ -260,8 +259,8 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
     {
       onStart: ({x, y}) => {
         if (isEraser) {
-          currentEraserPath.current = Skia.Path.Make();
-          currentEraserPath.current.moveTo(x, y);
+          currentPath.current = Skia.Path.Make();
+          currentPath.current.moveTo(x, y);
         } else {
           currentPath.current = Skia.Path.Make();
           currentPath.current.moveTo(x, y);
@@ -269,18 +268,25 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
       },
       onActive: ({x, y}) => {
         if (isEraser) {
-          currentEraserPath.current?.lineTo(x, y);
+          currentPath.current?.lineTo(x, y);
         } else {
           currentPath.current?.lineTo(x, y);
         }
       },
       onEnd: () => {
         if (isEraser) {
-          if (!currentEraserPath.current) {
+          if (!currentPath.current) {
             return;
           }
-          setEraserPaths(values => values.concat(currentEraserPath.current!));
-          currentEraserPath.current = Skia.Path.Make();
+          setPaths(values =>
+            values.concat(
+              values.concat({
+                path: currentPath.current!,
+                color: 'black',
+              }),
+            ),
+          );
+          currentPath.current = Skia.Path.Make();
         } else {
           if (!currentPath.current) {
             return;
@@ -341,43 +347,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
               matrix={concatColorMatrices([brightness(brightnessValue)])}
             />
 
-            {eraserPaths.map((path, index) => (
-              <Path
-                key={index}
-                path={path}
-                color={'black'}
-                style={'stroke'}
-                strokeWidth={20}
-                strokeCap={'round'}
-                strokeJoin={'round'}></Path>
-            ))}
-            <Path
-              path={currentEraserPath}
-              color={'black'}
-              style={'stroke'}
-              strokeWidth={20}
-              strokeCap={'round'}
-              strokeJoin={'round'}></Path>
-
-            {paths.map((item, index) => (
-              <Path
-                key={index}
-                path={item.path}
-                color={item.color}
-                style={'stroke'}
-                strokeWidth={5}
-                strokeCap={'round'}
-                strokeJoin={'round'}></Path>
-            ))}
-            <Path
-              path={currentPath}
-              color={selectedColor}
-              style={'stroke'}
-              strokeWidth={5}
-              strokeCap={'round'}
-              strokeJoin={'round'}></Path>
-
-            {/* <Mask
+            <Mask
               mode="luminance"
               mask={
                 <Group>
@@ -385,42 +355,23 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
                     <Path
                       key={index}
                       path={item.path}
-                      color={'white'}
+                      color={item.color === 'black' ? 'black' : 'white'}
                       style={'stroke'}
-                      strokeWidth={5}
+                      strokeWidth={item.color === 'black' ? 25 : 5}
                       strokeCap={'round'}
                       strokeJoin={'round'}></Path>
                   ))}
                   <Path
                     path={currentPath}
-                    color={'white'}
+                    color={isEraser ? 'black' : 'white'}
                     style={'stroke'}
-                    strokeWidth={5}
-                    strokeCap={'round'}
-                    strokeJoin={'round'}></Path>
-
-                  {eraserPaths.map((path, index) => (
-                    <Path
-                      key={index}
-                      path={path}
-                      color={'black'}
-                      style={'stroke'}
-                      strokeWidth={20}
-                      strokeCap={'round'}
-                      strokeJoin={'round'}></Path>
-                  ))}
-                  <Path
-                    path={currentEraserPath}
-                    color={'black'}
-                    style={'stroke'}
-                    strokeWidth={20}
+                    strokeWidth={isEraser ? 25 : 5}
                     strokeCap={'round'}
                     strokeJoin={'round'}></Path>
                 </Group>
               }>
               <Group>
                 <Fill color={'white'} />
-
                 {paths.map((item, index) => (
                   <Path
                     key={index}
@@ -439,7 +390,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
                   strokeCap={'round'}
                   strokeJoin={'round'}></Path>
               </Group>
-            </Mask> */}
+            </Mask>
           </Canvas>
         </View>
         {!drawingMode && (
@@ -518,6 +469,7 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
           brightnessValue={brightnessValue}
           setBrightnessValue={setBrightnessValue}
         /> */}
+        <ColorPaletteModal />
       </View>
     </>
   );
