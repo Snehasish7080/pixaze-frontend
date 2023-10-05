@@ -13,8 +13,8 @@ const ColorPaletteModal = () => {
               return (
                 <View
                   style={{
-                    width: 22.2,
-                    height: 22.2,
+                    width: 19.4,
+                    height: 19.4,
                     backgroundColor: item,
                   }}
                   key={index}

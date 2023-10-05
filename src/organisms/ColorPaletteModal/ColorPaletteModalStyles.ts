@@ -6,17 +6,18 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.modalBackground,
     justifyContent: 'flex-end',
-    paddingHorizontal: 16,
+    paddingHorizontal: 0,
     paddingVertical: 16,
   },
   modalBody: {
     backgroundColor: Colors.white,
-    height: 300,
+    height: 230,
     borderRadius: 15,
-    overflow: 'hidden',
+    // overflow: 'hidden',
+    paddingTop: 20,
+    paddingBottom: 10,
   },
   colorContainer: {
-    flexDirection: 'row',
     flexWrap: 'wrap',
   },
 });
