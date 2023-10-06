@@ -253,7 +253,10 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
   const [paths, setPaths] = useState<path[]>([]);
   const [isEraser, setIsEraser] = useState<boolean>(false);
   const [drawingMode, setDrawingMode] = useState<boolean>(false);
-  const [selectedColor, setSelectedColor] = useState<string>('#FFFFFF');
+  const [openPaletteModal, setOpenPaletteModal] = useState<boolean>(false);
+  const [selectedColor, setSelectedColor] = useState<string>(
+    'rgba(253,254,254,1)',
+  );
 
   const touchHandler = useTouchHandler(
     {
@@ -310,6 +313,14 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
       bottom: withTiming(bottom.value),
     };
   }, [bottom]);
+
+  const handlePaletteModal = () => {
+    setOpenPaletteModal(!openPaletteModal);
+  };
+
+  const handleSelectedColor = (color: string) => {
+    setSelectedColor(color);
+  };
 
   return (
     <>
@@ -411,42 +422,6 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
             entering={SlideInDown.duration(700)}
             exiting={SlideOutDown.duration(700)}
             style={styles.colorPaletteContainer}>
-            <FlatList
-              contentContainerStyle={{
-                paddingVertical: 10,
-                paddingHorizontal: 16,
-              }}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={colorPalets}
-              keyExtractor={item => item}
-              bounces={false}
-              renderItem={({item, index}) => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => setSelectedColor(item)}
-                    style={[
-                      styles.colorPalette,
-                      {
-                        backgroundColor: item,
-                        borderWidth: selectedColor === item ? 2.5 : 1.5,
-                      },
-                    ]}
-                  />
-                );
-              }}
-              scrollEventThrottle={16}
-              decelerationRate="fast"
-              snapToOffsets={Array(colorPalets.length)
-                .fill(undefined)
-                .map((x, index) => index * (20 + 15))}
-              getItemLayout={(data, index) => ({
-                length: 20 + 15,
-                offset: (20 + 15) * index,
-                index,
-              })}
-              ItemSeparatorComponent={() => <View style={{width: 15}} />}
-            />
             <TouchableOpacity
               onPress={() => {
                 setIsEraser(!isEraser);
@@ -463,13 +438,21 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
                 />
               </Animated.View>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.colorPalette}
+              onPress={handlePaletteModal}></TouchableOpacity>
           </Animated.View>
         )}
         {/* <EditFilterSection
           brightnessValue={brightnessValue}
           setBrightnessValue={setBrightnessValue}
         /> */}
-        <ColorPaletteModal />
+        <ColorPaletteModal
+          handleModal={handlePaletteModal}
+          visible={openPaletteModal}
+          selectedColor={selectedColor}
+          handleSelectedColor={handleSelectedColor}
+        />
       </View>
     </>
   );

@@ -91,14 +91,16 @@ export const styles = StyleSheet.create({
     color: Colors.white,
   },
   colorPalette: {
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
     borderRadius: 15,
+    borderWidth: 1,
   },
   colorPaletteContainer: {
     marginTop: 50,
     borderWidth: 1,
     height: 150,
+    flexDirection: 'row',
   },
   eraser: {
     width: 80,
