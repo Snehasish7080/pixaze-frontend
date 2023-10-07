@@ -422,6 +422,15 @@ const EditScreen: React.FC<AuthenticatedNavProps<'EditScreen'>> = ({
             entering={SlideInDown.duration(700)}
             exiting={SlideOutDown.duration(700)}
             style={styles.colorPaletteContainer}>
+            <Image
+              source={require('../../assets/images/pencil.png')}
+              style={[
+                styles.eraser,
+                {
+                  backgroundColor: 'red',
+                },
+              ]}
+            />
             <TouchableOpacity
               onPress={() => {
                 setIsEraser(!isEraser);
